@@ -27,8 +27,8 @@ def size_help():
     return render_template('sizeManual.html')
 
 
-@app.route("/product")
-def product_detail():
+@app.route("/product/<int:pid>")
+def product_detail(pid):
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
     cursor.execute("SELECT * FROM SanPham WHERE MaSP=%s", (pid,))
@@ -67,3 +67,4 @@ def catalog():
 if __name__ == '__main__':
 
     app.run(debug=True)
+
