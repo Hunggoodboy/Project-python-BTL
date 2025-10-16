@@ -1,0 +1,105 @@
+
+/* menu-bar -> tag -> (navi + hidden dropdown) */
+div.menu-bar {
+
+    padding-left: 20px;
+    background-color: #16476A;
+
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    gap: 10px;
+
+}
+
+/* tag<span> = navi<a> + dropdown<table> */
+.tag {
+    position: relative; /* Để .hidden bám theo tag */
+    display: inline-block;
+}
+
+/* navi<a> */
+.navi:link, .navi:visited {
+    padding: 14px 25px;
+    border-radius: 10px 10px 0 0;   /* bo góc tròn trên */
+
+    background-color: #16476A;
+    color: white;
+    text-align: center;
+    font-family: "Verdana", sans-serif;
+    text-decoration: none;
+
+    display: inline-block;
+}
+
+.navi:hover, .navi:active {
+    background-color: #BF092F;
+}
+
+/* hidden dropdown<table> */
+.hidden {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    z-index: 999;
+    border-collapse: collapse;
+}
+.tag:hover .hidden {
+    display: table;
+}
+
+/* Style cho bảng */
+.hidden td {
+    border: 1px solid #BF092F;
+    padding: 10px;
+    font-family: "Verdana", sans-serif;
+    text-align: center;
+    color: #16476A;
+    background-color: white;
+}
+
+
+/* logo về trang chủ */
+a.img {
+    display: inline-block;
+    border-left: 20px solid transparent;
+    border-right: 20px solid transparent;
+    height: 100px;
+    vertical-align: bottom;
+
+    display: flex;
+}
+
+.img div {
+    margin-top: 25px; /* chỉnh số px để logo lệch xuống */
+    z-index: 20;
+}
+
+.img img {
+    display: block;   /* tránh hở line */
+
+}
+
+.star_gif{
+    background-color: #4FB7B3;
+    color: #132440;
+    height: 50px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    position: relative;
+}
+.star_gif img {
+    height: 100%;
+    width: auto;
+    object-fit: contain;
+    display: block;
+
+    position: absolute;
+    transform: translate(0%, 10%);
+    z-index: 10;
+}
