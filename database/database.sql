@@ -3,10 +3,10 @@ CREATE database IF NOT EXISTS QLBanQuanAo;
 USE QLBanQuanAo;
 
 CREATE TABLE IF NOT exists KhachHang(
-	MaKH int primary key,
+	MaKH int auto_increment primary key,
     HoTen nvarchar(100) NOT NULL,
-    Email varchar(100) NOT NULL,
-    MatKhau varchar(100) NOT NULL,
+    UserName nvarchar(100) NOT NULL,
+    MatKhau nvarchar(100) NOT NULL,
     SDT varchar(10) NOT NULL,
     Address nvarchar(100)
 );
