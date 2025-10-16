@@ -5,32 +5,11 @@
     <title>Web Qáo</title>
 </head>
 <body>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <header>
-        Nhóm 3
-        <a style="float: right" href="{{ url_for('size_help') }}">Hỗ trợ chọn size</a>
-    </header>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
-    <div class="menu-bar">
-        <!-- logo Trang web -->
-        <a class = 'img' href="{{ url_for('main_menu') }}">
-            <img src="{{ url_for('static', filename='Logo_PTIT.jpg') }}" alt="Logo PTIT" height = "100" style="position: static;">
-        </a>
+    <!-- bar điều hướng, có ở tất cả các trang-->
+    {% include 'MenuBar.html' %}
 
-        <a class="navi" href="{{ url_for('new_product') }}" > Hàng mới về </a>
-        <a class="navi" href="{{ url_for('collections') }}"> Bộ sưu tập </a>
-
-        <!--Danh mục hàng, có thể sẽ thay bằng bảng csdl-->
-        <span class="tag">
-            <a class="navi" href="{{ url_for('catalog') }}">Danh mục hàng</a>
-            <table class="hidden dropdown" name="navi_choice">
-                    <tr><td> Áo </td></tr>
-                    <tr><td> Quần </td></tr>
-                    <tr><td> Phụ Kiện </td></tr>
-            </table>
-        </span>
-    </div>
-
-    <h4 style="padding-left: 70px">Web Qao / Hàng mới về</h4>
+    <h4 style="padding-left: 195px">Web Qao / Hàng mới về</h4>
 </body>
 </html>
