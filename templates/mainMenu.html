@@ -3,66 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <title>Web Qao</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <a class="navi" href="{{ url_for('new_product') }}">Hàng mới về</a>
-    <a class="navi" href="{{ url_for('collections') }}">Bộ sưu tập</a>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
-    <span class="tag">
-        <a class="navi" href="{{ url_for('catalog') }}">Danh mục hàng</a>
-        <table class="hidden dropdown" name="navi_choice">
-            <tr><td>Áo</td></tr>
-            <tr><td>Quần</td></tr>
-            <tr><td>Phụ Kiện</td></tr>
-        </table>
-    </span>
+    <!-- bar điều hướng, có ở tất cả các trang-->
+    {% include 'MenuBar.html' %}
 
-    <div class="star_gif">
-        <img src="{{ url_for('static', filename='star.png') }}">
+    <!-- bieu tuong (cho dep) -->
+    <div class="star_gif" >
+        <img src="{{ url_for('static', filename='used/star.png') }}">
     </div>
 
+    <!-- quảng cáo flagship -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/Menu-ads.css') }}">
     <div class="ads">
         <div class="wrapper">
             <div class="track">
+
                 <div class="flagship">
-                    <img src="{{ url_for('static', filename='placeHolder_1.jpg') }}">
+                    <img src="{{ url_for('static', filename='used/placeHolder_1.jpg') }}">
                 </div>
                 <div class="flagship">
-                    <img src="{{ url_for('static', filename='placeHolder_2.jpg') }}">
+                    <img src="{{ url_for('static', filename='used/placeHolder_2.jpg') }}">
                 </div>
                 <div class="flagship">
-                    <img src="{{ url_for('static', filename='placeHolder_3.jpg') }}">
+                    <img src="{{ url_for('static', filename='used/placeHolder_3.jpg') }}">
                 </div>
+
             </div>
         </div>
+        <!-- hai mũi tên trái - phải -->
         <button type="button" class="arrow arrowL">
-            <img class="arr_img" src="{{ url_for('static', filename='arrow_left.png') }}">
+            <img class="arr_img" src="{{ url_for('static', filename='used/arrow_left.png') }}">
         </button>
         <button type="button" class="arrow arrowR">
-            <img class="arr_img" src="{{ url_for('static', filename='arrow_right.png') }}">
+            <img class="arr_img" src="{{ url_for('static', filename='used/arrow_right.png') }}">
         </button>
     </div>
-
     <script src="{{ url_for('static', filename='js/slider.js') }}"></script>
 
-    <h4 style="text-align: center">Gợi ý cho bạn</h4>
+    <h4 style = "text-align: center"> Gợi ý cho bạn </h4>
 
     <table>
-        {# Phần này tạm tắt, chờ có dữ liệu #}
-        {#
-        {% for p in product %}
+    <!--{% for p in product %} đoạn này chờ có csdl
         <tr>
-            <td style="text-align: center">
-                <a class="img" href="{{ url_for('product_detail', pid=p.id) }}">
-                    <img src="{{ url_for('static', filename='product/' ~ p.id ~ '_0.png') }}">
+            <td text-align = "center">
+                <a class="img" href="{{ url_for('product_detail', pid = p.id) }}">
+                    <img src="{{ url_for('static', filename='product/' ~ p.id ~ '_0.png' ) }}"
                 </a>
                 {{ p.name }}
                 {{ p.price }}
+
             </td>
         </tr>
         {% endfor %}
-        #}
+    -->
     </table>
+
 </body>
 </html>
