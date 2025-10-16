@@ -42,3 +42,28 @@ CREATE TABLE IF NOT EXISTS DonHang(
     TongGia int
 );
 
+CREATE TABLE IF NOT EXISTS SizePhuNu (
+	id INT PRIMARY KEY,
+    MaSize VARCHAR(5) NOT NULL,
+    NgangVai DECIMAL(10,1),
+    VongNguc DECIMAL(10,1),
+    TayAo DECIMAL(10,1),
+    Eo  DECIMAL(10,1),
+    Hong DECIMAL(10,1),
+    DaiQuan DECIMAL(10,1),
+    ChieuCao VARCHAR(100) CHARACTER SET utf8mb4,
+    CanNang VARCHAR(100) CHARACTER SET utf8mb4
+);
+
+CREATE TABLE IF NOT EXISTS SizeDanOng (
+	id INT PRIMARY KEY,
+    MaSize VARCHAR(5) NOT NULL,
+    NgangVai DECIMAL(10,1),
+    VongNguc DECIMAL(10,1),
+    TayAo DECIMAL(10,1),
+    Eo  DECIMAL(10,1),
+    Hong DECIMAL(10,1),
+    DaiQuan DECIMAL(10,1),
+    ChieuCao VARCHAR(100) CHARACTER SET utf8mb4,
+    CanNang VARCHAR(100) CHARACTER SET utf8mb4
+);
