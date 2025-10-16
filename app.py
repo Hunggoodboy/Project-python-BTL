@@ -1,4 +1,7 @@
-from flask import Flask, render_template, request, redirect, url_for
+import base64
+
+import flask
+from flask import Flask, render_template, request, redirect, url_for, session
 #from DB_connect import get_db_connection
 import os
 
@@ -11,25 +14,30 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 @app.route('/')
 def main_menu():
-    return render_template('mainMenu.html')
+    conn = get_connect()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT MaSP, TenSP, Gia, HinhAnh FROM SanPham LIMIT 10")
+    products = cursor.fetchall()
+    for p in products:
+        if p['HinhAnh']:
+            p['HinhAnh'] = base64.b64encode(p['HinhAnh']).decode('utf-8')
+    cursor.close()
+    conn.close()
+    return render_template('mainMenu.html',product=products )
 
 @app.route('/help')
 def size_help():
     return render_template('sizeManual.html')
-@app.route('/login', methods=['GET', 'POST'])
-def login():
+@app.route('/register', methods=['GET', 'POST'])
+def register():
     if request.method == 'POST':
         name = request.form.get('HoTen')
         username = request.form.get('username')
-        password = request.form.get('password')
+        password = request.form.get('MatKhau')
         numberphone = request.form.get('numberPhone')
         address = request.form.get('address')
 
         print("DEBUG:", name, username, password, numberphone, address)  # 👈 Kiểm tra ở terminal
-
-        if not name:
-            return "❌ Bạn chưa nhập họ tên!"
-
         conn = get_connect()
         cursor = conn.cursor()
         sql = """
@@ -41,30 +49,47 @@ def login():
         cursor.close()
         conn.close()
         return redirect('/showTable')
+    return render_template('register.html')
+
+app.secret_key = '123456'
+@app.route('/login', methods = ['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        conn = get_connect()
+        cursor = conn.cursor()
+        sql = """
+        SELECT *
+        FROM QLBanQuanAo.KhachHang
+        WHERE UserName = %s AND MatKhau = %s
+        """
+        cursor.execute(sql, [username, password])
+        result = cursor.fetchone()
+        cursor.close()
+        conn.close()
+        if result:
+            session['logged_in'] = True
+            session['username'] = result[0]
+            session['password'] = result[1]
+            return redirect('/')
+        else:
+            flask.flash('Sai tên đăng nhập hoặc mật khẩu!')
+            return render_template('login.html')
     return render_template('login.html')
-
-# @app.route('/showTable', methods=['GET', 'POST'])
-# def show_table():
-#     conn = get_connect()
-#     cursor = conn.cursor()
-#     sql = """
-#     SELECT * FROM QLBanQuanAo.KhachHang
-#     """
-#     cursor.execute(sql)
-#     rows = cursor.fetchall()
-#     cursor.close()
-#     conn.close()
-#     html = "<h2>Danh sách khách hàng</h2><table border='1' cellpadding='5'><tr><th>ID</th><th>Họ Tên</th><th>Tên đăng nhập</th><th>Mật khẩu</th><th>SĐT</th><th>Địa chỉ</th></tr>"
-#     for r in rows:
-#         html += f"<tr><td>{r[0]}</td><td>{r[1]}</td><td>{r[2]}</td><td>{r[3]}</td><td>{r[4]}</td><td>{r[5]}</td></tr>"
-#     html += "</table>"
-#     return html
-
-@app.route("/product")
-def product_detail():
-    # Lấy dữ liệu theo pid từ DB
-    # product = get_product_by_id(pid)
-    return render_template("productDetail.html")
+@app.route("/product/<int:pid>")
+def product_detail(pid):
+    conn = get_connect()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM SanPham WHERE MaSP=%s", (pid,))
+    p = cursor.fetchone()
+    if p and p['HinhAnh']:
+        p['HinhAnh'] = base64.b64encode(p['HinhAnh']).decode('utf-8')
+    cursor.close()
+    conn.close()
+    if p:
+        return render_template('productDetail.html', product=p)
+    return "Không tìm thấy sản phẩm"
 
 @app.route('/new-product')
 def new_product():
@@ -76,7 +101,15 @@ def collections():
 
 @app.route('/catalog')
 def catalog():
-    return render_template('catalog.html')
+    conn = get_connect()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM DanhMuc")
+    categories = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return render_template('catalog.html', categories=categories)
 
 if __name__ == '__main__':
-    app.run(debug=True, port = '5003')
+
+    app.run(debug=True)
+
