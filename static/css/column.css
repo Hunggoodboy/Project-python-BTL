@@ -1,0 +1,59 @@
+img{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* page layout */
+.columns{
+    display: flex;
+}
+.left{
+    flex: 70%;
+}
+.right {
+    flex: 30%;       /* 20% width */
+    background: lightgreen;
+    display: flex;
+    justify-content: center;
+}
+
+.p1{
+    font-size: large;
+    font-family: "Verdana", sans-serif;
+}
+
+table{
+    border-collapse: collapse;
+    text-align: center;
+    vertical-align: center;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    border: 2px solid orange;
+}
+
+.descript {
+    display: block;
+    width: fit-content;      /* hoặc width: max-content */
+    margin: 0 auto;
+    text-align: center;
+}
+
+.toc{
+    display: block;
+    border-radius: 10px;
+    background-color: lightskyblue;
+    border: 3px solid cornflowerblue;
+    list-style-type: upper-roman;
+    height: fit-content;
+    width: 80%;
+
+    font-family: "Verdana", sans-serif;
+    font-weight: bold;
+    font-size: large;
+
+}
+.b{
+    list-style-type: decimal;
+}
