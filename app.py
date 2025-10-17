@@ -36,6 +36,13 @@ def new_product():
 def collections():
     return render_template('collections.html')
 
-
+@app.route('/ShowUser')
+def show_user():
+    conn = get_connect()
+    cursor = conn.cursor()
+    cursor.execute("select * from QLBanQuanAo.KhachHang")
+    users = cursor.fetchall()
+    cursor.close()
+    return render_template('ShowUser.html', users=users)
 if __name__ == '__main__':
-    app.run(debug=True, port=5003)
+    app.run(debug=True, port=5005)

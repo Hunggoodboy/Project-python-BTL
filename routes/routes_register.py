@@ -1,3 +1,4 @@
+import flask
 from flask import Blueprint, render_template, request, redirect
 from database.connect import get_connect
 
@@ -24,6 +25,7 @@ def register():
         conn.commit()
         cursor.close()
         conn.close()
-        return redirect('/showTable')
+        flask.flash("Bạn đã đăng ký tài khoản thành công", "success")
+        return render_template('mainMenu.html')
 
     return render_template('register.html')
