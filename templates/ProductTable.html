@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/filter_column.css') }}">
+    <table class="product_table">
+        {% for p in products %}
+        <tr>
+            <td>
+                <div>
+                    <img class="main" src="{{ url_for('static', filename= p.HinhAnh) }}">
+
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
