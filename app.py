@@ -4,7 +4,6 @@ import flask
 from flask import Flask, render_template, request, redirect, url_for, session
 #from DB_connect import get_db_connection
 import os
-
 from database.connect import get_connect
 from routes.routes_catalog import catalog_bp
 from routes.routes_register import register_bp
@@ -31,7 +30,6 @@ def size_help():
 @app.route('/new-product')
 def new_product():
     return render_template('newProduct.html')
-
 @app.route('/collections')
 def collections():
     return render_template('collections.html')
@@ -44,10 +42,6 @@ def show_user():
     users = cursor.fetchall()
     cursor.close()
     return render_template('ShowUser.html', users=users)
-
-@app.route("/login")
-def login():
-    return render_template('login.html')
 
 @app.route("/register")
 def register():
