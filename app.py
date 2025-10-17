@@ -44,5 +44,14 @@ def show_user():
     users = cursor.fetchall()
     cursor.close()
     return render_template('ShowUser.html', users=users)
+
+@app.route("/login")
+def login():
+    return render_template('login.html')
+
+@app.route("/register")
+def register():
+    return render_template('register.html')
+
 if __name__ == '__main__':
     app.run(debug=True, port=5005)

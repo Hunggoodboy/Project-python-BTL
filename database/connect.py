@@ -1,5 +1,5 @@
 import mysql.connector
-import fcntl
+#import fcntl
 
 
 def get_connect():
