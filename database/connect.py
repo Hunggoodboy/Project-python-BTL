@@ -1,5 +1,7 @@
 import mysql.connector
 import fcntl
+
+
 def get_connect():
     connection = mysql.connector.connect(
         host = "127.0.0.1",
