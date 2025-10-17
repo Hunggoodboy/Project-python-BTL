@@ -4,6 +4,8 @@
     background-color: grey;
     height: 370px;
     width: 100%;
+    overflow-x: hidden;
+    touch-action: pan-y;
 }
 
 .flagship {
