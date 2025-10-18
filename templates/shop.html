@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Cửa hàng của tôi</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+  <h1>Cửa hàng của tôi</h1>
+
+  <table>
+    {% for i in range(0, products|length, 4) %}
+      <tr>
+        {% for p in products[i:i+4] %}
+          <td>
+            <a href="{{ url_for('productdetail.productdetail', id=p.id) }}">
+            <img src="{{ p.images[0] }}" alt="{{ p.name }}" width="200">
+            </a>
+            <h3>{{ p.name }}</h3>
+            <p class="price">{{ "{:,.0f}".format(p.price) }}₫</p>
+          </td>
+        {% endfor %}
+      </tr>
+    {% endfor %}
+  </table>
+
+</body>
+</html>

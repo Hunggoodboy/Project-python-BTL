@@ -14,6 +14,8 @@ from routes.routes_main import main_bp
 from routes.routes_category import category_bp
 from routes.routes_size import size_bp
 from routes.routes_logout import logout_bp
+from routes.routes_productdetail import productdetail_bp
+
 app = Flask(__name__)
 app.secret_key = '123456'
 
@@ -28,6 +30,7 @@ app.register_blueprint(product_bp)
 app.register_blueprint(catalog_bp)
 app.register_blueprint(size_bp)
 app.register_blueprint(logout_bp)
+app.register_blueprint(productdetail_bp)
 
 @app.route('/help')
 def size_help():
