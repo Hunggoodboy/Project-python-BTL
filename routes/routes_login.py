@@ -17,13 +17,21 @@ def login():
                 (username, password)
             )
             user = cursor.fetchone()
+            print(user)
             cursor.close()
             conn.close()
 
             if user:
+                print(user)
                 session['logged_in'] = True
+                session['id'] = user['MaKH']
+                session['hoten'] = user['HoTen']
                 session['username'] = user['UserName']
-                return render_template('collections.html')
+                # session['password'] = password
+                # session['numberphone'] = numberphone
+                # session['address'] = address
+                flash('Bạn đã đăng nhập thành công !')
+                return render_template('MenuBar.html')
             else:
                 flash('Sai tên đăng nhập hoặc mật khẩu!')
                 return render_template('login.html')

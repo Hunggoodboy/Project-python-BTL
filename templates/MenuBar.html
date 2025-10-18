@@ -9,8 +9,13 @@
     <header>
         Nhóm 3
         <a style="float: right" href="{{ url_for('size_help') }}">Hỗ trợ chọn size</a>
-        <a style="float: right" href="{{ url_for('register.register') }}">Đăng Ký</a>
-        <a style="float: right" href="{{ url_for('login_module.login') }}">Đăng Nhập</a>
+        {% if session.get('hoten') %}
+            <a>Xin Chào {{session.get('hoten')}}</a>
+            <a style="float: right" href="{{ url_for('logout.logout') }}" > Đăng Xuất</a>
+        {% else %}
+            <a style="float: right" href="{{ url_for('register.register') }}">Đăng Ký</a>
+            <a style="float: right" href="{{ url_for('login_module.login') }}">Đăng Nhập</a>
+        {% endif %}
     </header>
 
     <!-- bar điều hướng, có ở tất cả các trang-->
