@@ -1,4 +1,5 @@
-INSERT INTO SizePhuNu (id, MaSize, NgangVai, VongNguc, TayAo, Eo, Hong, DaiQuan, ChieuCao, CanNang)
+
+INSERT INTO QLBanQuanAo.SizePhuNu (id, MaSize, NgangVai, VongNguc, TayAo, Eo, Hong, DaiQuan, ChieuCao, CanNang)
 VALUES
 (1, 'XXS', 34.3, 78.7, 57.8, 59.7, 83.8, 75.5, '135-150', '33-45'),
 (2, 'XS', 34.9, 82.5, 58.1, 62.2, 90.2, 79.6, '150-165', '45-55'),
@@ -7,7 +8,7 @@ VALUES
 (5, 'L', 36.8, 94, 58.4, 73.7, 101.6, 87.4, '165-180', '63-92'),
 (6, 'XL', 37.5, 99.1, 58.4, 78.7, 106.7, 89, '175-185', '63-92'),
 (7, 'XXL', 38, 104.1, 58.4, 83.8, 114.3, 90, '175-180', '75-95');
-INSERT INTO SizeDanOng (id, MaSize, NgangVai, VongNguc, TayAo, Eo, Hong, DaiQuan, ChieuCao, CanNang)
+INSERT INTO QLBanQuanAo.SizeDanOng (id, MaSize, NgangVai, VongNguc, TayAo, Eo, Hong, DaiQuan, ChieuCao, CanNang)
 VALUES
 (1, 'XS', 43.0, 88.0, 60.0, 72.0, 88.0, 98.0, N'155-165cm', N'45-55kg'),
 (2, 'S', 44.5, 92.0, 61.0, 76.0, 92.0, 100.0, N'160-170cm', N'55-65kg'),
@@ -17,13 +18,13 @@ VALUES
 (6, 'XXL', 50.5, 108.0, 65.0, 92.0, 108.0, 108.0, N'180-190cm', N'95-105kg'),
 (7, '3XL', 52.0, 112.0, 66.0, 96.0, 112.0, 110.0, N'180-195cm', N'105-115kg');
 -- Thêm Danh Mục CHA (Cấp 1)
-INSERT INTO DanhMuc (MaDM, TenDM, MoTa, MaDMCha) VALUES
+INSERT INTO QLBanQuanAo.DanhMuc (MaDM, TenDM, MoTa, MaDMCha) VALUES
 (100, N'Áo (Tất Cả)', N'Các loại áo mặc thân trên.', NULL),
 (200, N'Quần & Váy (Tất Cả)', N'Các loại quần và váy.', NULL),
 (300, N'Phụ Kiện (Tất Cả)', N'Các vật dụng đi kèm.', NULL);
 
 -- Thêm Danh Mục CON (Cấp 2)
-INSERT INTO DanhMuc (MaDM, TenDM, MoTa, MaDMCha) VALUES
+INSERT INTO QLBanQuanAo.DanhMuc (MaDM, TenDM, MoTa, MaDMCha) VALUES
 (101, N'Áo Thun Cơ Bản', N'Áo phông cổ tròn, cổ tim, tối giản.', 100),
 (102, N'Áo Sơ Mi', N'Sơ mi classic, linen, oxford.', 100),
 (103, N'Áo Khoác', N'Hoodie, Sweater, Cardigan, Khoác Gió.', 100),
@@ -33,7 +34,7 @@ INSERT INTO DanhMuc (MaDM, TenDM, MoTa, MaDMCha) VALUES
 (301, N'Túi & Ví', N'Ví da, túi tote, túi đeo chéo thiết kế trung tính.', 300),
 (302, N'Mũ & Vớ', N'Các loại mũ, vớ cơ bản.', 300);
 
-INSERT INTO SanPham (MaSP, MaDM, TenSP, MoTa, Gia, MauSac, Size, ChatLieu, SoLuongCon, HinhAnh) VALUES
+INSERT INTO QLBanQuanAo.SanPham (MaSP, MaDM, TenSP, MoTa, Gia, MauSac, Size, ChatLieu, SoLuongCon, HinhAnh) VALUES
 -- Áo (MaDM 101, 102, 103)
 (1001, 101, N'Áo Thun Cotton Basic', N'Áo thun cổ tròn, form vừa, chất liệu thoáng mát, 100% Cotton.', 199000, N'Trắng, Đen, Xám', N'S, M, L, XL', N'Cotton 100%', 350, NULL),
 (1002, 102, N'Sơ Mi Linen Cổ Điển', N'Sơ mi dài tay, chất liệu linen mát, phù hợp cho mùa hè.', 450000, N'Be, Xanh Navy', N'S, M, L', N'Linen Tự Nhiên', 120, NULL),

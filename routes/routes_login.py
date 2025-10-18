@@ -23,7 +23,7 @@ def login():
             if user:
                 session['logged_in'] = True
                 session['username'] = user['UserName']
-                return redirect(url_for('collections'))
+                return render_template('collections.html')
             else:
                 flash('Sai tên đăng nhập hoặc mật khẩu!')
                 return render_template('login.html')
