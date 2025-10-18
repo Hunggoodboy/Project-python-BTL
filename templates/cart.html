@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Giỏ hàng</title>
+    <style>
+        table { width: 60%; margin: auto; border-collapse: collapse; }
+        th, td { padding: 10px; border: 1px solid #ddd; text-align: center; }
+        h2 { text-align: center; }
+        .actions { text-align: center; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h2>Giỏ hàng của bạn</h2>
+    {% if cart_items %}
+    <table>
+        <tr>
+            <th>Tên sản phẩm</th>
+            <th>Giá</th>
+            <th>Số lượng</th>
+            <th>Thành tiền</th>
+            <th>Hành động</th>
+        </tr>
+        {% for item in cart_items %}
+        <tr>
+            <td>{{ item.name }}</td>
+            <td>{{ item.price }}₫</td>
+            <td>{{ item.quantity }}</td>
+            <td>{{ item.price * item.quantity }}₫</td>
+            <td><a href="{{ url_for('cart_bp.remove_from_cart', product_id=item.id) }}">Xóa</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <div class="actions">
+        <h3>Tổng cộng: {{ total }}₫</h3>
+        <a href="{{ url_for('cart_bp.clear_cart') }}">Xóa toàn bộ</a>
+    </div>
+    {% else %}
+    <p style="text-align:center;">Giỏ hàng trống.</p>
+    {% endif %}
+</body>
+</html>
+
