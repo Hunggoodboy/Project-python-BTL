@@ -46,10 +46,10 @@
     <h4 style = "text-align: center"> Gợi ý cho bạn </h4>
 
     <table>
-    <!--{% for p in product %} đoạn này chờ có csdl
+    <{% for p in product %}
         <tr>
             <td text-align = "center">
-                <a class="img" href="{{ url_for('product_detail', pid = p.id) }}">
+                <a class="img" href="{{ url_for('productdetail.shop', pid=p['MaSP']) }}">
                     <img src="{{ url_for('static', filename='product/' ~ p.id ~ '_0.png' ) }}"
                 </a>
                 {{ p.name }}
@@ -58,7 +58,6 @@
             </td>
         </tr>
         {% endfor %}
-    -->
     </table>
 
 </body>

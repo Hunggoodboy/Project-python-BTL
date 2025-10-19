@@ -11,9 +11,6 @@ def main_menu():
     cursor = conn.cursor(dictionary=True)
     cursor.execute("SELECT MaSP, TenSP, Gia, HinhAnh FROM SanPham LIMIT 10")
     products = cursor.fetchall()
-    for p in products:
-        if p['HinhAnh']:
-            p['HinhAnh'] = base64.b64encode(p['HinhAnh']).decode('utf-8')
     cursor.close()
     conn.close()
     return render_template('mainMenu.html',product=products )
