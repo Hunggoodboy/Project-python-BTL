@@ -9,7 +9,11 @@ def size_help():
     conn = get_connect()
     cursor = conn.cursor(dictionary=True)
     cursor.execute("USE QLBanQuanAo")
+    #bảng size phụ nữ
     cursor.execute("SELECT * from SizePhuNu")
-    sizes = cursor.fetchall()
+    sizes_pn = cursor.fetchall()
+    #bảng size đàn ông
+    cursor.execute("SELECT * from SizeDanOng")
+    sizes_do = cursor.fetchall()
     conn.close()
-    return render_template('sizeManual.html', sizes = sizes)
+    return render_template('sizeManual.html', sizes_pn = sizes_pn, sizes_do = sizes_do)
