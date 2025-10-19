@@ -14,3 +14,14 @@ def main_menu():
     cursor.close()
     conn.close()
     return render_template('mainMenu.html',product=products )
+
+@main_bp.route('/search')
+def search():
+    word = request.args.get('word', '')   # lấy từ input
+    cursor = conn.cursor(dictionary=True)
+    sql = "SELECT * FROM QLBanQuanAo.SanPham WHERE MoTa LIKE %s"
+    cursor.execute(sql, (f"%{word}%",))
+    products = cursor.fetchall()  # tất cả sản phẩm
+    cursor.close()
+    conn.close()
+    return render_template("search.html", word=word, products=products)
