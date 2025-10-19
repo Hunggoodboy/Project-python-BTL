@@ -135,14 +135,28 @@ div.menu-bar {
 /* Icon user */
 .upright-user {
     position: absolute;
-    right: 20px;   /* đẩy qua trái một chút */
-    top: 50%;
+    right: 120px;   /* đẩy qua trái một chút */
+    top: 48%;
     transform: translateY(-50%);
     display: inline-block;
     z-index: 20;
 }
 
 .upright-user img {
+    height: 44px;
+    object-fit: contain;
+}
+
+.upright-cart {
+    position: absolute;
+    right: 20px;   /* đẩy qua trái một chút */
+    top: 56%;
+    transform: translateY(-50%);
+    display: inline-block;
+    z-index: 20;
+}
+
+.upright-cart img {
     height: 40px;
     object-fit: contain;
 }
@@ -186,3 +200,4 @@ div.menu-bar {
 .upright-search:hover .dropdown {
     display: block;
 }
+
