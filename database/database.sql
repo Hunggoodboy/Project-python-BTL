@@ -35,7 +35,8 @@ CREATE TABLE IF NOT EXISTS SanPham(
     Size nvarchar(100),
     ChatLieu nvarchar(100),
     SoLuongcon int,
-    HinhAnh LONGBLOB
+    HinhAnh varchar(100),
+    Season nvarchar(10)
 );
 
 CREATE TABLE IF NOT EXISTS DonHang(
