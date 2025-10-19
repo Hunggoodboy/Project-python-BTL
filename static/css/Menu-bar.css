@@ -9,6 +9,7 @@ div.menu-bar {
     flex-direction: row;
     align-items: flex-end;
     gap: 10px;
+    position: relative;
 
 }
 
@@ -124,4 +125,64 @@ a.img {
 }
 .hidden td:hover {
     background-color: orange;
+}
+
+/* Dành chỗ bên phải cho 2 icon */
+div.menu-bar {
+    padding-right: 120px;  /* tăng nếu cần */
+}
+
+/* Icon user */
+.upright-user {
+    position: absolute;
+    right: 20px;   /* đẩy qua trái một chút */
+    top: 50%;
+    transform: translateY(-50%);
+    display: inline-block;
+    z-index: 20;
+}
+
+.upright-user img {
+    height: 40px;
+    object-fit: contain;
+}
+
+/* Icon search */
+.upright-search {
+    position: absolute;
+    right: 70px;   /* icon nằm sát mép phải */
+    top: 50%;
+    transform: translateY(-50%);
+    display: inline-block;
+    z-index: 20;
+}
+
+.upright-search img {
+    height: 40px;
+    object-fit: contain;
+    cursor: pointer;
+}
+
+.upright-search input {
+    border: none;
+    outline: none;
+    background: transparent;
+    padding: 5px;
+    font-size: 14px;
+}
+
+/* Dropdown cho search */
+.upright-search .dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: white;
+    padding: 10px;
+    border: 1px solid #ccc;
+    z-index: 999;
+}
+
+.upright-search:hover .dropdown {
+    display: block;
 }

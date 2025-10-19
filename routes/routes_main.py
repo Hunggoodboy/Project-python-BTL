@@ -1,6 +1,6 @@
 import base64
 
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, request
 
 from database.connect import get_connect
 
@@ -18,6 +18,8 @@ def main_menu():
 @main_bp.route('/search')
 def search():
     word = request.args.get('word', '')   # lấy từ input
+
+    conn = get_connect()
     cursor = conn.cursor(dictionary=True)
     sql = "SELECT * FROM QLBanQuanAo.SanPham WHERE MoTa LIKE %s"
     cursor.execute(sql, (f"%{word}%",))
