@@ -9,11 +9,11 @@ main_bp = Blueprint('menu', __name__, template_folder='templates')
 def main_menu():
     conn = get_connect()
     cursor = conn.cursor(dictionary=True)
-    cursor.execute("SELECT MaSP, TenSP, Gia, HinhAnh FROM SanPham LIMIT 10")
+    cursor.execute("SELECT MaSP, TenSP, Gia, ChatLieu, HinhAnh FROM SanPham LIMIT 10")
     products = cursor.fetchall()
     cursor.close()
     conn.close()
-    return render_template('mainMenu.html',product=products )
+    return render_template('mainMenu.html',products=products )
 
 @main_bp.route('/search')
 def search():

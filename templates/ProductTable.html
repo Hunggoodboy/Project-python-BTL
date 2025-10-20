@@ -7,14 +7,24 @@
 <body>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/filter_column.css') }}">
     <table class="product_table">
-        {% for p in products %}
+        {% for row in products|batch(5, '') %}
         <tr>
-            <td>
-                <div>
-                    <img class="main" src="{{ url_for('static', filename= p.HinhAnh) }}">
-
-                </div>
-            </td>
+            {% for p in row %}
+                {% if p != '' %}
+                <td>
+                    <a class="product" href="{{ url_for('product.product_detail', pid=p.MaSP) }}">
+                        <div>
+                            <img class="main" src="{{ url_for('static', filename= p.HinhAnh) }}">
+                        </div>
+                        <div>{{ p.TenSP }}</div>
+                        <div class="price">{{ p.Gia|int }}₫</div>
+                        <div class="material">{{ p.ChatLieu }}</div>
+                    </a>
+                </td>
+                {% else %}
+                <td></td>
+                {% endif %}
+            {% endfor %}
         </tr>
         {% endfor %}
     </table>

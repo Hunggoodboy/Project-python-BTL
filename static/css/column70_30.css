@@ -23,7 +23,7 @@ img{
     color: #132440;
     border-top: 1px #132440 groove;
     border-bottom: 1px #132440 groove;
-    padding: 10px;
+    padding: 10px 20px;
 
     width: calc(100% + 40px); /* cộng lại margin hai bên của cha */
     margin-left: -20px;

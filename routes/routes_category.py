@@ -20,12 +20,19 @@ def category(category):
 def collection(season):
     conn = get_connect()
     cursor = conn.cursor(dictionary=True)
-    sql = "SELECT * FROM QLBanQuanAo.SanPham WHERE MoTa = %s"
+    sql = """
+          SELECT * 
+          FROM QLBanQuanAo.SanPham 
+          WHERE Season LIKE %s
+          OR Season IS NULL
+        """
+
     cursor.execute(sql, [f"%{season}%"])
     products = cursor.fetchall()  # tất cả sản phẩm
     cursor.close()
     conn.close()
-    return render_template("collections.html", products=products)
+    return render_template("collections.html", season = season, products=products)
+
 
 
 
