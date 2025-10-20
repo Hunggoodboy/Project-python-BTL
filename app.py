@@ -32,15 +32,18 @@ app.register_blueprint(size_bp)
 app.register_blueprint(logout_bp)
 app.register_blueprint(productdetail_bp)
 
-@app.route('/help')
-def size_help():
-    return render_template('sizeManual.html')
+
 @app.route('/new-product')
 def new_product():
     return render_template('newProduct.html')
 @app.route('/collections')
 def collections():
-    return render_template('collections.html')
+    conn = get_connect()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute('SELECT * FROM QLBanQuanAo.SanPham')
+    products = cursor.fetchall()
+    cursor.close()
+    return render_template('collections.html', products=products)
 
 @app.route('/ShowUser')
 def show_user():
