@@ -9,28 +9,52 @@ img{
     display: flex;
 }
 .left{
+    margin: 20px;
+    font-family: "Roboto Bold", sans-serif;
     flex: 70%;
-}
-.right {
-    flex: 30%;       /* 20% width */
-    background: lightgreen;
-    display: flex;
-    justify-content: center;
 }
 
 .p1{
     font-size: large;
     font-family: "Verdana", sans-serif;
 }
+.s1{
+    background-color: #4FB7B3;
+    color: #132440;
+    border-top: 1px #132440 groove;
+    border-bottom: 1px #132440 groove;
+    padding: 10px 20px;
 
-table{
+    width: calc(100% + 40px); /* cộng lại margin hai bên của cha */
+    margin-left: -20px;
+
+    font-size: large;
+    font-weight: bold;
+}
+
+.s2{
+    font-size: large;
+    font-weight: bold;
+    text-align: center;
+    padding: 10px;
+    border: 1px outset #132440;
+}
+
+table:not(.dropdown){
     border-collapse: collapse;
     text-align: center;
     vertical-align: center;
     width: 80%;
-    margin-left: auto;
-    margin-right: auto;
+    margin: 20px auto;
     border: 2px solid orange;
+}
+th:not(.dropdown){
+    background-color: #FFCF71;
+    color: white;
+    border: 1px solid orange;
+}
+td:not(.dropdown){
+    border: 1px solid orange;
 }
 
 .descript {
@@ -40,20 +64,44 @@ table{
     text-align: center;
 }
 
-.toc{
-    display: block;
+/* cột table of content bên phải*/
+.right {
+    flex: 30%;       /* 30% width */
+    background: white;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.toc:not(.title){
     border-radius: 10px;
-    background-color: lightskyblue;
-    border: 3px solid cornflowerblue;
+
+    background-color: #FEF3E2;
+    border: 3px solid #FA812F;
     list-style-type: upper-roman;
-    height: fit-content;
+    height: 10%;
     width: 80%;
+    display: flex;
+    flex-direction: column;
 
     font-family: "Verdana", sans-serif;
     font-weight: bold;
     font-size: large;
+    color: #0D1164;
 
 }
 .b{
     list-style-type: decimal;
+}
+
+.title{
+    width: 100%;
+    color: #132440;
+    font-family: "Verdana", sans-serif;
+    font-weight: bold;
+    font-size: x-large;
+    padding: 20px 10px 10px;
+    text-align: center;
 }

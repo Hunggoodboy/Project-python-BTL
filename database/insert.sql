@@ -36,21 +36,21 @@ INSERT INTO QLBanQuanAo.DanhMuc (MaDM, TenDM, MoTa, MaDMCha) VALUES
 
 INSERT INTO QLBanQuanAo.SanPham (MaSP, MaDM, TenSP, MoTa, Gia, MauSac, Size, ChatLieu, SoLuongCon, HinhAnh, Season) VALUES
 -- Áo (MaDM 101, 102, 103)
-(1001, 101, N'Áo Thun Cotton Basic', N'Áo thun cổ tròn, form vừa, chất liệu thoáng mát, 100% Cotton.', 199000, N'Trắng, Đen, Xám', N'S, M, L, XL', N'Cotton 100%', 350, 'static/anh_quan_ao/ao/ao_thun_basic.png', 'Summer'),
-(1002, 102, N'Sơ Mi Linen Cổ Điển', N'Sơ mi dài tay, chất liệu linen mát, phù hợp cho mùa hè.', 450000, N'Be, Xanh Navy', N'S, M, L', N'Linen Tự Nhiên', 120, 'static/anh_quan_ao/ao/so_mi_len_co_dien.jpg', NULL),
-(1003, 101, N'Áo Polo Cotton Pique', N'Áo polo phom cơ bản, cổ dệt kim, chất liệu Pique thoáng khí.', 290000, N'Đen, Trắng, Xanh rêu', N'S, M, L, XL', N'Cotton Pique', 250, 'static/anh_quan_ao/ao/ao_polo_cotton_pique.jpg', 'Summer'),
-(1004, 103, N'Áo Hoodie Nỉ Phom Rộng', N'Áo hoodie có mũ, phom rộng thoải mái, nỉ bông dày dặn.', 550000, N'Xám tro, Kem, Đen', N'M, L, XL', N'Nỉ Bông (Fleece)', 180, 'static/anh_quan_ao/ao/ao_hoodie_ni_phom_rong.jpg', 'Winter'),
-(1005, 103, N'Áo Khoác Gió Hai Lớp', N'Áo khoác ngoài nhẹ, chống nước nhẹ, có khóa kéo và mũ.', 690000, N'Xanh Navy, Be, Xám', N'S, M, L, XL', N'Polyester', 100, 'static/anh_quan_ao/ao/ao_khoac_gio_hai_lop.jpg', 'Winter'),
+(1001, 101, N'Áo Thun Cotton Basic', N'Áo thun cổ tròn, form vừa, chất liệu thoáng mát, 100% Cotton.', 199000, N'Trắng, Đen, Xám', N'S, M, L, XL', N'Cotton 100%', 350, 'anh_quan_ao/ao/ao_thun_basic.png', 'Summer'),
+(1002, 102, N'Sơ Mi Linen Cổ Điển', N'Sơ mi dài tay, chất liệu linen mát, phù hợp cho mùa hè.', 450000, N'Be, Xanh Navy', N'S, M, L', N'Linen Tự Nhiên', 120, 'anh_quan_ao/ao/so_mi_len_co_dien.jpg', NULL),
+(1003, 101, N'Áo Polo Cotton Pique', N'Áo polo phom cơ bản, cổ dệt kim, chất liệu Pique thoáng khí.', 290000, N'Đen, Trắng, Xanh rêu', N'S, M, L, XL', N'Cotton Pique', 250, 'anh_quan_ao/ao/ao_polo_cotton_pique.jpg', 'Summer'),
+(1004, 103, N'Áo Hoodie Nỉ Phom Rộng', N'Áo hoodie có mũ, phom rộng thoải mái, nỉ bông dày dặn.', 550000, N'Xám tro, Kem, Đen', N'M, L, XL', N'Nỉ Bông (Fleece)', 180, 'anh_quan_ao/ao/ao_hoodie_ni_phom_rong.jpg', 'Winter'),
+(1005, 103, N'Áo Khoác Gió Hai Lớp', N'Áo khoác ngoài nhẹ, chống nước nhẹ, có khóa kéo và mũ.', 690000, N'Xanh Navy, Be, Xám', N'S, M, L, XL', N'Polyester', 100, 'anh_quan_ao/ao/ao_khoac_gio_hai_lop.jpg', 'Winter'),
 
 -- Quần & Váy (MaDM 201, 202, 203)
-(2001, 201, N'Quần Jeans Slim-fit', N'Quần jeans dáng đứng, tối giản, không rách.', 650000, N'Xanh Đậm, Đen', N'29, 30, 31, 32', N'Denim Co Giãn', 200, 'static/anh_quan_ao/quan/quan_jean_slim_fit.jpg', NULL),
-(2002, 203, N'Chân Váy Chữ A Cơ Bản', N'Chân váy ngắn chữ A, dễ phối đồ, cạp cao.', 320000, N'Đen, Trắng Ngà', N'S, M, L', N'Vải Tuyết Mưa', 150, 'static/anh_quan_ao/quan/chan_vay_chu_A.jpg', NULL),
-(2003, 201, N'Quần Jogger Thun Basic', N'Quần jogger bo gấu, lưng thun, có dây rút, thích hợp mặc nhà/tập luyện.', 350000, N'Đen, Xám Melange', N'S, M, L, XL', N'Cotton/Spandex', 160, 'static/anh_quan_ao/quan/quan_jogger_thun.jpg',NULL),
-(2004, 202, N'Quần Short Kaki Phẳng', N'Quần short đứng dáng, độ dài trên gối, cạp phẳng.', 280000, N'Trắng ngà, Xanh mint', N'29, 30, 31, 32', N'Kaki', 140, 'static/anh_quan_ao/quan/quan_short_kaki.jpg',NULL),
+(2001, 201, N'Quần Jeans Slim-fit', N'Quần jeans dáng đứng, tối giản, không rách.', 650000, N'Xanh Đậm, Đen', N'29, 30, 31, 32', N'Denim Co Giãn', 200, 'anh_quan_ao/quan/quan_jean_slim_fit.jpg', NULL),
+(2002, 203, N'Chân Váy Chữ A Cơ Bản', N'Chân váy ngắn chữ A, dễ phối đồ, cạp cao.', 320000, N'Đen, Trắng Ngà', N'S, M, L', N'Vải Tuyết Mưa', 150, 'anh_quan_ao/quan/chan_vay_chu_A.jpg', NULL),
+(2003, 201, N'Quần Jogger Thun Basic', N'Quần jogger bo gấu, lưng thun, có dây rút, thích hợp mặc nhà/tập luyện.', 350000, N'Đen, Xám Melange', N'S, M, L, XL', N'Cotton/Spandex', 160, 'anh_quan_ao/quan/quan_jogger_thun.jpg',NULL),
+(2004, 202, N'Quần Short Kaki Phẳng', N'Quần short đứng dáng, độ dài trên gối, cạp phẳng.', 280000, N'Trắng ngà, Xanh mint', N'29, 30, 31, 32', N'Kaki', 140, 'anh_quan_ao/quan/quan_short_kaki.jpg',NULL),
 
 -- Phụ Kiện (MaDM 301, 302)
-(3001, 301, N'Ví Da Gấp Đôi Tối Giản', N'Ví da bò thật, thiết kế mỏng, chỉ có logo dập chìm.', 390000, N'Nâu Đậm, Đen', N'Free Size', N'Da Bò Thật', 80, 'static/anh_quan_ao/phukien/vi_gap_doi_toi_gian.jpg',NULL),
-(3002, 302, N'Thắt Lưng Da Khóa Cổ Điển', N'Dây nịt da trơn, khóa kim loại đơn giản.', 480000, N'Đen, Nâu', N'Free Size', N'Da Tổng Hợp', 65, 'static/anh_quan_ao/phukien/that_lung_da.jpg',NULL),
-(3003, 301, N'Túi Tote Vải Canvas Lớn', N'Túi vải canvas khổ lớn, quai đeo vai, in chữ tối giản.', 150000, N'Trắng, Đen', N'Free Size', N'Canvas dày', 300, 'static/anh_quan_ao/phukien/tui_tote_vai_canvas.jpg',NULL),
-(3004, 302, N'Mũ Lưỡi Trai Cotton Trơn', N'Mũ lưỡi trai trơn, không logo, có thể điều chỉnh phía sau.', 120000, N'Đen, Trắng, Nâu', N'Free Size', N'Cotton', 220, 'static/anh_quan_ao/phukien/mu_luoi_trai.jpg',NULL),
-(3005, 302, N'Vớ Cổ Cao Basic (Pack 3)', N'Bộ 3 đôi vớ cổ cao, chất liệu co giãn, thấm hút mồ hôi.', 99000, N'Trắng, Xám, Đen', N'Free Size', N'Cotton, Spandex', 500, 'static/anh_quan_ao/phukien/vo_cao_co_pack3.jpg',NULL);
+(3001, 301, N'Ví Da Gấp Đôi Tối Giản', N'Ví da bò thật, thiết kế mỏng, chỉ có logo dập chìm.', 390000, N'Nâu Đậm, Đen', N'Free Size', N'Da Bò Thật', 80, 'anh_quan_ao/phu_kien/vi_gap_doi_toi_gian.jpg',NULL),
+(3002, 302, N'Thắt Lưng Da Khóa Cổ Điển', N'Dây nịt da trơn, khóa kim loại đơn giản.', 480000, N'Đen, Nâu', N'Free Size', N'Da Tổng Hợp', 65, 'anh_quan_ao/phukien/that_lung_da.jpg',NULL),
+(3003, 301, N'Túi Tote Vải Canvas Lớn', N'Túi vải canvas khổ lớn, quai đeo vai, in chữ tối giản.', 150000, N'Trắng, Đen', N'Free Size', N'Canvas dày', 300, 'anh_quan_ao/phu_kien/tui_tote_vai_canvas.jpg',NULL),
+(3004, 302, N'Mũ Lưỡi Trai Cotton Trơn', N'Mũ lưỡi trai trơn, không logo, có thể điều chỉnh phía sau.', 120000, N'Đen, Trắng, Nâu', N'Free Size', N'Cotton', 220, 'anh_quan_ao/phu_kien/mu_luoi_trai.jpg',NULL),
+(3005, 302, N'Vớ Cổ Cao Basic (Pack 3)', N'Bộ 3 đôi vớ cổ cao, chất liệu co giãn, thấm hút mồ hôi.', 99000, N'Trắng, Xám, Đen', N'Free Size', N'Cotton, Spandex', 500, 'anh_quan_ao/phu_kien/vo_cao_co_pack3.jpg',NULL);

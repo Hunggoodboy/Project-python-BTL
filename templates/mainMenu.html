@@ -22,13 +22,19 @@
             <div class="track">
 
                 <div class="flagship">
-                    <img src="{{ url_for('static', filename='used/placeHolder_1.jpg') }}">
+                    <a href="{{ url_for('category.collection', season='Đông') }}">
+                        <img src="{{ url_for('static', filename='used/winter.png') }}">
+                    </a>
                 </div>
                 <div class="flagship">
-                    <img src="{{ url_for('static', filename='used/placeHolder_2.jpg') }}">
+                    <a href="{{ url_for('category.collection', season='Hè') }}">
+                        <img src="{{ url_for('static', filename='used/summer.jpg') }}">
+                    </a>
                 </div>
                 <div class="flagship">
-                    <img src="{{ url_for('static', filename='used/placeHolder_3.jpg') }}">
+                    <a href="{{ url_for('category.collection', season='Thu') }}">
+                        <img src="{{ url_for('static', filename='used/fall.jpg') }}">
+                    </a>
                 </div>
 
             </div>
@@ -45,20 +51,7 @@
 
     <h4 style = "text-align: center"> Gợi ý cho bạn </h4>
 
-    <table>
-    <{% for p in product %}
-        <tr>
-            <td text-align = "center">
-                <a class="img" href="{{ url_for('productdetail.shop', pid=p['MaSP']) }}">
-                    <img src="{{ url_for('static', filename='product/' ~ p.id ~ '_0.png' ) }}"
-                </a>
-                {{ p.name }}
-                {{ p.price }}
-
-            </td>
-        </tr>
-        {% endfor %}
-    </table>
+    {% include 'ProductTable.html' %}
 
 </body>
 </html>

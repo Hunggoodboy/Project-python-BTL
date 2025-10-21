@@ -9,13 +9,6 @@
     <header>
         Nhóm 3
         <a style="float: right" href="{{ url_for('size.size_help') }}">Hỗ trợ chọn size</a>
-        {% if session.get('hoten') %}
-            <a>Xin Chào {{session.get('hoten')}}</a>
-            <a style="float: right" href="{{ url_for('logout.logout') }}" > Đăng Xuất</a>
-        {% else %}
-            <a style="float: right" href="{{ url_for('register.register') }}">Đăng Ký</a>
-            <a style="float: right" href="{{ url_for('login_module.login') }}">Đăng Nhập</a>
-        {% endif %}
     </header>
 
     <!-- bar điều hướng, có ở tất cả các trang-->
@@ -56,6 +49,26 @@
                     <img src="{{ url_for('static', filename='used/search.png') }}" alt="Search" />
                 </button>
             </form>
+        </div>
+
+        <div class="upright-user">
+            {% if session.get('hoten') %}
+            <a style="float: right" href="{{ url_for('logout.logout') }}">
+                <img src="{{ url_for('static', filename='used/logout.png') }}" alt="Log Out" />
+            </a>
+            {% else %}
+            <a style="float: right" href="{{ url_for('login_module.login') }}">
+                <img src="{{ url_for('static', filename='used/user.png') }}" alt="User" />
+            </a>
+        </div>
+        {% endif %}
+        <div class="upright-cart">
+            <img src="{{ url_for('static', filename='used/cart.png') }}" alt="Cart" />
+            <ul>
+                {#
+                <!-- idk giỏ hàng kbiet cần ko-->
+                #}
+            </ul>
         </div>
 
     </div>

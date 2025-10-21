@@ -72,6 +72,6 @@ CREATE TABLE IF NOT EXISTS SizeDanOng (
     Eo  DECIMAL(10,1),
     Hong DECIMAL(10,1),
     DaiQuan DECIMAL(10,1),
-    ChieuCao VARCHAR(100) CHARACTER SET utf8mb4,
-    CanNang VARCHAR(100) CHARACTER SET utf8mb4
+    ChieuCao NVARCHAR(100),
+    CanNang NVARCHAR(100)
 );
