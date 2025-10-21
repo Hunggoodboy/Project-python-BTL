@@ -1,12 +1,14 @@
-from flask import Blueprint, render_template, request, redirect, session, flash
-from database.connect import get_connect
+from flask import Blueprint, render_template, request, redirect, session, flash, url_for, app
 import mysql.connector
+from database.connect import get_connect
 
 login_bp = Blueprint('login_module', __name__)
+
 
 @login_bp.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
+        print("ok")
         username = request.form.get('username')
         password = request.form.get('password')
         try:
@@ -31,7 +33,7 @@ def login():
                 # session['numberphone'] = numberphone
                 # session['address'] = address
                 flash('Bạn đã đăng nhập thành công !')
-                return render_template('MenuBar.html')
+                return redirect(url_for('home_bp.home'))
             else:
                 flash('Sai tên đăng nhập hoặc mật khẩu!')
                 return render_template('login.html')
