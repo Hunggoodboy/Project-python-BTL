@@ -5,13 +5,11 @@
     <title>Title</title>
 </head>
 <body>
-    <table>
-        {% for p in products %}
-        <tr>
+    {% include 'MenuBar.html' %}
+    <h4 style="padding-left: 195px">Web Qao / Tìm kiếm: {{ word }} </h4>
+    {% include 'ProductTable.html' %}
 
-        </tr>
-        {% endfor %}
-    </table>
+</body>
 
 </body>
 </html>
