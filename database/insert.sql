@@ -104,3 +104,11 @@ INSERT INTO SanPham (MaSP, MaDM, TenSP, MoTa, Gia, MauSac, Size, ChatLieu, SoLuo
 (3012, 301, N'Túi Đeo Vai Mini', N'Túi mini, quai đeo vai, thích hợp đi chơi hoặc đi làm.', 190000, N'Đen, Be', N'Free Size', N'Canvas + Polyester', 160, 'anh_quan_ao/phu_kien/tui_deo_vai_mini.jpg','Winter'),
 (3013, 302, N'Mũ Snapback Thể Thao', N'Mũ snapback, điều chỉnh size phía sau, phong cách năng động.', 150000, N'Đen, Xanh Navy, Trắng', N'Free Size', N'Cotton', 220, 'anh_quan_ao/phu_kien/mu_snapback_the_thao.jpg','Winter'),
 (3014, 302, N'Vớ Cổ Cao Thời Trang (Pack 3)', N'Bộ 3 đôi vớ ngắn, chất liệu cotton co giãn, màu cơ bản.', 95000, N'Trắng, Xám, Đen', N'Free Size', N'Cotton + Spandex', 350, 'anh_quan_ao/phu_kien/vo_cao_co_pack3.jpg','Winter');
+
+ALTER TABLE SanPham
+ADD COLUMN Sold INT DEFAULT 0,
+ADD COLUMN Discount INT;
+
+UPDATE SanPham
+SET Discount = FLOOR(RAND() * 51)   -- số ngẫu nhiên từ 0 đến 50
+WHERE MaSP >= 1001;
