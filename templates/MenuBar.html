@@ -51,18 +51,18 @@
             </form>
         </div>
 
-<!--        <div class="upright-user">-->
-<!--            {% if session.get('hoten') %}-->
-<!--            <a style="float: right" href="{{ url_for('logout.logout') }}">-->
-<!--                <img src="{{ url_for('static', filename='used/logout.png') }}" alt="Log Out" />-->
-<!--            </a>-->
-<!--            {% else %}-->
-<!--            <a style="float: right" href="{{ url_for('login_module.login') }}">-->
-<!--                <img src="{{ url_for('static', filename='used/user.png') }}" alt="User" />-->
-<!--            </a>-->
-<!--        </div>-->
-<!--        {% endif %}-->
-        <div class="upright-cart">
+        <div class="upright-user">
+            {% if session.get('hoten') %}
+            <a style="float: right" href="{{ url_for('logout.logout') }}">
+                <img src="{{ url_for('static', filename='used/logout.png') }}" alt="Log Out" />
+            </a>
+            {% else %}
+            <a style="float: right" href="{{ url_for('login_module.login') }}">
+                <img src="{{ url_for('static', filename='used/user.png') }}" alt="User" />
+            </a>
+            {% endif %} 
+        </div>
+        <div cla`ss="upright-cart">
             <img src="{{ url_for('static', filename='used/cart.png') }}" alt="Cart" />
             <ul>
                 {#
