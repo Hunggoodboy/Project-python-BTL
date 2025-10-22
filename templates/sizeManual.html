@@ -12,7 +12,7 @@
     {% include 'MenuBar.html' %}
     <h4>&nbsp;</h4>
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/column70_30.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/Size-Manual.css') }}">
     <div class="columns">
         <div class="left">
             <img src="{{ url_for('static', filename='used/XXS_to_XXL.jpg') }}" alt="size from XXS to XXL" width="100%">
@@ -22,18 +22,18 @@
                 cho mọi sản phẩm đang được bày bán trên trang web của chúng tôi!
             </p>
 
-            <div class="s1"> Kích thước quần áo nữ </div>
-            <img src="{{ url_for('static', filename='used/chart1-w.jpg') }}" alt="image of a woman with sizing" height="500px">
-            <div class="s2"> Kích thước áo </div>
+            <div class="s1" id="full-size-nu"> Kích thước quần áo nữ </div>
+                <img src="{{ url_for('static', filename='used/chart1-w.jpg') }}" alt="image of a woman with sizing" height="500px">
 
-            Để chọn được một chiếc áo phù hợp, bạn cần phải biết số đo:
-            <ul>
-                <li> Số đo ngang vai </li>
-                <li> Số đo vòng ngực </li>
-                <li> Chiều dài sải tay </li>
-            </ul>
-            Dưới đây chính là bảng dựa trên những số đo cần thiết,
-            ngoài ra, nếu bạn vẫn không chắc chắn sau khi đo, bạn có thể tham khảo chiều cao và cân nặng mẫu:
+            <div class="s2" id="size-ao-nu"> Kích thước áo </div>
+                Để chọn được một chiếc áo phù hợp, bạn cần phải biết số đo:
+                <ul>
+                    <li> Số đo ngang vai </li>
+                    <li> Số đo vòng ngực </li>
+                    <li> Chiều dài sải tay </li>
+                </ul>
+                Dưới đây chính là bảng dựa trên những số đo cần thiết,
+                ngoài ra, nếu bạn vẫn không chắc chắn sau khi đo, bạn có thể tham khảo chiều cao và cân nặng mẫu:
             <table>
                 <tr>
                     <th> Size </th>
@@ -55,7 +55,7 @@
                 {% endfor %}
             </table>
 
-            <div class="s2"> Kích thước quần </div>
+            <div class="s2" id="size-quan-nu"> Kích thước quần </div>
             Để chọn được một chiếc quần phù hợp, bạn cần phải biết số đo:
             <ul>
                 <li> Số đo vòng eo </li>
@@ -86,18 +86,18 @@
             </table>
 
             <!-- Đàn ông -->
-            <div class="s1"> Kích thước quần áo nam </div>
-            <img src="{{ url_for('static', filename='used/chart1-m.jpg') }}" alt="image of a woman with sizing" height="500px">
+            <div class="s1" id="full-size-nam"> Kích thước quần áo nam </div>
+                <img src="{{ url_for('static', filename='used/chart1-m.jpg') }}" alt="image of a woman with sizing" height="500px">
 
-            <div class="s2"> Kích thước áo </div>
-            Để chọn được một chiếc áo phù hợp, bạn cần phải biết số đo:
-            <ul>
-                <li> Số đo ngang vai </li>
-                <li> Số đo vòng ngực </li>
-                <li> Chiều dài sải tay </li>
-            </ul>
-            Dưới đây chính là bảng dựa trên những số đo cần thiết,
-            ngoài ra, nếu bạn vẫn không chắc chắn sau khi đo, bạn có thể tham khảo chiều cao và cân nặng mẫu:
+            <div class="s2" id="size-ao-nam"> Kích thước áo </div>
+                Để chọn được một chiếc áo phù hợp, bạn cần phải biết số đo:
+                <ul>
+                    <li> Số đo ngang vai </li>
+                    <li> Số đo vòng ngực </li>
+                    <li> Chiều dài sải tay </li>
+                </ul>
+                Dưới đây chính là bảng dựa trên những số đo cần thiết,
+                ngoài ra, nếu bạn vẫn không chắc chắn sau khi đo, bạn có thể tham khảo chiều cao và cân nặng mẫu:
             <table>
                 <tr>
                     <th> Size </th>
@@ -119,15 +119,15 @@
                 {% endfor %}
             </table>
 
-            <div class="s2"> Kích thước quần </div>
-            Để chọn được một chiếc quần phù hợp, bạn cần phải biết số đo:
-            <ul>
-                <li> Số đo vòng eo </li>
-                <li> Số đo hông </li>
-                <li> Chiều dài ống quần </li>
-            </ul>
-            Dưới đây chính là bảng dựa trên những số đo cần thiết,
-            ngoài ra, nếu bạn vẫn không chắc chắn sau khi đo, bạn có thể tham khảo chiều cao và cân nặng mẫu:
+            <div class="s2" id="size-quan-nam"> Kích thước quần </div>
+                Để chọn được một chiếc quần phù hợp, bạn cần phải biết số đo:
+                <ul>
+                    <li> Số đo vòng eo </li>
+                    <li> Số đo hông </li>
+                    <li> Chiều dài ống quần </li>
+                </ul>
+                Dưới đây chính là bảng dựa trên những số đo cần thiết,
+                ngoài ra, nếu bạn vẫn không chắc chắn sau khi đo, bạn có thể tham khảo chiều cao và cân nặng mẫu:
             <table>
                 <tr>
                     <th> Size </th>
@@ -150,24 +150,9 @@
             </table>
         </div>
 
+        <!-- cột bên phải, gồm table of content -->
         <div class="right">
-            <div class="toc title">
-                Các mục trong trang
-            </div>
-
-            <ol class="toc">
-                <li>Kích thước quần áo nữ</li>
-                <ol class="b">
-                    <li> Kích thước áo </li>
-                    <li> Kích thước quần </li>
-                </ol>
-                <li> Kích thước quần áo nam</li>
-                <ol class="b">
-                    <li>Kích thước áo</li>
-                    <li> Kích thước quần </li>
-                </ol>
-
-            </ol>
+            <script src="{{ url_for('static', filename='js/table-of-content.js') }}"></script>
 
         </div>
     </div>

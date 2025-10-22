@@ -21,9 +21,26 @@ def search():
 
     conn = get_connect()
     cursor = conn.cursor(dictionary=True)
-    sql = "SELECT * FROM QLBanQuanAo.SanPham WHERE MoTa LIKE %s"
-    cursor.execute(sql, (f"%{word}%",))
+    sql = ("""
+            SELECT *
+            FROM QLBanQuanAo.SanPham 
+            WHERE ChatLieu LIKE %s 
+                OR TenSP LIKE %s
+                OR MauSac LIKE %s
+            ORDER BY
+                CASE
+                    WHEN TenSP LIKE %s THEN 1
+                    WHEN ChatLieu LIKE %s THEN 2
+                    ELSE 3
+                END,
+                TenSP;
+            """)
+    key = f"% {word} %"
+    cursor.execute(sql, [key, key, key, key, key])
     products = cursor.fetchall()  # tất cả sản phẩm
     cursor.close()
     conn.close()
-    return render_template("search.html", word=word, products=products)
+    if products:
+        return render_template("search.html", word=word, products=products)
+    else:
+        return render_template("search.html", word=word, products='')

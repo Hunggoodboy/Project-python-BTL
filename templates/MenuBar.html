@@ -50,7 +50,6 @@
                 </button>
             </form>
         </div>
-
         <div class="upright-user">
             {% if session.get('hoten') %}
             <a style="float: right" href="{{ url_for('logout.logout') }}">
@@ -62,16 +61,13 @@
             </a>
             {% endif %} 
         </div>
-        <div cla`ss="upright-cart">
+
+        <div class="upright-cart">
             <img src="{{ url_for('static', filename='used/cart.png') }}" alt="Cart" />
             <ul>
-                {#
-                <!-- idk giỏ hàng kbiet cần ko-->
-                #}
+                {# <!-- idk giỏ hàng kbiet cần ko--> #}
             </ul>
         </div>
-
-    </div>
 
 </body>
 </html>
