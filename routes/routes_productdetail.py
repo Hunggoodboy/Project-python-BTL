@@ -1,70 +1,32 @@
 from flask import Blueprint, render_template
+from database.connect import get_connect
 
 productdetail_bp = Blueprint('productdetail', __name__)
 
-products = [
-    {
-        "id": 1,
-        "name": "Áo Cà Sa",
-        "price": 2590000000,
-        "discount": -15,
-        "sold": 234,
-        "images": [
-            "https://cdn3.upanh.info/upload/server-sw3/product-acc/1816156/68cc2bb6c2a5d.webp",
-            "https://vn-test-11.slatic.net/p/24a4ae0479b0d7d2659b4868fe76e881.jpg",
-            "https://cf.shopee.vn/file/5386246b6a61702d6c35c7b558160291",
-            "https://streetvibe.vn/wp-content/uploads/2022/03/2-4.jpg"
-        ],
-        "colors": [
-            {"name": "Đen", "image": "https://vn-test-11.slatic.net/p/24a4ae0479b0d7d2659b4868fe76e881.jpg"},
-            {"name": "Trắng", "image": "https://cf.shopee.vn/file/5386246b6a61702d6c35c7b558160291"}
-        ],
-        "stock": 5,
-        "sizes": ["S", "M", "L", "XL"],
-        "shipping_info": "Dự kiến giao hàng trong 365 năm.",
-        "description": "NGON!!!",
-        "rating": 200.0,
-        "review_count": 124,
-        "comments": [
-            {"user": "Ngân 98", "text": "Húpppp!!"},
-            {"user": "Ngân 89", "text": "Như CC!"}
-        ]
-    },
-    {
-        "id": 2,
-        "name": "Áo Cà Sa",
-        "price": 8087876000000,
-        "discount": -95,
-        "sold": 23989794,
-        "images": [
-            "https://cdn3.upanh.info/upload/server-sw3/product-acc/1816153/68cc2b653d313.webp",
-            "https://vn-test-11.slatic.net/p/24a4ae0479b0d7d2659b4868fe76e881.jpg",
-            "https://cf.shopee.vn/file/5386246b6a61702d6c35c7b558160291",
-            "https://streetvibe.vn/wp-content/uploads/2022/03/2-4.jpg"
-        ],
-        "colors": [
-            {"name": "Đen", "image": "https://vn-test-11.slatic.net/p/24a4ae0479b0d7d2659b4868fe76e881.jpg"},
-            {"name": "Trắng", "image": "https://cf.shopee.vn/file/5386246b6a61702d6c35c7b558160291"}
-        ],
-        "stock": 7,
-        "sizes": ["S", "M", "L", "XL"],
-        "shipping_info": "Dự kiến giao hàng trong 2555 năm.",
-        "description": "NGON!!!",
-        "rating": 206.0,
-        "review_count": 674,
-        "comments": [
-            {"user": "Ngân 99", "text": "Húpppp!!"},
-            {"user": "Ngân 97", "text": "Như CC!"}
-        ]
-    }
-]
+def get_all_products():
+    conn = get_connect()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT MaSP, TenSP, Gia, HinhAnh, MauSac, MoTa, Size, ChatLieu, SoLuongCon FROM SanPham")
+    products = cursor.fetchall()
+    conn.close()
+    return products
+
+def get_product_by_id(id):
+    conn = get_connect()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM SanPham WHERE MaSP = %s", (id,))
+    product = cursor.fetchone()
+    conn.close()
+    return product
 
 @productdetail_bp.route('/shop')
 def shop():
+    products = get_all_products()
     return render_template('shop.html', products=products)
+
 @productdetail_bp.route('/product/<int:id>')
 def productdetail(id):
-    product = next((p for p in products if p['id'] == id), None)
+    product = get_product_by_id(id)
     if not product:
         return "Sản phẩm không tồn tại", 404
     return render_template('productdetail.html', product=product)
