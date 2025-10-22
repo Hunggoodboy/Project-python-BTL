@@ -1,28 +1,26 @@
-CREATE database IF NOT EXISTS QLBanQuanAo;
+
+CREATE DATABASE IF NOT EXISTS QLBanQuanAo CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 USE QLBanQuanAo;
 
-CREATE TABLE IF NOT exists KhachHang(
-	MaKH int auto_increment primary key,
-    HoTen nvarchar(100) NOT NULL,
-    UserName nvarchar(100) NOT NULL,
-    MatKhau nvarchar(100) NOT NULL,
-    SDT varchar(10) NOT NULL,
-    Address nvarchar(100)
+-- Bảng 1: Khách hàng
+CREATE TABLE IF NOT EXISTS KhachHang(
+    MaKH INT AUTO_INCREMENT PRIMARY KEY,
+    HoTen NVARCHAR(100) NOT NULL,
+    UserName NVARCHAR(100) NOT NULL UNIQUE,
+    MatKhau NVARCHAR(100) NOT NULL,
+    SDT VARCHAR(10) NOT NULL,
+    Address NVARCHAR(100)
 );
 
+-- Bảng 2: Danh Mục (Ban đầu)
 CREATE TABLE IF NOT EXISTS DanhMuc(
-	MaDM int Primary KEY,
-    TenDM nvarchar(100) NOT NULL,
-    MoTa nvarchar(100) NOT NULL
+    MaDM INT PRIMARY KEY,
+    TenDM NVARCHAR(100) NOT NULL,
+    MoTa NVARCHAR(100),
+    MaDMCha INT NULL,
+    CONSTRAINT fk_dm_cha FOREIGN KEY (MaDMCha) REFERENCES DanhMuc(MaDM)
 );
-SET FOREIGN_KEY_CHECKS = 0;
-
-ALTER TABLE DanhMuc
-ADD COLUMN MaDMCha INT NULL,
-ADD CONSTRAINT fk_dm_cha FOREIGN KEY (MaDMCha) REFERENCES DanhMuc(MaDM);
-
-SET FOREIGN_KEY_CHECKS = 1;
 
 CREATE TABLE IF NOT EXISTS SanPham(
 	MaSP int primary key,
@@ -36,8 +34,14 @@ CREATE TABLE IF NOT EXISTS SanPham(
     ChatLieu nvarchar(100),
     SoLuongcon int,
     HinhAnh varchar(100),
-    Season nvarchar(10)
+    Season varchar(20)
 );
+ALTER TABLE SanPham
+MODIFY COLUMN Season VARCHAR(50);
+ALTER TABLE SanPham MODIFY HinhAnh VARCHAR(255);
+ALTER TABLE SanPham
+ADD COLUMN Sold INT DEFAULT 0,
+ADD COLUMN Discount INT;
 
 CREATE TABLE IF NOT EXISTS DonHang(
 	MaDH int primary key,
@@ -64,14 +68,14 @@ CREATE TABLE IF NOT EXISTS SizePhuNu (
 );
 
 CREATE TABLE IF NOT EXISTS SizeDanOng (
-	id INT PRIMARY KEY,
+    id INT PRIMARY KEY,
     MaSize VARCHAR(5) NOT NULL,
-    NgangVai DECIMAL(10,1),
-    VongNguc DECIMAL(10,1),
-    TayAo DECIMAL(10,1),
-    Eo  DECIMAL(10,1),
-    Hong DECIMAL(10,1),
-    DaiQuan DECIMAL(10,1),
+    NgangVai DECIMAL(10 , 1 ),
+    VongNguc DECIMAL(10 , 1 ),
+    TayAo DECIMAL(10 , 1 ),
+    Eo DECIMAL(10 , 1 ),
+    Hong DECIMAL(10 , 1 ),
+    DaiQuan DECIMAL(10 , 1 ),
     ChieuCao NVARCHAR(100),
     CanNang NVARCHAR(100)
 );
