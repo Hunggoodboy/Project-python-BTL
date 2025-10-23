@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Web Qao</title>
+</head>
+<body>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <!-- bar điều hướng, có ở tất cả các trang-->
+    {% include 'MenuBar.html' %}
+    <h4 style="padding-left: 195px">Web Qao / {{ season }} Collection </h4>
+
+    {% include 'ProductTable.html' %}
+
+</body>
+</html>

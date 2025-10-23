@@ -1,0 +1,203 @@
+
+/* menu-bar -> tag -> (navi + hidden dropdown) */
+div.menu-bar {
+
+    padding-left: 20px;
+    background-color: #16476A;
+
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    gap: 10px;
+    position: relative;
+
+}
+
+/* tag<span> = navi<a> + dropdown<table> */
+.tag {
+    position: relative; /* Để .hidden bám theo tag */
+    display: inline-block;
+}
+
+/* navi<a> */
+.navi:link, .navi:visited {
+    padding: 14px 25px;
+    border-radius: 10px 10px 0 0;   /* bo góc tròn trên */
+
+    background-color: #16476A;
+    color: white;
+    text-align: center;
+    font-family: "Verdana", sans-serif;
+    text-decoration: none;
+
+    display: inline-block;
+}
+
+.navi:hover, .navi:active {
+    background-color: #BF092F;
+}
+
+/* hidden dropdown<table> */
+.hidden {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: 100%;
+    width: auto;
+    z-index: 999;
+    border-collapse: collapse;
+
+}
+.tag:hover .hidden {
+    display: table;
+}
+
+/* Style cho bảng */
+.hidden td {
+    border: 2px solid orange;
+    padding: 10px;
+    font-family: "Verdana", sans-serif;
+    text-align: center;
+    color: #16476A;
+    background-color: white;
+}
+
+
+/* logo về trang chủ */
+a.img {
+    display: inline-block;
+    border-left: 20px solid transparent;
+    border-right: 20px solid transparent;
+    height: 100px;
+    vertical-align: bottom;
+
+    display: flex;
+}
+
+.img div {
+    margin-top: 25px; /* chỉnh số px để logo lệch xuống */
+    z-index: 20;
+}
+
+.img img {
+    display: block;   /* tránh hở line */
+
+}
+
+.star_gif{
+    background-color: #4FB7B3;
+    color: #132440;
+    height: 50px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    position: relative;
+}
+.star_gif img {
+    height: 100%;
+    width: auto;
+    object-fit: contain;
+    display: block;
+
+    position: absolute;
+    transform: translate(0%, 10%);
+    z-index: 10;
+}
+
+.cate{
+    white-space: nowrap;
+    display: block;
+    text-align: center;
+    font-family: "Verdana", sans-serif;
+}
+
+.cate:link, .cate:visited {
+    color: #16476A;
+    text-decoration: none;
+}
+
+.cate:hover, .cate:active {
+    color: white;
+}
+.hidden td:hover {
+    background-color: orange;
+}
+
+/* Dành chỗ bên phải cho 2 icon */
+div.menu-bar {
+    padding-right: 120px;  /* tăng nếu cần */
+}
+
+/* Icon user */
+.upright-user {
+    position: absolute;
+    right: 120px;   /* đẩy qua trái một chút */
+    top: 48%;
+    transform: translateY(-50%);
+    display: inline-block;
+    z-index: 20;
+}
+
+.upright-user img {
+    height: 44px;
+    object-fit: contain;
+}
+
+.upright-cart {
+    position: absolute;
+    right: 20px;   /* đẩy qua trái một chút */
+    top: 56%;
+    transform: translateY(-50%);
+    display: inline-block;
+    z-index: 20;
+}
+
+.upright-cart img {
+    height: 40px;
+    object-fit: contain;
+}
+
+/* Icon search */
+.upright-search {
+    position: absolute;
+    right: 70px;   /* icon nằm sát mép phải */
+    top: 50%;
+    transform: translateY(-50%);
+    display: inline-block;
+    z-index: 20;
+}
+
+.upright-search img {
+    height: 40px;
+    object-fit: contain;
+    cursor: pointer;
+}
+
+.upright-search input {
+    border: none;
+    outline: none;
+    background: transparent;
+    padding: 5px;
+    font-size: 14px;
+}
+
+/* Dropdown cho search */
+.upright-search .dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: white;
+    padding: 10px;
+    border: 1px solid #ccc;
+    z-index: 999;
+}
+
+.upright-search:hover .dropdown {
+    display: block;
+}
+
