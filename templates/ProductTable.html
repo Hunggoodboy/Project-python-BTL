@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="vi">
+<style>
+    .no-product{
+        text-align: center;
+        padding: 50px;
+        font-family: 'Roboto', sans-serif;
+    }
+    .no-product img{
+        height: 150px;
+        width: 150px;
+    }
+
+</style>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/filter_column.css') }}">
+    {% if products == '' %}
+        <div class="no-product">
+            <img src="{{ url_for('static', filename='used/no-product.png') }}" alt="No product">
+            <h1> Xin lỗi, sản phẩm hiện đang hết hàng hoặc không tồn tại!</h1>
+            <h2> Vui lòng thử lại sau. </h2>
+        </div>
+    {% else %}
+    <table class="product_table">
+        {% for row in products|batch(5, '') %}
+        <tr>
+            {% for p in row %}
+                {% if p != '' %}
+                <td>
+                    <a class="product" href="{{ url_for('product.product_detail', pid=p.MaSP) }}">
+                        <div>
+                            <img class="main" src="{{ url_for('static', filename= p.HinhAnh) }}">
+                        </div>
+                        <div>{{ p.TenSP }}</div>
+                        <div class="price">{{ p.Gia|int }}₫</div>
+                        <div class="material">{{ p.ChatLieu }}</div>
+                    </a>
+                </td>
+                {% else %}
+                <td></td>
+                {% endif %}
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+</body>
+</html>

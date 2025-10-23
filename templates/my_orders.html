@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Đơn hàng của tôi</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            padding: 20px;
+        }
+        .order-row {
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #ddd;
+            padding: 15px 0;
+        }
+        .order-row img {
+            height: 100px;
+            width: 100px;
+            margin-right: 20px;
+        }
+        .order-info {
+            flex: 1;
+        }
+        .order-info div {
+            margin-bottom: 5px;
+        }
+        .status {
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .status.green {
+            color: green;
+        }
+        .status.yellow {
+            color: goldenrod;
+        }
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 999; 
+            left: 0; top: 0;
+            width: 100%; height: 100%; 
+            overflow: auto; 
+            background-color: rgba(0,0,0,0.5);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 10% auto; 
+            padding: 20px;
+            border: 1px solid #888;
+            width: 50%;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Đơn hàng của tôi</h1>
+    {% for order in orders %}
+    <div class="order-row">
+        <img src="{{ url_for('static', filename=order.HinhAnh) }}" alt="{{ order.TenSP }}">
+        <div class="order-info">
+            <div><strong>{{ order.TenSP }}</strong></div>
+            <div>Giá: {{ order.Gia }}₫</div>
+            <div>Số lượng: {{ order.SoLuong }}</div>
+        </div>
+        <div class="status {% if order.TrangThai == 'Đã giao thành công' %}green{% else %}yellow{% endif %}" onclick="openModal('{{ loop.index0 }}')">
+            {{ order.TrangThai }}
+        </div>
+    </div>
+    {% endfor %}
+    {% for order in orders %}
+    <div id="modal-{{ loop.index0 }}" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('{{ loop.index0 }}')">&times;</span>
+            <h2>Chi tiết trạng thái đơn hàng</h2>
+            <p>Thông tin chi tiết sẽ hiển thị ở đây...</p>
+        </div>
+    </div>
+    {% endfor %}
+
+    <script>
+        function openModal(index) {
+            document.getElementById('modal-' + index).style.display = 'block';
+        }
+        function closeModal(index) {
+            document.getElementById('modal-' + index).style.display = 'none';
+        }
+        window.onclick = function(event) {
+            {% for order in orders %}
+            var modal = document.getElementById('modal-{{ loop.index0 }}');
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+            {% endfor %}
+        }
+    </script>
+</body>
+</html>

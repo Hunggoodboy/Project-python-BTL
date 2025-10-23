@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <!-- bar điều hướng, có ở tất cả các trang-->
+    {% include 'MenuBar.html' %}
+    <h4>&nbsp;</h4>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/Size-Manual.css') }}">
+    <div class="columns">
+        <div class="left">
+            <img src="{{ url_for('static', filename='used/XXS_to_XXL.jpg') }}" alt="size from XXS to XXL" width="100%">
+            <span class="descript"> Nhiều lựa chọn từ XS tới XL</span>
+            <p class="p1">
+                Biến trải nghiệm mua sắm của bạn trở nên thoải mái và đơn giản với bảng kích cỡ phù hợp
+                cho mọi sản phẩm đang được bày bán trên trang web của chúng tôi!
+            </p>
+
+            <div class="s1" id="full-size-nu"> Kích thước quần áo nữ </div>
+                <img src="{{ url_for('static', filename='used/chart1-w.jpg') }}" alt="image of a woman with sizing" height="500px">
+
+            <div class="s2" id="size-ao-nu"> Kích thước áo </div>
+                Để chọn được một chiếc áo phù hợp, bạn cần phải biết số đo:
+                <ul>
+                    <li> Số đo ngang vai </li>
+                    <li> Số đo vòng ngực </li>
+                    <li> Chiều dài sải tay </li>
+                </ul>
+                Dưới đây chính là bảng dựa trên những số đo cần thiết,
+                ngoài ra, nếu bạn vẫn không chắc chắn sau khi đo, bạn có thể tham khảo chiều cao và cân nặng mẫu:
+            <table>
+                <tr>
+                    <th> Size </th>
+                    <th> Số đo ngang vai </th>
+                    <th> Số đo vòng ngực </th>
+                    <th> Chiều dài sải tay </th>
+                    <th> Chiều cao mẫu </th>
+                    <th> Cân nặng mẫu </th>
+                </tr>
+                {% for s in sizes_pn %}
+                <tr>
+                    <td> {{ s.MaSize }} </td>
+                    <td> {{ s.NgangVai }} </td>
+                    <td> {{ s.VongNguc }} </td>
+                    <td> {{ s.TayAo }} </td>
+                    <td> {{ s.ChieuCao }} </td>
+                    <td> {{ s.CanNang }} </td>
+                </tr>
+                {% endfor %}
+            </table>
+
+            <div class="s2" id="size-quan-nu"> Kích thước quần </div>
+            Để chọn được một chiếc quần phù hợp, bạn cần phải biết số đo:
+            <ul>
+                <li> Số đo vòng eo </li>
+                <li> Số đo hông </li>
+                <li> Chiều dài ống quần </li>
+            </ul>
+            Dưới đây chính là bảng dựa trên những số đo cần thiết,
+            ngoài ra, nếu bạn vẫn không chắc chắn sau khi đo, bạn có thể tham khảo chiều cao và cân nặng mẫu:
+            <table>
+                <tr>
+                    <th> Size </th>
+                    <th> Số đo vòng eo </th>
+                    <th> Số đo hông </th>
+                    <th> Chiều dài ống quần </th>
+                    <th> Chiều cao mẫu </th>
+                    <th> Cân nặng mẫu </th>
+                </tr>
+                {% for s in sizes_pn %}
+                <tr>
+                    <td> {{ s.MaSize }} </td>
+                    <td> {{ s.Eo }} </td>
+                    <td> {{ s.Hong }} </td>
+                    <td> {{ s.DaiQuan }} </td>
+                    <td> {{ s.ChieuCao }} </td>
+                    <td> {{ s.CanNang }} </td>
+                </tr>
+                {% endfor %}
+            </table>
+
+            <!-- Đàn ông -->
+            <div class="s1" id="full-size-nam"> Kích thước quần áo nam </div>
+                <img src="{{ url_for('static', filename='used/chart1-m.jpg') }}" alt="image of a woman with sizing" height="500px">
+
+            <div class="s2" id="size-ao-nam"> Kích thước áo </div>
+                Để chọn được một chiếc áo phù hợp, bạn cần phải biết số đo:
+                <ul>
+                    <li> Số đo ngang vai </li>
+                    <li> Số đo vòng ngực </li>
+                    <li> Chiều dài sải tay </li>
+                </ul>
+                Dưới đây chính là bảng dựa trên những số đo cần thiết,
+                ngoài ra, nếu bạn vẫn không chắc chắn sau khi đo, bạn có thể tham khảo chiều cao và cân nặng mẫu:
+            <table>
+                <tr>
+                    <th> Size </th>
+                    <th> Số đo ngang vai </th>
+                    <th> Số đo vòng ngực </th>
+                    <th> Chiều dài sải tay </th>
+                    <th> Chiều cao mẫu </th>
+                    <th> Cân nặng mẫu </th>
+                </tr>
+                {% for s in sizes_do %}
+                <tr>
+                    <td> {{ s.MaSize }} </td>
+                    <td> {{ s.NgangVai }} </td>
+                    <td> {{ s.VongNguc }} </td>
+                    <td> {{ s.TayAo }} </td>
+                    <td> {{ s.ChieuCao }} </td>
+                    <td> {{ s.CanNang }} </td>
+                </tr>
+                {% endfor %}
+            </table>
+
+            <div class="s2" id="size-quan-nam"> Kích thước quần </div>
+                Để chọn được một chiếc quần phù hợp, bạn cần phải biết số đo:
+                <ul>
+                    <li> Số đo vòng eo </li>
+                    <li> Số đo hông </li>
+                    <li> Chiều dài ống quần </li>
+                </ul>
+                Dưới đây chính là bảng dựa trên những số đo cần thiết,
+                ngoài ra, nếu bạn vẫn không chắc chắn sau khi đo, bạn có thể tham khảo chiều cao và cân nặng mẫu:
+            <table>
+                <tr>
+                    <th> Size </th>
+                    <th> Số đo vòng eo </th>
+                    <th> Số đo hông </th>
+                    <th> Chiều dài ống quần </th>
+                    <th> Chiều cao mẫu </th>
+                    <th> Cân nặng mẫu </th>
+                </tr>
+                {% for s in sizes_do %}
+                <tr>
+                    <td> {{ s.MaSize }} </td>
+                    <td> {{ s.Eo }} </td>
+                    <td> {{ s.Hong }} </td>
+                    <td> {{ s.DaiQuan }} </td>
+                    <td> {{ s.ChieuCao }} </td>
+                    <td> {{ s.CanNang }} </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+
+        <!-- cột bên phải, gồm table of content -->
+        <div class="right">
+            <script src="{{ url_for('static', filename='js/table-of-content.js') }}"></script>
+
+        </div>
+    </div>
+
+
+</body>
+</html>

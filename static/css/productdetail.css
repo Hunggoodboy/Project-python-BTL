@@ -1,0 +1,337 @@
+
+body {
+    font-family: Arial, sans-serif;
+    background: #fafafa;
+    padding: 20px;
+}
+
+.product-detail {
+    max-width: 800px;
+    margin: auto;
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.image-viewer {
+    position: relative;
+    text-align: center;
+    margin-bottom: 20px;
+    width: 100%;
+    height: 400px;        
+    overflow: hidden; 
+}
+
+.image-viewer img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;    
+    border-radius: 10px;
+}
+
+.nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0,0,0,0.4);
+    color: white;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 50%;
+}
+
+.nav-btn.left { left: 10px; }
+.nav-btn.right { right: 10px; }
+
+.price-row {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+    font-size: 20px;
+}
+
+.discount {
+    color: red;
+    margin-top: 10px;
+}
+
+.product-name {
+    margin-top: 15px;
+}
+
+.section-box {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 15px;
+    margin-top: 15px;
+    background-color: #fafafa;
+}
+
+.color-options img {
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    border: 2px solid transparent;
+}
+.color-options img:hover, .color-options img.active {
+    border-color: #007bff;
+}
+.size-chart {
+    display: flex;            
+    justify-content: space-between; 
+    align-items: center;     
+    margin: 10px 0;
+}
+
+.size-chart .section.section-box.size {
+    flex: 1; 
+}
+
+.size-chart a {
+    font-style: italic;      
+    text-decoration: underline; 
+    color: #1aae3a;              
+}
+
+.size-options .size-btn {
+    margin-right: 10px;
+    padding: 6px 12px;
+    border: 1px solid #aaa;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.size-options .size-btn:hover, .size-options .size-btn.active {
+    background: #007bff;
+    color: white;
+}
+
+.clickable {
+    color: #007bff;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.rating {
+    margin-top: 15px;
+    font-size: 18px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: #fafafa;
+}
+
+.comments {
+    margin-top: 15px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: #fafafa;
+}
+
+.comments h3 {
+    margin-top: 0;
+}
+
+.comment {
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+    border-bottom: 1px dashed #ccc;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.5);
+}
+.modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 400px;
+    margin: 100px auto;
+}
+.close {
+    float: right;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.section-box.color, 
+.section-box.size, 
+.section-box.shipping, 
+.section-box.description {
+    border: none;
+    background-color: transparent;
+    padding: 10px 0; 
+}
+
+.section-box.color + .size.and.size.chart,
+.size.and.size.chart + .section-box.shipping,
+.section-box.shipping + .section-box.description {
+    border-top: 1px solid #ddd;
+}
+
+
+.action-row {
+    display: flex;
+    width: 100%;
+    position: fixed;      
+    bottom: 0;            
+    left: 0;
+    background-color: #fefdfd; 
+    padding: 10px;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+    z-index: 9999;
+}
+
+.action-row button {
+    flex: 1; 
+    padding: 12px 0;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    color: rgb(224, 135, 19);
+    border-radius: 6px;
+    margin-right: 10px; 
+}
+
+.action-row .add-cart {
+    background-color: #ff9900; 
+    color: white;              
+    border: none;              
+    border-radius: 6px;        
+    cursor: pointer;           
+}
+.action-row .buy-now {
+    background-color: #ff3e3e; 
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.product-modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 1000;
+}
+
+.product-modal .modal-content {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    width: 90%;
+    max-width: 400px;
+    margin: 100px auto;
+    position: relative;
+}
+
+.product-modal .close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.modal-top {
+    display: flex;
+    margin-bottom: 15px;
+}
+
+.modal-top img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 6px;
+    margin-right: 15px;
+}
+
+.modal-top .price-stock {
+    flex: 1;
+}
+
+.price-stock p {
+    margin: 4px 0;
+}
+
+.modal-section {
+    margin-bottom: 15px;
+}
+
+.modal-section .options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.modal-section .options button {
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    background: white;
+}
+
+.modal-section .options button img {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    margin-right: 5px;
+}
+
+.quantity-control {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.quantity-control .qty-btn {
+    width: 30px;
+    height: 30px;
+    border: 1px solid #ccc;
+    background: #f5f5f5;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.quantity-control input {
+    width: 50px;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+.modal-footer button {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.modal-footer .add-cart {
+    background-color: #ff9900;
+    color: white;
+    margin-bottom: 10px;
+}
+
+.modal-footer .buy-now {
+    background-color: #ff3e3e;
+    color: white;
+}
