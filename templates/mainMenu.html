@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Web Qao</title>
+</head>
+<body>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <!-- bar điều hướng, có ở tất cả các trang-->
+    {% include 'MenuBar.html' %}
+
+    <!-- bieu tuong (cho dep) -->
+    <div class="star_gif" >
+        <img src="{{ url_for('static', filename='used/star.png') }}">
+    </div>
+
+    <!-- quảng cáo flagship -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/Menu-ads.css') }}">
+    <div class="ads">
+        <div class="wrapper">
+            <div class="track">
+
+                <div class="flagship">
+                    <a href="{{ url_for('category.collection', season='Đông') }}">
+                        <img src="{{ url_for('static', filename='used/winter.png') }}">
+                    </a>
+                </div>
+                <div class="flagship">
+                    <a href="{{ url_for('category.collection', season='Hè') }}">
+                        <img src="{{ url_for('static', filename='used/summer.jpg') }}">
+                    </a>
+                </div>
+                <div class="flagship">
+                    <a href="{{ url_for('category.collection', season='Thu') }}">
+                        <img src="{{ url_for('static', filename='used/fall.jpg') }}">
+                    </a>
+                </div>
+
+            </div>
+        </div>
+        <!-- hai mũi tên trái - phải -->
+        <button type="button" class="arrow arrowL">
+            <img class="arr_img" src="{{ url_for('static', filename='used/arrow_left.png') }}">
+        </button>
+        <button type="button" class="arrow arrowR">
+            <img class="arr_img" src="{{ url_for('static', filename='used/arrow_right.png') }}">
+        </button>
+    </div>
+    <script src="{{ url_for('static', filename='js/slider.js') }}"></script>
+
+    <h4 style = "text-align: center"> Gợi ý cho bạn </h4>
+
+    {% include 'ProductTable.html' %}
+
+</body>
+</html>
