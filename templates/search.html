@@ -1,16 +1,117 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     {% include 'MenuBar.html' %}
     <h4 style="padding-left: 195px">Web Qao / Tìm kiếm: {{ word }} </h4>
-    {% include 'ProductTable.html' %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/filter_column.css') }}">
+    <div class="columns">
+        <div class="filter">
+            <form action="{{ url_for('search.search') }}" method="GET">
+                <input type="hidden" name="word" value="{{ word }}">
+                <div class="fhead">
+                    <img src="{{ url_for('static', filename='used/filter.png') }}" alt="Filter" height="20">
+                    &nbsp; Filter &nbsp;
+
+                    <a href="{{ url_for('search.search', word=word) }}" style="background: none; border: none; padding: 0;">
+                        <img src="{{ url_for('static', filename='used/no-filter.png') }}" alt="Reset filters">
+                    </a>
+
+                </div>
+                <div class="fbody">
+                    <div class="head1">Theo Danh Mục</div>
+                    <div class="category">
+                        <!--
+                        <input type="checkbox" name="category" value="Áo"
+                               {% if 'Áo' in categories %}checked{% endif %}>
+                        <label>Áo</label>
+
+                        <input type="checkbox" name="category" value="Quần"
+                               {% if 'Quần' in categories %}checked{% endif %}>
+                        <label>Quần</label>
+
+                        <input type="checkbox" name="category" value="Váy"
+                               {% if 'Váy' in categories %}checked{% endif %}>
+                        <label>Váy</label>
+
+                        <input type="checkbox" name="category" value="Phụ Kiện"
+                               {% if 'Phụ Kiện' in categories %}checked{% endif %}>
+                        <label>Phụ Kiện</label>
+                        -->
+
+                        <label class="container">
+                            <input type="checkbox" name="category" value="Áo"
+                               {% if 'Áo' in categories %}checked{% endif %}>
+                            <span class="text">
+                                <img src="{{ url_for('static', filename='used/shirt.png') }}" alt="Áo">
+                                Áo
+                            </span>
+                        </label>
+
+                        <label class="container">
+                            <input type="checkbox" name="category" value="Quần"
+                               {% if 'Quần' in categories %}checked{% endif %}>
+                            <span class="text">
+                                <img src="{{ url_for('static', filename='used/trousers.png') }}" alt="Quần">
+                                Quần
+                            </span>
+                        </label>
+
+                        <label class="container">
+                            <input type="checkbox" name="category" value="Váy"
+                               {% if 'Váy' in categories %}checked{% endif %}>
+                            <span class="text">
+                                <img src="{{ url_for('static', filename='used/skirt.png') }}" alt="Váy">
+                                Váy
+                            </span>
+                        </label>
+
+                        <label class="container">
+                            <input type="checkbox"name="category" value="Phụ Kiện"
+                                   {% if 'Phụ Kiện' in categories %}checked{% endif %}>
+                            <span class="text">
+                                <img src="{{ url_for('static', filename='used/belt.png') }}" alt="Phụ Kiện">
+                                Phụ Kiện
+                            </span>
+                        </label>
+
+                    </div>
+
+                    <div class="head1">Khoảng giá</div>
+                    <div class="price-range">
+                        <input type="number"
+                               id="from" name="price_from"
+                               placeholder="Giá từ: "
+                               value="{{ request.args.get('price_from', '') }}">
+                        &nbsp; - &nbsp;
+                        <input type="number"
+                               id="to"
+                               name="price_to"
+                               placeholder="Tới:"
+                               value="{{ request.args.get('price_to', '') }}">
+                    </div>
+                    <div class="head1">Sắp xếp theo</div>
+                    <select name="order">
+                        <option value="" {% if not request.args.get('order') %}selected{% endif %}>Mức độ liên quan</option>
+                        <option value="Tên từ A-Z" {% if request.args.get('order') == 'Tên từ A-Z' %}selected{% endif %}>Tên từ A-Z</option>
+                        <option value="Giá thấp đến cao" {% if request.args.get('order') == 'Giá thấp đến cao' %}selected{% endif %}>Giá thấp đến cao</option>
+                        <option value="Giá cao đến thấp" {% if request.args.get('order') == 'Giá cao đến thấp' %}selected{% endif %}>Giá cao đến thấp</option>
+                    </select>
+
+                    <input type="submit" value="Áp dụng">
+                </div>
+            </form>
+
+        </div>
+        <div class="products">
+            {% include 'ProductTable.html' %}
+        </div>
+    </div>
+
 
 </body>
 
-</body>
 </html>
