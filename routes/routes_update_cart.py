@@ -2,7 +2,7 @@ import flask
 from flask import Blueprint, render_template, request, redirect, url_for, session, flash
 
 update_cartbp = Blueprint('update_cart', __name__)
-@update_cart.route('/update_cart/<string:product_id>', methods=['POST'])
+@update_cartbp.route('/update_cart/<string:product_id>', methods=['POST'])
 def update_cart(product_id):
     #Cập nhật số lượng cho một sản phẩm trong giỏ hàng.
     try:
@@ -33,22 +33,3 @@ def update_cart(product_id):
     return redirect(url_for('cart.cart'))
 
 
-# Route để XÓA một sản phẩm khỏi giỏ hàng
-@cart_bp.route('/delete_from_cart/<string:product_id>', methods=['GET', 'POST'])
-def delete_from_cart(product_id):
-    #Xóa một sản phẩm khỏi giỏ hàng
-    try:
-        cart = session.get('cart', {})
-        if cart.pop(product_id, None):
-            flash('Đã xóa sản phẩm khỏi giỏ hàng!')
-        else:
-            flash('Không tìm thấy sản phẩm để xóa.')
-
-        session['cart'] = cart
-        session.modified = True
-
-    except Exception as e:
-        print(f"Lỗi khi xóa khỏi giỏ hàng: {e}")
-        flash('Có lỗi xảy ra, không thể xóa sản phẩm')
-
-    return redirect(url_for('cart.cart'))

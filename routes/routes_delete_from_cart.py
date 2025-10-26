@@ -1,5 +1,6 @@
 import flask
 from flask import Blueprint, render_template, request, redirect, url_for, session, flash
+delete_from_cartbp = Blueprint('delete_from_cartbp', __name__)
 @delete_from_cartbp.route('/delete_from_cart/<string:product_id>', methods=['GET', 'POST'])
 def delete_from_cart(product_id):
     #Xóa một sản phẩm khỏi giỏ hàng
