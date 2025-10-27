@@ -23,8 +23,8 @@ from routes.routes_add_product import addproduct_bp
 from routes.routes_edit_product import edit_productbp
 from routes.routes_delete_user import delete_userbp
 from routes.routes_delete_product import delete_productbp
+from routes.routes_show_product import show_productbp
 from routes.routes_orders import orders_bp
-
 app = Flask(__name__)
 app.secret_key = '123456'
 
@@ -48,6 +48,8 @@ app.register_blueprint(edit_productbp)
 app.register_blueprint(addproduct_bp)
 app.register_blueprint(delete_productbp)
 app.register_blueprint(delete_userbp)
+
+app.register_blueprint(show_productbp)
 app.register_blueprint(orders_bp)
 @app.route('/new-product')
 def new_product():

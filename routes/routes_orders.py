@@ -1,58 +1,29 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, redirect, session, flash, url_for, request
+from database.connect import get_connect
 
 orders_bp = Blueprint('orders', __name__)
 
 @orders_bp.route('/orders')
-def orders_page():
-    all_orders = [
-        {
-            "id": 1,
-            "MaSP": 1001,
-            "TenSP": "Áo Thun Cotton Basic",
-            "Gia": 199000,
-            "SoLuong": 1,
-            "TrangThai": "Chờ xác nhận đơn",
-            "HinhAnh": "anh_quan_ao/ao/ao_thun_basic.png"
-        },
-        {
-            "id": 2,
-            "MaSP": 1015,
-            "TenSP": "Sơ Mi Linen Tay Lửng",
-            "Gia": 420000,
-            "SoLuong": 1,
-            "TrangThai": "Đang giao hàng",
-            "HinhAnh": "anh_quan_ao/ao/so_mi_linen_tay_lung.jpg"
-        },
-        {
-            "id": 3,
-            "MaSP": 2001,
-            "TenSP": "Quần Jeans Slim-fit",
-            "Gia": 650000,
-            "SoLuong": 1,
-            "TrangThai": "Đã giao thành công",
-            "HinhAnh": "anh_quan_ao/quan/quan_jean_slim_fit.jpg"
-        },
-        {
-            "id": 4,
-            "MaSP": 3006,
-            "TenSP": "Túi Đeo Chéo Mini",
-            "Gia": 220000,
-            "SoLuong": 2,
-            "TrangThai": "Đã hủy đơn",
-            "HinhAnh": "anh_quan_ao/phu_kien/tui_deo_cheo_mini.jpg"
-        },
-        {
-            "id": 5,
-            "MaSP": 3013,
-            "TenSP": "Mũ Snapback Thể Thao",
-            "Gia": 150000,
-            "SoLuong": 1,
-            "TrangThai": "Chờ xác nhận đơn",
-            "HinhAnh": "anh_quan_ao/phu_kien/mu_snapback_the_thao.jpg"
-        }
-    ]
+def show_orders():
+    # Kiểm tra quyền admin
+    if 'user_role' not in session or session['user_role'] != 'admin':
+        flash('Bạn không có quyền thực hiện hành động này!')
+        return redirect(url_for('menu.main_menu'))
 
-    # Bỏ đã hủy đơn:
-    valid_orders = [order for order in all_orders if order["TrangThai"] != "Đã hủy đơn"]
+    try:
+        conn = get_connect()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("""
+                       SELECT dh.MaDH, kh.HoTen, dh.NgayDat, dh.TongTien, dh.TrangThai
+                       FROM QLBanQuanAo.DonHang dh
+                                JOIN QLBanQuanAo.KhachHang kh ON dh.MaKH = kh.MaKH
+                       ORDER BY dh.NgayDat DESC
+                       """)
+        orders = cursor.fetchall()
+        cursor.close()
+        conn.close()
 
-    return render_template('my_orders.html', orders=valid_orders)
+    except Exception as e:
+        print(f"Lỗi khi lấy danh sách đơn hàng: {e}")
+        flash(f'Lỗi: {e}')
+    return render_template('my_orders.html', orders=orders)
