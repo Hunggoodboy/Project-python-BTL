@@ -66,10 +66,13 @@
         </div>
 
         <div class="upright-cart">
+            <link rel="stylesheet" href="{{ url_for('static', filename='css/orderorcart.css') }}">
             <img src="{{ url_for('static', filename='used/cart.png') }}" alt="Cart" />
-            <ul>
-                {# <!-- idk giỏ hàng kbiet cần ko--> #}
-            </ul>
+            <div class="cart-dropdown hidden">
+                <a href="{{ url_for('cart_bp.cart') }}">🛒 Giỏ hàng của tôi</a>
+                <a href="{{ url_for('orders.orders_page') }}">📦 Đơn hàng của tôi</a>
+            </div>
+            <script src="{{ url_for('static', filename='js/orderorcart.js') }}"></script>
         </div>
     </div>
 </body>
