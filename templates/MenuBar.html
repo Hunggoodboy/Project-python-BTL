@@ -70,7 +70,7 @@
             <img src="{{ url_for('static', filename='used/cart.png') }}" alt="Cart" />
             <div class="cart-dropdown hidden">
                 <a href="{{ url_for('cart_bp.cart') }}">🛒 Giỏ hàng của tôi</a>
-                <a href="{{ url_for('orders.orders_page') }}">📦 Đơn hàng của tôi</a>
+                <a href="{{ url_for('orders.show_orders') }}">📦 Đơn hàng của tôi</a>
             </div>
             <script src="{{ url_for('static', filename='js/orderorcart.js') }}"></script>
         </div>

@@ -1,8 +1,13 @@
+/* .menu-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
 .upright-cart {
     position: relative;
     display: inline-block;
     cursor: pointer;
-}
+} */
 .cart-dropdown {
     position: absolute;
     right: 0;
@@ -24,6 +29,6 @@
 .cart-dropdown a:hover {
     background-color: #f0f0f0;
 }
-.hidden {
-    display: none;
+.upright-cart:hover .cart-dropdown {
+    display: block !important;
 }
