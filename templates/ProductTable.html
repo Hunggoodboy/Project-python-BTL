@@ -20,6 +20,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/Product-table.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/filter_column.css') }}">
+
     {% if products == '' %}
         <div class="no-product">
             <img src="{{ url_for('static', filename='used/no-product.png') }}" alt="No product">
@@ -27,7 +28,7 @@
             <h2> Vui lòng thử lại sau. </h2>
         </div>
     {% else %}
-    <table class="product_table">
+    <table class="product_table" id="product_table">
         {% for row in products|batch(5, '') %}
         <tr>
             {% for p in row %}
@@ -43,7 +44,7 @@
                             <div class="material">{{ p.ChatLieu }}</div>
 
                             {% if p.Discount %}
-                            <div class="discount"> {{ p.Discount }}% </div>
+                            <div class="discount"> -{{ p.Discount }}% </div>
                             {% endif %}
                         </div>
                     </a>
@@ -55,6 +56,14 @@
         </tr>
         {% endfor %}
     </table>
+
+    <!-- đoạn phân trang -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/pagination.css') }}">
+    <div class="pagination" id="pagination"></div>
+    <script src="{{ url_for('static', filename='js/pagination.js') }}"></script>
+
     {% endif %}
+
+
 </body>
 </html>

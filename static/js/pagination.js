@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
     const productsPerPage = 5;
-    const container = document.getElementById("product-table");
-    const paginationDiv = document.getElementById("pagination");
+    const container = document.getElementById("product_table");
+    const pageDiv = document.getElementById("pagination");
 
     // Lưu bản sao các ô sản phẩm
     const items = [...container.querySelectorAll("td")].filter(td => td.innerHTML.trim() !== "");
@@ -9,6 +9,8 @@ document.addEventListener("DOMContentLoaded", function () {
     let currentPage = 1;
 
     function renderPage(page) {
+        if (page < 1 || page > totalPages) return;
+
         currentPage = page;
 
         const start = (page - 1) * productsPerPage;
@@ -33,15 +35,35 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function renderPagination() {
-        paginationDiv.innerHTML = "";
+        pageDiv.innerHTML = "";
+
+        //nút trang trước
+        const prev = document.createElement("button");
+        prev.textContent = "«";
+        pageDiv.appendChild(prev);
+
+        //các số trang
         for (let i = 1; i <= totalPages; i++) {
             const btn = document.createElement("button");
             btn.textContent = i;
             if (i === currentPage) btn.classList.add("active");
             btn.onclick = () => renderPage(i);
-            paginationDiv.appendChild(btn);
+            pageDiv.appendChild(btn);
         }
-    }
 
-    renderPage(currentPage);
+        //nút trang sau
+        const next = document.createElement("button");
+        next.textContent = "»";
+        pageDiv.appendChild(next);
+
+        if (currentPage === totalPages)
+            next.classList.add("disabled");
+        if(currentPage === 1)
+            prev.classList.add("disabled");
+
+        prev.onclick = () => renderPage(currentPage - 1);
+        next.onclick = () => renderPage(currentPage + 1);
+
+    }
+    renderPage(1);
 });
