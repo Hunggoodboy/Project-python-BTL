@@ -37,45 +37,5 @@ h4{
 
     font-family: "Roboto Bold", sans-serif;
 }
-.product_table{
-    width: 100%;
-}
-
-.product_table img{
-    height: 150px;
-    width: 150px;
-    object-fit: cover;
-    overflow: hidden;
-}
-.product{
-    display: flex;
-    flex-direction: column;
-}
-.product div{
-    padding: 10px;
-    text-align: center;
-    font-family: 'Roboto Bold', sans-serif;
-}
-.product .material{
-    margin: 20px;
-    border-radius: 10px;
-    color: orange;
-    border:1px ridge orange;
-    align-content: space-between;
-    overflow: clip;
-    width: 50%;
-}
-.product:link, .product:visited{
-    text-decoration: none;
-    border: 2px solid transparent;
-}
-.product:hover, .product:active{
-    border: 2px #4FB7B3 solid;
-}
-.product .price{
-    font-weight: bold;
-    font-size: small;
-    color: #132440;
-}
 
 

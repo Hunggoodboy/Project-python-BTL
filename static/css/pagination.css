@@ -1,0 +1,30 @@
+.pagination {
+    display: flex;
+    justify-content: center;
+    list-style: none; /* remove list bullets */
+    padding: 0px;
+}
+
+.pagination li a {
+    display: block; /* let links fill the list item */
+    padding: 8px 12px;
+    text-decoration: none;
+    border: 1px solid gray;
+    color: black;
+    margin: 0 4px;
+    border-radius: 5px; /* add rounded borders */
+    transition: background-color 1s ease-in-out;
+}
+
+.pagination li a.active {
+    background-color: #132440;
+    color: white;
+}
+.pagination li a:hover:not(.active) {
+    background-color: #dddddd;
+}
+.pagination li a.disabled {
+    color: #dddddd;
+    cursor: not-allowed;
+    pointer-events: none;
+}
