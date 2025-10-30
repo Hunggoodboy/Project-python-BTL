@@ -21,7 +21,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/Product-table.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/filter_column.css') }}">
 
-    {% if products == '' %}
+    {% if not products %}
         <div class="no-product">
             <img src="{{ url_for('static', filename='used/no-product.png') }}" alt="No product">
             <h1> Xin lỗi, sản phẩm hiện đang hết hàng hoặc không tồn tại!</h1>
