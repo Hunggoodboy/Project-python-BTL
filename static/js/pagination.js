@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const productsPerPage = 5;
+    const productsPerPage = 10;
     const container = document.getElementById("product_table");
     const pageDiv = document.getElementById("pagination");
 
