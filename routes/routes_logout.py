@@ -1,5 +1,5 @@
 
-from flask import Blueprint, session, render_template
+from flask import Blueprint, session, render_template, redirect, url_for
 
 logout_bp = Blueprint('logout', __name__)
 
@@ -7,4 +7,4 @@ logout_bp = Blueprint('logout', __name__)
 def logout():
     session['logged_in'] = False
     session.clear()
-    return render_template('mainMenu.html')
+    return redirect(url_for('menu.main_menu'))
