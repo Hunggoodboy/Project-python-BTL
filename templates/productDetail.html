@@ -85,7 +85,7 @@
                 <img id="modal-main-img" src="{{url_for('static', filename = product.HinhAnh)}}" alt="{{ product.name }}">
                 <div class="price-stock">
                     <p>Giá: {{ "{:,.0f}".format(product.Gia) }}₫</p>
-                    <p>Số còn trong kho: <span id="stock-count">{{ product.stock }}</span></p>
+                    <p>Số còn trong kho: <span id="stock-count">{{ product.SoLuongcon }}</span></p>
                 </div>
             </div>
 
@@ -112,7 +112,9 @@
 
             <div class="modal-footer">
                 <button class="add-cart" id="modal-add-cart">Thêm vào giỏ hàng</button>
+
                 <button class="buy-now" id="modal-buy-now">Đặt hàng</button>
+
             </div>
         </div>
     </div>

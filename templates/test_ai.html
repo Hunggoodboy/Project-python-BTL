@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Chatbot AI</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        h2 {
+            text-align: center;
+        }
+        #chat-container {
+            max-width: 600px;
+            margin: 0 auto;
+            border: 1px solid #ccc;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        #chat-box {
+            height: 400px;
+            overflow-y: auto;
+            border-bottom: 1px solid #ddd;
+            padding: 10px;
+        }
+        #chat-box p {
+            margin: 10px 0;
+        }
+        #chat-input-area {
+            display: flex;
+            padding: 10px;
+        }
+        #chat-input {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        #send-button {
+            padding: 10px 15px;
+            margin-left: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #send-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Test AI Chatbot (Bài tập lớn)</h2>
+
+    <div id="chat-container">
+        <div id="chat-box">
+            <p><strong>Bot:</strong> Chào bạn! Hãy hỏi tôi bất cứ điều gì.</p>
+        </div>
+        <div id="chat-input-area">
+            <input type="text" id="chat-input" placeholder="Nhập câu hỏi của bạn...">
+            <button id="send-button">Gửi</button>
+        </div>
+    </div>
+
+    <script>
+        // Đợi cho trang tải xong
+        document.addEventListener("DOMContentLoaded", function() {
+
+            // Lấy các phần tử HTML
+            const chatBox = document.getElementById("chat-box");
+            const chatInput = document.getElementById("chat-input");
+            const sendButton = document.getElementById("send-button");
+
+            // Xử lý khi bấm nút "Gửi"
+            sendButton.addEventListener("click", sendMessage);
+
+            // Xử lý khi gõ phím "Enter"
+            chatInput.addEventListener("keypress", function(event) {
+                if (event.key === "Enter") {
+                    sendMessage();
+                }
+            });
+
+            async function sendMessage() {
+                const userMessage = chatInput.value.trim();
+
+                // Nếu không có tin nhắn thì không làm gì
+                if (!userMessage) {
+                    return;
+                }
+
+                // 1. Hiển thị tin nhắn của người dùng lên chat box
+                addMessageToChatBox("Bạn", userMessage);
+
+                // Xóa nội dung trong ô input
+                chatInput.value = "";
+
+                // Hiển thị tạm "Bot đang suy nghĩ..."
+                addMessageToChatBox("Bot", "Đang suy nghĩ...", true);
+
+                try {
+                    // 2. Gửi tin nhắn đến Backend (file Flask của bạn)
+                    const response = await fetch('/api/chat-real', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ message: userMessage })
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Lỗi mạng hoặc server');
+                    }
+
+                    const data = await response.json();
+                    const aiReply = data.reply;
+
+                    // 3. Xóa "Đang suy nghĩ..." và hiển thị câu trả lời của Bot
+                    removeLoadingMessage();
+                    addMessageToChatBox("Bot", aiReply);
+
+                } catch (error) {
+                    console.error('Lỗi khi gọi API:', error);
+                    removeLoadingMessage();
+                    addMessageToChatBox("Bot", "Xin lỗi, tôi gặp lỗi rồi. Vui lòng thử lại.");
+                }
+            }
+
+            // Hàm để thêm tin nhắn vào chat box
+            function addMessageToChatBox(sender, message, isLoading = false) {
+                const p = document.createElement("p");
+                p.innerHTML = `<strong>${sender}:</strong> ${message}`;
+                if (isLoading) {
+                    p.id = "loading-message";
+                }
+                chatBox.appendChild(p);
+                // Cuộn xuống tin nhắn mới nhất
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }
+
+            // Hàm để xóa tin nhắn "Đang suy nghĩ..."
+            function removeLoadingMessage() {
+                const loadingMsg = document.getElementById("loading-message");
+                if (loadingMsg) {
+                    loadingMsg.remove();
+                }
+            }
+        });
+    </script>
+
+</body>
+</html>

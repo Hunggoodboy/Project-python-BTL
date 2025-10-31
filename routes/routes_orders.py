@@ -3,6 +3,7 @@ from database.connect import get_connect
 orders_bp = Blueprint('orders', __name__)
 
 @orders_bp.route('/orders')
+
 def show_orders():
 
     conn = get_connect()
