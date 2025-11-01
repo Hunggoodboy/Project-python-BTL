@@ -75,5 +75,31 @@
             <script src="{{ url_for('static', filename='js/orderorcart.js') }}"></script>
         </div>
     </div>
+
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/ai.css') }}">
+    <div class="ai-button">
+        <button  onclick="switchpopup()">
+            <img src="{{ url_for('static', filename='used/ai.png') }}" alt="Ai" />
+        </button>
+        <span>
+            Hỏi tôi bất cứ điều gì!
+            <div class="triangle-down"></div>
+        </span>
+    </div>
+
+    <div class="overlay" id="overlay">
+        <div class="hidden-ai" id="hidden-ai">
+            {% include 'test_ai.html' %}
+        </div>
+    </div>
+    <script>
+        function switchpopup() {
+            const el = document.getElementById('overlay');
+            const current = window.getComputedStyle(el).display;
+            el.style.display = current === 'none' ? 'flex' : 'none';
+        }
+    </script>
+
 </body>
 </html>

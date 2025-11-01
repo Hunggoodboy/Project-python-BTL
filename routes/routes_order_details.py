@@ -1,4 +1,4 @@
-from flask import Blueprint, redirect, session, flash, url_for, request
+from flask import Blueprint, redirect, session, flash, url_for, request, render_template
 from database.connect import get_connect
 
 order_detailsbp = Blueprint('order_details', __name__)

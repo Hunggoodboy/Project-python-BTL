@@ -84,14 +84,15 @@
     <button class="buy-now" onclick="openProductModal('buy')">Đặt hàng</button>
 </div>
 
-<div class="product-modal" id="product-modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeProductModal()">&times;</span>
-        <div class="modal-top">
-            <img id="modal-main-img" src="{{ url_for('static', filename=product.HinhAnh | default('default.png')) }}" alt="{{ product.TenSP }}">
-            <div class="price-stock">
-                <p>Giá: {{ "{:,.0f}".format(product.Gia | default(0)) }}₫</p>
-                <p>Số còn trong kho: <span id="stock-count">{{ product.stock | default(10) }}</span></p>
+    <div class="product-modal" id="product-modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeProductModal()">&times;</span>
+            <div class="modal-top">
+                <img id="modal-main-img" src="{{url_for('static', filename = product.HinhAnh)}}" alt="{{ product.name }}">
+                <div class="price-stock">
+                    <p>Giá: {{ "{:,.0f}".format(product.Gia) }}₫</p>
+                    <p>Số còn trong kho: <span id="stock-count">{{ product.SoLuongcon }}</span></p>
+                </div>
             </div>
         </div>
 
@@ -130,7 +131,7 @@
 
 <script>
     const PRODUCT_ID = {{ product.MaSP | default(0) | tojson }};
-    const maxStock = {{ product.stock | default(10) | tojson }};
+    const maxStock = {{ product.SoLuongcon | default(10) | tojson }};
 </script>
 
 <script src="{{ url_for('static', filename='js/product_detail.js') }}"></script>
