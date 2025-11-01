@@ -67,7 +67,6 @@ div.menu-bar {
 
 /* logo về trang chủ */
 a.img {
-    display: inline-block;
     border-left: 20px solid transparent;
     border-right: 20px solid transparent;
     height: 100px;
@@ -143,14 +142,14 @@ div.menu-bar {
 }
 
 .upright-user img {
-    height: 44px;
+    height: 40px;
     object-fit: contain;
 }
 
 .upright-cart {
     position: absolute;
-    right: 20px;   /* đẩy qua trái một chút */
-    top: 56%;
+    right: 20px;
+    top: 48%;
     transform: translateY(-50%);
     display: inline-block;
     z-index: 20;

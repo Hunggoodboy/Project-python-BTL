@@ -4,54 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Test Chatbot AI</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f4f4f4;
-        }
-        h2 {
-            text-align: center;
-        }
-        #chat-container {
-            max-width: 600px;
-            margin: 0 auto;
-            border: 1px solid #ccc;
-            background-color: #fff;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        #chat-box {
-            height: 400px;
-            overflow-y: auto;
-            border-bottom: 1px solid #ddd;
-            padding: 10px;
-        }
-        #chat-box p {
-            margin: 10px 0;
-        }
-        #chat-input-area {
-            display: flex;
-            padding: 10px;
-        }
-        #chat-input {
-            flex-grow: 1;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        #send-button {
-            padding: 10px 15px;
-            margin-left: 10px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        #send-button:hover {
-            background-color: #0056b3;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/ai.css') }}">
 </head>
 <body>
 

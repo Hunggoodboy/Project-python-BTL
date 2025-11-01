@@ -2,7 +2,7 @@
     display: flex;
 }
 .filter{
-    flex: 30%;       /* 30% width */
+    flex: 20%;       /* 20% width */
     background: white;
     display: flex;
     flex-direction: column;
@@ -11,7 +11,7 @@
 .products{
     margin: 20px;
     font-family: "Roboto Bold", sans-serif;
-    flex: 70%;
+    flex: 80%;
 }
 
 .filter img{
@@ -85,6 +85,9 @@
 }
 
 /* Filter theo danh mục container = input + span text */
+.category {
+    gap: 0;
+}
 .container {
     display: inline-block;
     position: relative;

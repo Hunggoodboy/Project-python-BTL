@@ -3,10 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
     {% include 'MenuBar.html' %}
     <h4 style="padding-left: 195px">Web Qao / Tìm kiếm: {{ word }} </h4>
+
     <link rel="stylesheet" href="{{ url_for('static', filename='css/filter_column.css') }}">
     <div class="columns">
         <div class="filter">
@@ -24,23 +26,6 @@
                 <div class="fbody">
                     <div class="head1">Theo Danh Mục</div>
                     <div class="category">
-                        <!--
-                        <input type="checkbox" name="category" value="Áo"
-                               {% if 'Áo' in categories %}checked{% endif %}>
-                        <label>Áo</label>
-
-                        <input type="checkbox" name="category" value="Quần"
-                               {% if 'Quần' in categories %}checked{% endif %}>
-                        <label>Quần</label>
-
-                        <input type="checkbox" name="category" value="Váy"
-                               {% if 'Váy' in categories %}checked{% endif %}>
-                        <label>Váy</label>
-
-                        <input type="checkbox" name="category" value="Phụ Kiện"
-                               {% if 'Phụ Kiện' in categories %}checked{% endif %}>
-                        <label>Phụ Kiện</label>
-                        -->
 
                         <label class="container">
                             <input type="checkbox" name="category" value="Áo"
@@ -106,6 +91,7 @@
             </form>
 
         </div>
+
         <div class="products">
             {% include 'ProductTable.html' %}
         </div>
