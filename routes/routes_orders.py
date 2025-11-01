@@ -51,7 +51,9 @@ def create_order():
         product_id = int(request.form.get('product_id'))
         quantity = int(request.form.get('quantity', 1))
         color = request.form.get('color', '')
-
+        print(product_id)
+        print(quantity)
+        print(color)
         conn = get_connect()
         cursor = conn.cursor(dictionary=True)
         cursor.execute("SELECT TenSP, Gia, HinhAnh FROM QLBanQuanAo.SanPham WHERE MaSP=%s", (product_id,))
@@ -64,7 +66,7 @@ def create_order():
         cursor.execute("""
             INSERT INTO QLBanQuanAo.DonHang (MaKH, MaSP, SoLuong, TongGiaDaGiam, TrangThai, Mau)
             VALUES (%s, %s, %s, %s, %s, %s)
-        """, (user_id, product_id, quantity, total_price, "Đã giao thành công", color))
+        """, (user_id, product_id, quantity, total_price, "Đang Xử Lý", color))
         conn.commit()
         order_id = cursor.lastrowid
         cursor.close()
