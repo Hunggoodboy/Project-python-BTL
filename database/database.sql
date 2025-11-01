@@ -40,9 +40,11 @@ CREATE TABLE IF NOT EXISTS SanPham(
 );
 
 CREATE TABLE IF NOT EXISTS DonHang(
-	MaDH int primary key,
+	MaDH INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     MaSP int,
     MaKH int,
+    Mau VARCHAR(50) DEFAULT '',
+    TrangThai VARCHAR(50) DEFAULT 'Chờ xác nhận đơn',
     foreign key(MaSP) references SanPham(MaSP),
     foreign key(MaKH) references KhachHang(MaKH),
     SoLuong int,

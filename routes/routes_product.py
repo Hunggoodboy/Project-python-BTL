@@ -23,6 +23,12 @@ def product_detail(pid):
 
         product['images'] = [product['HinhAnh']]
 
+        print("\n==== PRODUCT DEBUG ====")
+        print(product)
+        print("product['MaSP'] =", product.get('MaSP'))
+        print("product['id'] =", product.get('MaSP'))
+        print("========================\n")
+
         return render_template('productDetail.html', product=product)
 
     return "Không tìm thấy sản phẩm"

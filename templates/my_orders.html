@@ -105,7 +105,7 @@
         {% endfor %}
         </div>
         <textarea id="comment-{{ order.id }}" placeholder="Nhập bình luận của bạn..." rows="3" style="width:100%; margin-top:10px;"></textarea>
-        <button class="confirm-btn" onclick="submitReview({{ order.id }}, '{{ order.ProductID }}')">Gửi</button>
+        <button class="confirm-btn" onclick="submitReview({{ order.id }}, '{{ order.MaSP }}')">Gửi</button>
     </div>
 </div>
 {% endfor %}
@@ -187,6 +187,7 @@ function updateStarsDisplay(stars, activeCount) {
 }
 
 function submitReview(orderId, productId) {
+    productId = productId.toString();
     const rating = starRatings[orderId] || 1;
     const comment = document.getElementById('comment-' + orderId).value.trim();
     let reviews = JSON.parse(localStorage.getItem('product_reviews') || '{}');

@@ -1,27 +1,27 @@
 let currentImage = 0;
 const images = JSON.parse(document.getElementById('image-data').textContent || '[]');
-
+        
 function prevImage() {
-  const main = document.getElementById('main-image');
-  currentImage = (currentImage - 1 + images.length) % images.length;
-  main.src = images[currentImage];
+    const main = document.getElementById('main-image');
+    currentImage = (currentImage - 1 + images.length) % images.length;
+    main.src = images[currentImage];
 }
 
 function nextImage() {
-  const main = document.getElementById('main-image');
-  currentImage = (currentImage + 1) % images.length;
-  main.src = images[currentImage];
+    const main = document.getElementById('main-image');
+    currentImage = (currentImage + 1) % images.length;
+    main.src = images[currentImage];
 }
 
 function changeColor(imageUrl) {
-  document.getElementById('main-image').src = imageUrl;
+    document.getElementById('main-image').src = imageUrl;
 }
 
 function openModal(id) {
-  document.getElementById(id).style.display = 'block';
+    document.getElementById(id).style.display = 'block';
 }
 function closeModal(id) {
-  document.getElementById(id).style.display = 'none';
+    document.getElementById(id).style.display = 'none';
 }
 
 function openProductModal(type) {
