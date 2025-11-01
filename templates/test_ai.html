@@ -8,7 +8,7 @@
 </head>
 <body>
 
-    <h2>Test AI Chatbot (Bài tập lớn)</h2>
+    <h2>🔹Test AI Chatbot (Bài tập lớn)🔹</h2>
 
     <div id="chat-container">
         <div id="chat-box">
@@ -48,7 +48,12 @@
                 }
 
                 // 1. Hiển thị tin nhắn của người dùng lên chat box
-                addMessageToChatBox("Bạn", userMessage);
+                const userDiv = document.createElement("div");
+                userDiv.classList.add("user-div");
+                userDiv.textContent = userMessage;
+
+                chatBox.appendChild(userDiv);
+                chatBox.scrollTop = chatBox.scrollHeight;
 
                 // Xóa nội dung trong ô input
                 chatInput.value = "";
@@ -86,6 +91,7 @@
 
             // Hàm để thêm tin nhắn vào chat box
             function addMessageToChatBox(sender, message, isLoading = false) {
+                message = message.replace(/\* /g, '\t• ')
                 const p = document.createElement("p");
                 p.innerHTML = `<strong>${sender}:</strong> ${message}`;
                 if (isLoading) {

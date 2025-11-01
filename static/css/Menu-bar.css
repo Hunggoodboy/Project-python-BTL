@@ -196,7 +196,8 @@ div.menu-bar {
     z-index: 999;
 }
 
-.upright-search:hover .dropdown {
+.upright-search:hover input.dropdown,
+.upright-search input.dropdown:focus {
     display: block;
 }
 
