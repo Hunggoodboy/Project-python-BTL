@@ -9,7 +9,7 @@
     <div class="product-detail">
     <div class="image-viewer">
       <button class="nav-btn left" onclick="prevImage()">❮</button>
-      <img id="main-image" src="{{url_for('static', filename = product.HinhAnh)}}" alt="{{ product.name }}">
+      <img id="main-image" src="{{url_for('static', filename = product.HinhAnh)}}" alt="{{ product.TenSP }}">
       <button class="nav-btn right" onclick="nextImage()">❯</button>
     </div>
     <div class="price-row">
@@ -119,12 +119,15 @@
         </div>
     </div>
     <script id="image-data" type="application/json">
-        {{ product.images | tojson }}
+        {{ product.images | default([])| tojson }}
     </script>
     <script>
-        const maxStock = {{ product.stock }};
+        const PRODUCT_ID = {{ product.MaSP | default(0) | tojson }};
+        const maxStock = {{ product.stock | default(10) | tojson }};
     </script>
-    <script src="{{ url_for('static', filename='js/product_detail.js') }}"></script>
+
+<script src="{{ url_for('static', filename='js/product_detail.js') }}"></script>
+<script src="{{ url_for('static', filename='js/order_product.js') }}"></script>
     
 <!-- script bình luận và đánh giá -->
 <script>
