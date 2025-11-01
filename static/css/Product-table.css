@@ -35,7 +35,7 @@
 .product .add_info{
     display: flex;
     margin: 0;
-    gap: 5px;
+    gap: 10px;
     line-height: 1;
     align-items: center;
     justify-content: center;
@@ -47,7 +47,6 @@
     max-width: 50%;
     box-sizing: border-box;
     text-align: center;
-    white-space: nowrap;
 }
 
 .product .material{

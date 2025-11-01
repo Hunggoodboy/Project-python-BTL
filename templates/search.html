@@ -37,6 +37,15 @@
                         </label>
 
                         <label class="container">
+                            <input type="checkbox"name="category" value="Phụ Kiện"
+                                   {% if 'Phụ Kiện' in categories %}checked{% endif %}>
+                            <span class="text">
+                                <img src="{{ url_for('static', filename='used/belt.png') }}" alt="Phụ Kiện">
+                                Phụ Kiện
+                            </span>
+                        </label>
+
+                        <label class="container">
                             <input type="checkbox" name="category" value="Quần"
                                {% if 'Quần' in categories %}checked{% endif %}>
                             <span class="text">
@@ -51,15 +60,6 @@
                             <span class="text">
                                 <img src="{{ url_for('static', filename='used/skirt.png') }}" alt="Váy">
                                 Váy
-                            </span>
-                        </label>
-
-                        <label class="container">
-                            <input type="checkbox"name="category" value="Phụ Kiện"
-                                   {% if 'Phụ Kiện' in categories %}checked{% endif %}>
-                            <span class="text">
-                                <img src="{{ url_for('static', filename='used/belt.png') }}" alt="Phụ Kiện">
-                                Phụ Kiện
                             </span>
                         </label>
 
