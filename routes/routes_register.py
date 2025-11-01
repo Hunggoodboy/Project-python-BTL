@@ -1,5 +1,5 @@
 import flask
-from flask import Blueprint, render_template, request, redirect, session
+from flask import Blueprint, render_template, request, redirect, session, url_for
 from database.connect import get_connect
 
 # Tạo Blueprint, đặt template_folder ở đây
@@ -32,6 +32,6 @@ def register():
         cursor.close()
         conn.close()
         flask.flash("Bạn đã đăng ký tài khoản thành công", "success")
-        return render_template('MenuBar.html')
+        return redirect(url_for('menu.main_menu'))
 
     return render_template('register.html')

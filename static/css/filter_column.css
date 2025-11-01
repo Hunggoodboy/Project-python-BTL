@@ -2,7 +2,7 @@
     display: flex;
 }
 .filter{
-    flex: 30%;       /* 30% width */
+    flex: 20%;       /* 20% width */
     background: white;
     display: flex;
     flex-direction: column;
@@ -11,7 +11,7 @@
 .products{
     margin: 20px;
     font-family: "Roboto Bold", sans-serif;
-    flex: 70%;
+    flex: 80%;
 }
 
 .filter img{
@@ -85,6 +85,11 @@
 }
 
 /* Filter theo danh mục container = input + span text */
+.category {
+    display: flex;
+    flex-wrap: wrap;
+}
+
 .container {
     display: inline-block;
     position: relative;
@@ -105,11 +110,11 @@
 /* Vùng text hiển thị */
 .text {
     display: inline-block;
-    padding: 10px 20px;      /* cố định kích thước */
+    padding: 10px 12px;
     border: 2px solid #ccc;
     border-radius: 10px;
     transition: all 0.2s ease;
-    background-color: white; /* mặc định */
+    background-color: white;
     color: #132440;
 }
 

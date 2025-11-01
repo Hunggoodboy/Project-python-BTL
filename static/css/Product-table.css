@@ -38,6 +38,15 @@
     gap: 10px;
     line-height: 1;
     align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.product .material,
+.product .discount {
+    max-width: 50%;
+    box-sizing: border-box;
+    text-align: center;
 }
 
 .product .material{

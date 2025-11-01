@@ -7,4 +7,4 @@ logout_bp = Blueprint('logout', __name__)
 def logout():
     session['logged_in'] = False
     session.clear()
-    return render_template('mainMenu.html')
+    return redirect(url_for('menu.main_menu'))

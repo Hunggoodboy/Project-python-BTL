@@ -33,7 +33,7 @@ def login():
                 # session['numberphone'] = numberphone
                 # session['address'] = address
                 flash('Bạn đã đăng nhập thành công !')
-                return redirect(url_for('home_bp.home'))
+                return redirect(url_for('menu.main_menu'))
             else:
                 flash('Sai tên đăng nhập hoặc mật khẩu!')
                 return render_template('login.html')
