@@ -123,7 +123,7 @@
     </script>
     <script>
         const PRODUCT_ID = {{ product.MaSP | default(0) | tojson }};
-        const maxStock = {{ product.stock | default(10) | tojson }};
+        const maxStock = {{ product.SoLuongcon  | default(10) | tojson }};
     </script>
 
 <script src="{{ url_for('static', filename='js/product_detail.js') }}"></script>
