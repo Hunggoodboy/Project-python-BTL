@@ -2,81 +2,87 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>{{ product.name }}</title>
+  <title>{{ product.TenSP }}</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/productdetail.css') }}">
 </head>
 <body>
-    <div class="product-detail">
+<div class="product-detail">
     <div class="image-viewer">
-      <button class="nav-btn left" onclick="prevImage()">❮</button>
-      <img id="main-image" src="{{url_for('static', filename = product.HinhAnh)}}" alt="{{ product.TenSP }}">
-      <button class="nav-btn right" onclick="nextImage()">❯</button>
+        <button class="nav-btn left" onclick="prevImage()">❮</button>
+        <img id="main-image" src="{{ url_for('static', filename=product.HinhAnh | default('default.png')) }}" alt="{{ product.TenSP }}">
+        <button class="nav-btn right" onclick="nextImage()">❯</button>
     </div>
+
     <div class="price-row">
-      <span class="price">{{ "{:,.0f}".format(product.Gia) }}₫</span>
-      <span class="sold">Đã bán: {{ product.Sold }}</span>
+        <span class="price">{{ "{:,.0f}".format(product.Gia | default(0)) }}₫</span>
+        <span class="sold">Đã bán: {{ product.Sold | default(0) }}</span>
     </div>
+
     <div class="discount">
-      Giảm: {{ product.Discount }}%
+        Giảm: {{ product.Discount | default(0) }}%
     </div>
-    <h2 class="product-name">{{ product.TenSP }}</h2>
+
+    <h2 class="product-name">{{ product.TenSP | default("Sản phẩm") }}</h2>
+
     <div class="section section-box color">
         <strong>Màu sắc:</strong>
         <div class="color-options">
-            {% for color in product.colors %}
-            <img src="{{ color.image }}" class="color-thumb" onclick="changeColor('{{ color.image }}')" alt="{{ color.name }}">
+            {% for color in product.colors | default([]) %}
+                <img src="{{ color.image | default('default.png') }}" class="color-thumb" onclick="changeColor('{{ color.image | default('default.png') }}')" alt="{{ color.name | default('Màu') }}">
             {% endfor %}
         </div>
     </div>
-    <div class = "size-chart">
+
+    <div class="size-chart">
         <div class="section section-box size">
             <strong>Size:</strong>
             <div class="size-options">
-                {% for s in product.sizes %}
-                <button class="size-btn">{{ s }}</button>
+                {% for s in product.sizes | default([]) %}
+                    <button class="size-btn">{{ s }}</button>
                 {% endfor %}
             </div>
         </div>
         <a href="{{ url_for('productdetail.sizechart') }}">Bảng size</a>
     </div>
-    <div class="section section-box shipping" onclick="openModal('shipping-modal')">
-        📦 Thời gian nhận hàng
-    </div>
 
-    <div class="section section-box description" onclick="openModal('desc-modal')">
-        🧾 Thông số & mô tả
-    </div>
-    <div class="rating section-box">
-        ⭐ {{ product.rating }} / 5 ({{ product.review_count }} lượt đánh giá)
-    </div>
+    <div class="section section-box shipping" onclick="openModal('shipping-modal')">📦 Thời gian nhận hàng</div>
+    <div class="section section-box description" onclick="openModal('desc-modal')">🧾 Thông số & mô tả</div>
+
+    <div class="rating section-box">⭐ {{ product.rating | default(0) }} / 5 ({{ product.review_count | default(0) }} lượt đánh giá)</div>
+
     <div class="comments section-box">
         <h3>💬 Bình luận của khách hàng</h3>
-        {% for c in product.comments %}
+        {% for c in product.comments | default([]) %}
             <div class="comment">
-            <strong>{{ c.user }}</strong>: {{ c.text }}
+                <strong>{{ c.user | default('Khách') }}</strong>: {{ c.text | default('') }}
             </div>
         {% endfor %}
-        </div>
     </div>
-    <div id="shipping-modal" class="modal">
-        <div class="modal-content">
+</div>
+
+<!-- Thông tin thời gian nhận hàng -->
+<div id="shipping-modal" class="modal">
+    <div class="modal-content">
         <span class="close" onclick="closeModal('shipping-modal')">&times;</span>
         <h3>Thời gian nhận hàng</h3>
-        <p>{{ product.shipping_info }}</p>
-        </div>
+        <p>{{ product.shipping_info | default('Chưa có thông tin') }}</p>
     </div>
-    <div id="desc-modal" class="modal">
-        <div class="modal-content">
+</div>
+
+<!-- Thông số sản phẩm -->
+<div id="desc-modal" class="modal">
+    <div class="modal-content">
         <span class="close" onclick="closeModal('desc-modal')">&times;</span>
         <h3>Thông số sản phẩm</h3>
-        <p>{{ product.description }}</p>
-        </div>
+        <p>{{ product.description | default('Chưa có thông tin') }}</p>
     </div>
+</div>
 
-    <div class="action-row">
-        <button class="add-cart" onclick="openProductModal('add')">Thêm vào giỏ hàng</button>
-        <button class="buy-now" onclick="openProductModal('buy')">Đặt hàng</button>
-    </div>
+<!-- nút đặt/thêm hàng -->
+<div class="action-row">
+    <button class="add-cart" onclick="openProductModal('add')">Thêm vào giỏ hàng</button>
+    <button class="buy-now" onclick="openProductModal('buy')">Đặt hàng</button>
+</div>
 
     <div class="product-modal" id="product-modal">
         <div class="modal-content">
@@ -88,69 +94,79 @@
                     <p>Số còn trong kho: <span id="stock-count">{{ product.SoLuongcon }}</span></p>
                 </div>
             </div>
+        </div>
 
-            <div class="modal-section">
-                <p>Phân loại:</p>
-                <div class="options">
-                    {% for color in product.colors %}
-                    <button onclick="changeModalImage('{{ color.image }}')">
-                        <img src="{{ color.image }}" alt="{{ color.name }}">
-                        <span>{{ color.name }}</span>
+        <div class="modal-section">
+            <p>Phân loại:</p>
+            <div class="options">
+                {% for color in product.colors | default([]) %}
+                    <button onclick="changeModalImage('{{ color.image | default('default.png') }}')">
+                        <img src="{{ color.image | default('default.png') }}" alt="{{ color.name | default('Màu') }}">
+                        <span>{{ color.name | default('Màu') }}</span>
                     </button>
-                    {% endfor %}
-                </div>
-            </div>
-
-            <div class="quantity-control">
-                <span>Số lượng:</span>
-                <div>
-                    <button class="qty-btn" id="decrease" onclick="changeQuantity(-1)">-</button>
-                    <input type="text" id="quantity" value="1" readonly>
-                    <button class="qty-btn" id="increase" onclick="changeQuantity(1)">+</button>
-                </div>
-            </div>
-
-            <div class="modal-footer">
-                <button class="add-cart" id="modal-add-cart">Thêm vào giỏ hàng</button>
-
-                <button class="buy-now" id="modal-buy-now">Đặt hàng</button>
-
+                {% endfor %}
             </div>
         </div>
+
+        <div class="quantity-control">
+            <span>Số lượng:</span>
+            <div>
+                <button class="qty-btn" id="decrease" onclick="changeQuantity(-1)">-</button>
+                <input type="text" id="quantity" value="1" readonly>
+                <button class="qty-btn" id="increase" onclick="changeQuantity(1)">+</button>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button class="add-cart" id="modal-add-cart">Thêm vào giỏ hàng</button>
+            <button class="buy-now" id="modal-buy-now">Đặt hàng</button>
+        </div>
     </div>
-    <script id="image-data" type="application/json">
-        {{ product.images | default([])| tojson }}
-    </script>
-    <script>
-        const PRODUCT_ID = {{ product.MaSP | default(0) | tojson }};
-        const maxStock = {{ product.SoLuongcon  | default(10) | tojson }};
-    </script>
+</div>
+
+<!-- Ảnh cho lúc đặt/thêm hàng -->
+<script id="image-data" type="application/json">
+    {{ product.images | default([]) | tojson }}
+</script>
+
+<script>
+    const PRODUCT_ID = {{ product.MaSP | default(0) | tojson }};
+    const maxStock = {{ product.SoLuongcon | default(10) | tojson }};
+</script>
 
 <script src="{{ url_for('static', filename='js/product_detail.js') }}"></script>
 <script src="{{ url_for('static', filename='js/order_product.js') }}"></script>
-    
-<!-- script bình luận và đánh giá -->
+
+<!-- Script bình luận & đánh giá -->
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-    const productId = "{{ product.id }}";
-    const reviews = JSON.parse(localStorage.getItem('product_reviews') || '{}');
+    const productId = "{{ product.MaSP }}";
+    const reviewsRaw = localStorage.getItem('product_reviews');
+    console.log("RAW product_reviews from localStorage:", reviewsRaw);  // kiểm tra dữ liệu
+    const reviews = JSON.parse(reviewsRaw || '{}');
+
+    console.log("productId:", productId);
+    console.log("reviews keys:", Object.keys(reviews));
+
     if (reviews[productId]) {
         const data = reviews[productId];
         document.querySelector(".rating").innerHTML = `⭐ ${data.avg.toFixed(1)} / 5 (${data.count} lượt đánh giá)`;
         const commentContainer = document.querySelector(".comments");
         data.comments.forEach(c => {
-        const div = document.createElement("div");
-        div.className = "comment";
-        const starsHTML = "★".repeat(c.stars) + "☆".repeat(5 - c.stars);
-        div.innerHTML = `
-            <img src="/static/images/user.png" class="avatar">
-            <div>
-            <div class="comment-stars">${starsHTML}</div>
-            <strong>${c.user}</strong>: ${c.text}
-            </div>
-        `;
-        commentContainer.appendChild(div);
+            const div = document.createElement("div");
+            div.className = "comment";
+            const starsHTML = "★".repeat(c.stars) + "☆".repeat(5 - c.stars);
+            div.innerHTML = `
+                <img src="/static/images/user.png" class="avatar">
+                <div>
+                    <div class="comment-stars">${starsHTML}</div>
+                    <strong>${c.user}</strong>: ${c.text}
+                </div>
+            `;
+            commentContainer.appendChild(div);
         });
+    } else {
+        console.log("No reviews found for this product.");
     }
 });
 </script>
@@ -160,5 +176,6 @@ document.addEventListener("DOMContentLoaded", () => {
 .comment img.avatar { width: 35px; height: 35px; border-radius: 50%; }
 .comment-stars { color: gold; font-size: 16px; line-height: 1; margin-bottom: 3px; }
 </style>
+
 </body>
 </html>
