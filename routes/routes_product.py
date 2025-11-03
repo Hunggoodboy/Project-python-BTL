@@ -41,6 +41,9 @@ def product_detail(pid):
             for i, color in enumerate(colors)
         ]
 
+        # tách size sản phẩm
+        product['sizes'] =  [s.strip() for s in product['Size'].split(',')]
+
         print("\n==== PRODUCT DEBUG ====")
         print(product)
         print("product['MaSP'] =", product.get('MaSP'))

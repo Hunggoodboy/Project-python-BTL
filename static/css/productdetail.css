@@ -2,7 +2,6 @@
 body {
     font-family: Arial, sans-serif;
     background: #fafafa;
-    padding: 20px;
 }
 
 .product-detail {
@@ -78,9 +77,10 @@ body {
     cursor: pointer;
     border: 2px solid transparent;
 }
-.color-options img:hover, .color-options img.active {
+.color-options:hover, .color-options .active {
     border-color: #007bff;
 }
+
 .size-chart {
     display: flex;            
     justify-content: space-between; 

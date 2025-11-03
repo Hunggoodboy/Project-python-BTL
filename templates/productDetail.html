@@ -6,6 +6,11 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/productdetail.css') }}">
 </head>
 <body>
+
+{%include 'MenuBar.html'%}
+<h4> &nbsp </h4>
+<br>
+
 <div class="product-detail">
     <div class="image-viewer">
         <button class="nav-btn left" onclick="prevImage()">❮</button>
@@ -23,28 +28,40 @@
     </div>
 
     <h2 class="product-name">{{ product.TenSP | default("Sản phẩm") }}</h2>
+    <input type="hidden" id="product-id" value="{{ product.MaSP }}">
 
     <div class="section section-box color">
         <strong>Màu sắc:</strong>
         <div class="color-options">
             {% for color in product.colors %}
-                <button class="color-thumb" onclick="changeColor(`{{ url_for('static', filename= color.image) | default('default.png') }}`)" alt="{{ name | default('Màu') }}">
-                    {{ color.name }}
-                </button>
+            <button
+                    class="color-thumb"
+                    onclick="selectColor(this); changeColor(`{{ url_for('static', filename=color.image) | default('default.png') }}`)"
+            >
+                {{ color.name }}
+            </button>
             {% endfor %}
         </div>
     </div>
+    <input type="hidden" id="selected-color" value="">
 
-    <div class="size-chart">
-        <div class="section section-box size">
-            <strong>Size:</strong>
-            <div class="size-options">
-                {% for s in product.sizes | default([]) %}
-                    <button class="size-btn">{{ s }}</button>
-                {% endfor %}
-            </div>
+    <div class="section section-box size">
+        <strong>Size:</strong>
+        <div class="size-options">
+            {% for s in product.sizes | default([]) %}
+            <button class="size-btn" onclick="selectSize(this)">{{ s }}</button>
+            {% endfor %}
         </div>
-        <a href="{{ url_for('productdetail.sizechart') }}">Bảng size</a>
+    </div>
+    <input type="hidden" id="selected-size" value="">
+
+    <div class="quantity-control">
+        <span>Số lượng:</span>
+        <div>
+            <button class="qty-btn" id="decrease1" onclick="changeQuantity1(-1)">-</button>
+            <input type="text" id="quantity1" value="1" readonly>
+            <button class="qty-btn" id="increase1" onclick="changeQuantity1(1)">+</button>
+        </div>
     </div>
 
     <div class="section section-box shipping" onclick="openModal('shipping-modal')">📦 Thời gian nhận hàng</div>
@@ -83,7 +100,7 @@
 
 <!-- nút đặt/thêm hàng -->
 <div class="action-row">
-    <button class="add-cart" onclick="openProductModal('add')">Thêm vào giỏ hàng</button>
+    <button class="add-cart" onclick="addToCart()">Thêm vào giỏ hàng</button>
     <button class="buy-now" onclick="openProductModal('buy')">Đặt hàng</button>
 </div>
 
@@ -106,7 +123,6 @@
                     <button onclick="changeModalImage(`{{ url_for('static', filename=color.image) | default('default.png') }}`)">
                         <span>{{ color.name | default('Màu') }}</span>
                     </button>
-
                 {% endfor %}
             </div>
         </div>
@@ -121,11 +137,13 @@
         </div>
 
         <div class="modal-footer">
-            <button class="add-cart" id="modal-add-cart">Thêm vào giỏ hàng</button>
             <button class="buy-now" id="modal-buy-now">Đặt hàng</button>
         </div>
     </div>
 </div>
+
+<!-- script thử cho cart -->
+<script src="{{ url_for('static', filename='js/add-to-cart.js') }}"></script>
 
 <!-- Ảnh cho lúc đặt/thêm hàng -->
 <script id="image-data" type="application/json">

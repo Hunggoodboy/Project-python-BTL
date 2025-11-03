@@ -22,18 +22,19 @@
             <th>Hành động</th>
         </tr>
         {% for item in cart_items %}
+        {% set dis_price = item.Gia * (100 - item.Discount) / 100 %}
         <tr>
-            <td>{{ item.name }}</td>
-            <td>{{ item.price }}₫</td>
-            <td>{{ item.quantity }}</td>
-            <td>{{ item.price * item.quantity }}₫</td>
+            <td>{{ item.TenSP }}</td>
+            <td><s>{{ item.Gia|int }}₫</s> {{ dis_price|int }}₫</td>
+            <td>{{ item.SoLuong }}</td>
+            <td>{{ (dis_price * item.SoLuong)|int }}₫</td>
             <td><a href="{{ url_for('cart_bp.remove_from_cart', product_id=item.id) }}">Xóa</a></td>
         </tr>
         {% endfor %}
     </table>
 
     <div class="actions">
-        <h3>Tổng cộng: {{ total }}₫</h3>
+        <h3>Tổng cộng: {{ total_price }}₫</h3>
         <a href="{{ url_for('cart_bp.clear_cart') }}">Xóa toàn bộ</a>
     </div>
     {% else %}
