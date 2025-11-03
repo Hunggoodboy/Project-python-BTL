@@ -27,8 +27,10 @@
     <div class="section section-box color">
         <strong>Màu sắc:</strong>
         <div class="color-options">
-            {% for color in product.colors | default([]) %}
-                <img src="{{ color.image | default('default.png') }}" class="color-thumb" onclick="changeColor('{{ color.image | default('default.png') }}')" alt="{{ color.name | default('Màu') }}">
+            {% for color in product.colors %}
+                <button class="color-thumb" onclick="changeColor(`{{ url_for('static', filename= color.image) | default('default.png') }}`)" alt="{{ name | default('Màu') }}">
+                    {{ color.name }}
+                </button>
             {% endfor %}
         </div>
     </div>
@@ -100,11 +102,11 @@
         <div class="modal-section">
             <p>Phân loại:</p>
             <div class="options">
-                {% for color in product.colors | default([]) %}
-                    <button onclick="changeModalImage('{{ color.image | default('default.png') }}')">
-                        <img src="{{ color.image | default('default.png') }}" alt="{{ color.name | default('Màu') }}">
+                {% for color in product.colors %}
+                    <button onclick="changeModalImage(`{{ url_for('static', filename=color.image) | default('default.png') }}`)">
                         <span>{{ color.name | default('Màu') }}</span>
                     </button>
+
                 {% endfor %}
             </div>
         </div>
