@@ -4,16 +4,27 @@
     <meta charset="UTF-8">
     <title>Giỏ hàng</title>
     <style>
-        table { width: 60%; margin: auto; border-collapse: collapse; }
-        th, td { padding: 10px; border: 1px solid #ddd; text-align: center; }
-        h2 { text-align: center; }
+        .cart-table {
+            width: 60%;
+            margin: auto;
+            border-collapse: collapse;
+            border: none;
+        }
+        .cart-table th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
         .actions { text-align: center; margin-top: 20px; }
+
     </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <h2>Giỏ hàng của bạn</h2>
+    {% include 'MenuBar.html' %}
+    <h4 style="padding-left: 195px">Giỏ hàng của bạn</h4>
     {% if cart_items %}
-    <table>
+    <table class="cart-table">
         <tr>
             <th>Tên sản phẩm</th>
             <th>Giá</th>

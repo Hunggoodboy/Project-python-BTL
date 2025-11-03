@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for, session
+from flask import Blueprint, render_template, request, redirect, url_for, session, jsonify
 from database.connect import get_connect
 
 cart_bp = Blueprint('cart_bp', __name__)
@@ -22,24 +22,49 @@ def cart():
     conn.close()
     return render_template('cart.html', cart_items= cart_items, total_price= total_price)
 
-# Thêm sản phẩm vào giỏ
-@cart_bp.route('/add_to_cart', methods=['POST'])
-def add_to_cart():
-    product_id = request.form['id']
-    name = request.form['name']
-    price = float(request.form['price'])
-    quantity = int(request.form.get('quantity', 1))
+# Thêm sản phẩm từ trang details
+@cart_bp.route('/add-no-reload', methods=['POST'])
+def add_cart_no_reload():
+    try:
+        data = request.get_json()  # nhận dữ liệu JSON từ fetch
+        ma_sp = int(data.get('ma_sp'))
+        so_luong = int(data.get('so_luong', 1))
+        mau = data.get('mau')  # thêm màu
+        size = data.get('size')
+        ma_kh = session.get('id')
 
-    carts = session.get('cart', [])
-    for item in carts:
-        if item['id'] == product_id:
-            item['quantity'] += quantity
-            break
-    else:
-        carts.append({'id': product_id, 'name': name, 'price': price, 'quantity': quantity})
+        if not ma_kh:
+            return jsonify({'error': 'not_logged_in'}), 401
 
-    session['cart'] = carts
-    return redirect(url_for('cart_bp.cart'))
+        # Lấy ttin sp từ bảng Product
+        conn = get_connect()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("SELECT Gia, Discount FROM QLBanQuanAo.SanPham WHERE MaSP = %s", (ma_sp,))
+        product = cursor.fetchone()
+        if not product:
+            return jsonify({'error': 'invalid_product'}), 404
+
+        cursor.execute("SELECT MaDH FROM QLBanQuanAo.DonHang ORDER BY MaDH DESC LIMIT 1")
+        row = cursor.fetchone()
+        if row:
+            ma_dh = row['MaDH'] + 1  # tăng lên 1
+        else:
+            ma_dh = 1  # nếu chưa có đơn hàng nào
+
+        # Thêm đơn hàng
+        sqladd = """
+            INSERT INTO QLBanQuanAo.DonHang
+            (MaDH, MaSP, MaKH, SoLuong, MauSac)
+            VALUES (%s, %s, %s, %s, %s)
+        """
+        cursor.execute(sqladd, (ma_dh, ma_sp, ma_kh, so_luong, mau))
+        conn.commit()
+        cursor.close()
+        conn.close()
+        return jsonify({'success': True})
+    except Exception as e:
+        print("Error adding to cart:", e)
+        return jsonify({'error': 'server_error'}), 500
 
 # Xóa sản phẩm khỏi giỏ
 @cart_bp.route('/remove_from_cart/<product_id>')
