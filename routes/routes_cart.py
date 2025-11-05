@@ -12,8 +12,8 @@ def cart():
         return redirect(url_for('login_module.login'))
     cursor = conn.cursor(dictionary=True)
     cursor.execute("""
-                    SELECT * FROM DonHang
-                    JOIN SanPham ON DonHang.MaSP = SanPham.MaSP
+                    SELECT * FROM GioHang
+                    JOIN SanPham ON GioHang.MaSP = SanPham.MaSP
                     WHERE MaKH = %s
                    """, (ma_kh,))
     cart_items = cursor.fetchall()
@@ -44,20 +44,13 @@ def add_cart_no_reload():
         if not product:
             return jsonify({'error': 'invalid_product'}), 404
 
-        cursor.execute("SELECT MaDH FROM QLBanQuanAo.DonHang ORDER BY MaDH DESC LIMIT 1")
-        row = cursor.fetchone()
-        if row:
-            ma_dh = row['MaDH'] + 1  # tăng lên 1
-        else:
-            ma_dh = 1  # nếu chưa có đơn hàng nào
-
         # Thêm đơn hàng
         sqladd = """
-            INSERT INTO QLBanQuanAo.DonHang
-            (MaDH, MaSP, MaKH, SoLuong, MauSacDaChon, KichCoDaChon)
-            VALUES (%s, %s, %s, %s, %s, %s)
+            INSERT INTO QLBanQuanAo.GioHang
+            (MaKH, MaSP, SoLuong, MauSacDaChon, KichCoDaChon)
+            VALUES (%s, %s, %s, %s, %s)
         """
-        cursor.execute(sqladd, (ma_dh, ma_sp, ma_kh, so_luong, mau, size))
+        cursor.execute(sqladd, (ma_kh, ma_sp, so_luong, mau, size))
         conn.commit()
         cursor.close()
         conn.close()
@@ -96,11 +89,11 @@ def update_cart():
         conn = get_connect()
         cursor = conn.cursor(dictionary=True)
 
-        cursor.execute("SELECT * from DonHang WHERE MaSP = %s AND MaKH = %s", (ma_sp, ma_kh))
+        cursor.execute("SELECT * from GioHang WHERE MaSP = %s AND MaKH = %s", (ma_sp, ma_kh))
         product = cursor.fetchone()
         if product:
             sqlupdate = """
-                UPDATE DonHang
+                UPDATE GioHang
                 SET SoLuong = %s
                 WHERE MaSP = %s AND MaKH = %s;
             """

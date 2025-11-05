@@ -85,16 +85,15 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS `giohang`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `giohang` (
-  `MaKH` int NOT NULL,
-  `MaSP` int NOT NULL,
-  `SoLuong` int DEFAULT NULL,
-  `MauSacDaChon` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-  `KichCoDaChon` varchar(10) DEFAULT NULL,
-  PRIMARY KEY (`MaKH`,`MaSP`)
+  `MaKH` INT NOT NULL,
+  `MaSP` INT NOT NULL,
+  `SoLuong` INT DEFAULT NULL,
+  `MauSacDaChon` VARCHAR(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT 'default',
+  `KichCoDaChon` VARCHAR(10) NOT NULL DEFAULT 'default',
+  PRIMARY KEY (`MaKH`, `MaSP`, `MauSacDaChon`, `KichCoDaChon`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
