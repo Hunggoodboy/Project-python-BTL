@@ -1,9 +1,9 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, url_for
 from database.connect import get_connect
 
 product_bp = Blueprint('product', __name__, url_prefix='/product')
 
-@product_bp.route("/product/<int:pid>")
+@product_bp.route("/<int:pid>")
 def product_detail(pid):
     conn = get_connect()
     cursor = conn.cursor(dictionary=True)
@@ -12,45 +12,40 @@ def product_detail(pid):
     cursor.close()
     conn.close()
 
-    if product:
-        product['Sold'] = product.get('Sold', 0)
-        product['Discount'] = product.get('Discount', 0)
-        product['HinhAnh'] = product.get('HinhAnh', '/static/images/default.png')
-        product['Season'] = product.get('Season', 'All')
+    if not product:
+        return "Không tìm thấy sản phẩm", 404
 
-        # Tính giá sau giảm
-        product['GiaSauGiam'] = int(product['Gia'] * (100 - product['Discount']) / 100)
+    # Giá trị mặc định
+    product['Sold'] = product.get('Sold', 0)
+    product['Discount'] = product.get('Discount', 0)
+    product['HinhAnh'] = product.get('HinhAnh', 'images/default.png')
+    product['Season'] = product.get('Season', 'All')
 
-        # tách ảnh phụ
-        path = product['HinhAnh'] #vd: anh_quan_ao/ao/ao_thun_basic.png
-        if '/ao/' in path:
-            subdir = 'anh_phu_ao'
-        elif '/quan/' in path:
-            subdir = 'anh_phu_quan'
-        else:
-            subdir = 'anh_phu_phu_kien'
+    # Tính giá sau giảm
+    product['GiaSauGiam'] = int(product['Gia'] * (100 - product['Discount']) / 100)
 
-        sep = path.split('/')
-        newpath = '/'.join([sep[0], subdir, sep[-1]]) #vd: anh_quan_ao/anh_phu_ao/ao_thun_basic.png
-        colors = [c.strip() for c in product['MauSac'].split(',')]
-        product['colors'] = [
-            {
-                'name': color,
-                'image': f"{newpath.rsplit('.', 1)[0]}_{i + 1}.jpg"
-            }
-            for i, color in enumerate(colors)
-        ]
+    # Tạo danh sách ảnh và chuyển sang URL
+    image_fields = ['HinhAnh', 'AnhPhu1', 'AnhPhu2', 'AnhPhu3', 'AnhPhu4']
+    images = []
+    for f in image_fields:
+        if product.get(f):
+            # Thêm url_for nếu file KHÔNG chứa /static/
+            path = product[f]
+            if not path.startswith("static/") and not path.startswith("/static/"):
+                path = url_for('static', filename=path)
+            else:
+                path = "/" + path.lstrip("/")
+            images.append(path)
+    product['images'] = images
 
-        # tách size sản phẩm
-        product['sizes'] =  [s.strip() for s in product['Size'].split(',')]
+    # Màu sắc
+    colors = [c.strip() for c in product.get('MauSac', '').split(',') if c.strip()]
+    product['colors'] = [{'name': c, 'image': images[0] if images else url_for('static', filename='images/default.png')} for c in colors]
 
-        print("\n==== PRODUCT DEBUG ====")
-        print(product)
-        print("product['MaSP'] =", product.get('MaSP'))
-        print("product['id'] =", product.get('MaSP'))
-        print("product['colors'] =", product.get('colors'))
-        print("========================\n")
+    # Size
+    product['sizes'] = [s.strip() for s in product.get('Size', '').split(',') if s.strip()]
 
-        return render_template('productDetail.html', product=product)
+    print("=== PRODUCT IMAGES ===")
+    print(product['images'])
 
-    return "Không tìm thấy sản phẩm"
+    return render_template('productDetail.html', product=product)

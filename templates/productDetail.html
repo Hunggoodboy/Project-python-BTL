@@ -14,9 +14,14 @@
 <div class="product-detail">
     <div class="image-viewer">
         <button class="nav-btn left" onclick="prevImage()">❮</button>
-        <img id="main-image" src="{{ url_for('static', filename=product.HinhAnh | default('default.png')) }}" alt="{{ product.TenSP }}">
+        <img id="main-image" src="{{ product.images[0] if product.images else url_for('static', filename='images/default.png') }}" alt="{{ product.TenSP }}">
         <button class="nav-btn right" onclick="nextImage()">❯</button>
     </div>
+
+    <script id="image-data" type="application/json">
+        {{ product.images | tojson | safe }}
+    </script>
+
 
     <div class="price-row">
         <span class="price">{{ "{:,.0f}".format(product.Gia | default(0)) }}₫</span>
@@ -104,15 +109,14 @@
     <button class="buy-now" onclick="openProductModal('buy')">Đặt hàng</button>
 </div>
 
-    <div class="product-modal" id="product-modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeProductModal()">&times;</span>
-            <div class="modal-top">
-                <img id="modal-main-img" src="{{url_for('static', filename = product.HinhAnh)}}" alt="{{ product.name }}">
-                <div class="price-stock">
-                    <p>Giá: {{ "{:,.0f}".format(product.Gia) }}₫</p>
-                    <p>Số còn trong kho: <span id="stock-count">{{ product.SoLuongcon }}</span></p>
-                </div>
+<div class="product-modal" id="product-modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeProductModal()">&times;</span>
+        <div class="modal-top">
+            <img id="modal-main-img" src="{{url_for('static', filename = product.HinhAnh)}}" alt="{{ product.name }}">
+            <div class="price-stock">
+                <p>Giá: {{ "{:,.0f}".format(product.Gia) }}₫</p>
+                <p>Số còn trong kho: <span id="stock-count">{{ product.SoLuongcon }}</span></p>
             </div>
         </div>
 
@@ -140,6 +144,14 @@
             <button class="buy-now" id="modal-buy-now">Đặt hàng</button>
         </div>
     </div>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
 </div>
 
 <!-- script thử cho cart -->

@@ -1,20 +1,31 @@
 let currentImage = 0;
 const images = JSON.parse(document.getElementById('image-data').textContent || '[]');
-        
+
+window.addEventListener('DOMContentLoaded', () => {
+    const data = document.getElementById('image-data').textContent || '[]';
+    const images = JSON.parse(data);
+    window.images = images;
+    window.currentImage = 0;
+    if (images.length > 0) {
+        document.getElementById('main-image').src = images[0];
+    }
+});
+
 function prevImage() {
-    const main = document.getElementById('main-image');
+    if(images.length < 2) return;
     currentImage = (currentImage - 1 + images.length) % images.length;
-    main.src = images[currentImage];
+    document.getElementById('main-image').src = images[currentImage];
 }
 
 function nextImage() {
-    const main = document.getElementById('main-image');
+    if(images.length < 2) return;
     currentImage = (currentImage + 1) % images.length;
-    main.src = images[currentImage];
+    document.getElementById('main-image').src = images[currentImage];
 }
 
 function changeColor(imageUrl) {
     document.getElementById('main-image').src = imageUrl;
+    currentImage = images.indexOf(imageUrl);
 }
 
 function openModal(id) {
