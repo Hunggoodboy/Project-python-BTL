@@ -111,6 +111,8 @@ def update_cart():
         data = request.get_json()  # nhận dữ liệu JSON từ fetch
         ma_sp = int(data.get('MaSP'))
         so_luong = int(data.get('SoLuong', 1))
+        mau = int(data.get('MauSacDaChon'))
+        size = data.get('KichCoDaChon')
         ma_kh = session.get('id')
 
         if not ma_kh:
@@ -120,15 +122,20 @@ def update_cart():
         conn = get_connect()
         cursor = conn.cursor(dictionary=True)
 
-        cursor.execute("SELECT * from GioHang WHERE MaSP = %s AND MaKH = %s", (ma_sp, ma_kh))
+        cursor.execute("""
+        SELECT * from GioHang 
+        WHERE MaSP = %s AND MaKH = %s
+        AND MauSacDaChon = %s AND KichCoDaChon = %s
+        """, (ma_sp, ma_kh, mau, size))
         product = cursor.fetchone()
         if product:
             sqlupdate = """
                 UPDATE GioHang
                 SET SoLuong = %s
-                WHERE MaSP = %s AND MaKH = %s;
+                WHERE MaSP = %s AND MaKH = %s
+                AND MauSacDaChon = %s AND KichCoDaChon = %s;
             """
-            cursor.execute(sqlupdate, (so_luong, ma_sp, ma_kh))
+            cursor.execute(sqlupdate, (so_luong, ma_sp, ma_kh, mau, size))
             conn.commit()
             cursor.close()
             conn.close()

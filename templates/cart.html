@@ -39,11 +39,22 @@
             <td style="color:orange"><s>{{ item.Gia|int }}₫</s> {{ dis_price|int }}₫</td>
             <td>
                 <div class="qcontrol">
-                    <button class="btnL" id="decrease_{{ item.MaSP }}" onclick="changeQuantitybtn(-1, '{{ item.MaSP }}')">-</button>
-                    <input type="text" id="quantity_{{ item.MaSP }}" value="{{ item.SoLuong }}" readonly>
-                    <input type="hidden" id="left_{{ item.MaSP }}" value="{{ item.SoLuongCon }}">
-                    <button class="btnR" id="increase_{{ item.MaSP }}" onclick="changeQuantitybtn(1, '{{ item.MaSP }}')">+</button>
+                    <button class="btnL"
+                            id="decrease_{{ item.MaSP }}_{{ item.MauSacDaChon }}_{{ item.KichCoDaChon }}"
+                            onclick="changeQuantitybtn(-1, '{{ item.MaSP }}', '{{ item.MauSacDaChon }}', '{{ item.KichCoDaChon }}')">-</button>
+
+                    <input type="text"
+                           id="quantity_{{ item.MaSP }}_{{ item.MauSacDaChon }}_{{ item.KichCoDaChon }}"
+                           value="{{ item.SoLuong }}" readonly>
+                    <input type="hidden"
+                           id="left_{{ item.MaSP }}_{{ item.MauSacDaChon }}_{{ item.KichCoDaChon }}"
+                           value="{{ item.SoLuongCon }}">
+
+                    <button class="btnR"
+                            id="increase_{{ item.MaSP }}_{{ item.MauSacDaChon }}_{{ item.KichCoDaChon }}"
+                            onclick="changeQuantitybtn(1, '{{ item.MaSP }}', '{{ item.MauSacDaChon }}', '{{ item.KichCoDaChon }}')">+</button>
                 </div>
+
             </td>
             <td style="color:orange">{{ (dis_price * item.SoLuong)|int }}₫</td>
             <td>
@@ -70,30 +81,30 @@
     <script>
         let debounceTimeout = null;
 
-        function changeQuantitybtn(delta, MaSP) {
-            let input = document.getElementById(`quantity_${MaSP}`);
+        function changeQuantitybtn(delta, MaSP, mau, size) {
+            let input = document.getElementById(`quantity_${MaSP}_${mau}_${size}`);
             let value = parseInt(input.value);
-            const maxStock = parseInt(document.getElementById(`left_${MaSP}`).value);
+            const maxStock = parseInt(document.getElementById(`left_${MaSP}_${mau}_${size}`).value);
             value += delta;
             if (value < 1) value = 1;
             if (value > maxStock) value = maxStock;
             input.value = value;
-            document.getElementById(`decrease_${MaSP}`).disabled = (value === 1);
-            document.getElementById(`increase_${MaSP}`).disabled = (value === maxStock);
+            document.getElementById(`decrease_${MaSP}_${mau}_${size}`).disabled = (value === 1);
+            document.getElementById(`increase_${MaSP}_${mau}_${size}`).disabled = (value === maxStock);
 
             // Debounce gửi request
             clearTimeout(debounceTimeout);
             debounceTimeout = setTimeout(() => {
-                updateCart(MaSP, value);
+                updateCart(MaSP, mau, size, value);
             }, 500); // 500ms sau lần bấm cuối mới gửi
 
         }
 
-        function updateCart(MaSP, quantity) {
+        function updateCart(MaSP, mau, size, quantity) {
             fetch('/update-cart', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({MaSP: MaSP, SoLuong: quantity})
+                body: JSON.stringify({MaSP: MaSP, MauSacDaChon: mau, KichCoDaChon: size, SoLuong: quantity})
             })
                 .then(res => res.json())
                 .then(data => console.log(data));
