@@ -18,6 +18,7 @@
 --
 -- Table structure for table `DanhMuc`
 --
+use qlbanquanao
 
 DROP TABLE IF EXISTS `DanhMuc`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -56,8 +57,8 @@ CREATE TABLE `DonHang` (
   `MaSP` int DEFAULT NULL,
   `MaKH` int DEFAULT NULL,
   `SoLuong` int DEFAULT NULL,
-  `DonGia` int DEFAULT NULL,
-  `TongGia` int DEFAULT NULL,
+  `MauSacDaChon` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
+  `KichCoDaChon` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
   PRIMARY KEY (`MaDH`),
   KEY `MaSP` (`MaSP`),
   KEY `MaKH` (`MaKH`),

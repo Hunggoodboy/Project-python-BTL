@@ -54,10 +54,10 @@ def add_cart_no_reload():
         # Thêm đơn hàng
         sqladd = """
             INSERT INTO QLBanQuanAo.DonHang
-            (MaDH, MaSP, MaKH, SoLuong, MauSac)
-            VALUES (%s, %s, %s, %s, %s)
+            (MaDH, MaSP, MaKH, SoLuong, MauSacDaChon, KichCoDaChon)
+            VALUES (%s, %s, %s, %s, %s, %s)
         """
-        cursor.execute(sqladd, (ma_dh, ma_sp, ma_kh, so_luong, mau))
+        cursor.execute(sqladd, (ma_dh, ma_sp, ma_kh, so_luong, mau, size))
         conn.commit()
         cursor.close()
         conn.close()
@@ -79,5 +79,40 @@ def remove_from_cart(product_id):
 def clear_cart():
     session.pop('cart', None)
     return redirect(url_for('cart_bp.cart'))
+
+#update số lượng
+@cart_bp.route('/update-cart', methods=['POST'])
+def update_cart():
+    try:
+        data = request.get_json()  # nhận dữ liệu JSON từ fetch
+        ma_sp = int(data.get('MaSP'))
+        so_luong = int(data.get('SoLuong', 1))
+        ma_kh = session.get('id')
+
+        if not ma_kh:
+            return jsonify({'error': 'not_logged_in'}), 401
+
+        # Lấy ttin sp từ bảng Product
+        conn = get_connect()
+        cursor = conn.cursor(dictionary=True)
+
+        cursor.execute("SELECT * from DonHang WHERE MaSP = %s AND MaKH = %s", (ma_sp, ma_kh))
+        product = cursor.fetchone()
+        if product:
+            sqlupdate = """
+                UPDATE DonHang
+                SET SoLuong = %s
+                WHERE MaSP = %s AND MaKH = %s;
+            """
+            cursor.execute(sqlupdate, (so_luong, ma_sp, ma_kh))
+            conn.commit()
+            cursor.close()
+            conn.close()
+            return jsonify({'success': True})
+        else:
+            return jsonify({'error': 'invalid_number'}), 408
+    except Exception as e:
+        print("Error adding to cart:", e)
+        return jsonify({'error': 'server_error'}), 500
 
 

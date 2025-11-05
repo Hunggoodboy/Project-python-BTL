@@ -3,30 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <title>Giỏ hàng</title>
-    <style>
-        .cart-table {
-            width: 60%;
-            margin: auto;
-            border-collapse: collapse;
-            border: none;
-        }
-        .cart-table th, td {
-            padding: 10px;
-            border: 1px solid #ddd;
-            text-align: center;
-        }
-        .actions { text-align: center; margin-top: 20px; }
-
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/Cart-page.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
     {% include 'MenuBar.html' %}
     <h4 style="padding-left: 195px">Giỏ hàng của bạn</h4>
+
+    <div class="cart-page">
     {% if cart_items %}
     <table class="cart-table">
         <tr>
-            <th>Tên sản phẩm</th>
+            <th style="padding-left: 155px">Tên sản phẩm</th>
+            <th> </th>
             <th>Giá</th>
             <th>Số lượng</th>
             <th>Thành tiền</th>
@@ -35,10 +24,28 @@
         {% for item in cart_items %}
         {% set dis_price = item.Gia * (100 - item.Discount) / 100 %}
         <tr>
-            <td>{{ item.TenSP }}</td>
-            <td><s>{{ item.Gia|int }}₫</s> {{ dis_price|int }}₫</td>
-            <td>{{ item.SoLuong }}</td>
-            <td>{{ (dis_price * item.SoLuong)|int }}₫</td>
+            <td>
+                <a class="product-wrapper" href="{{ url_for('product.product_detail', pid=item.MaSP) }}">
+                    <img src="{{ url_for('static', filename = item.HinhAnh) }}">
+                    <div class="pro-name">{{ item.TenSP }}</div>
+                </a>
+            </td>
+            <td>
+                <div class="option">
+                    {{ item.MauSacDaChon }},
+                    {{ item.KichCoDaChon }}
+                </div>
+            </td>
+            <td style="color:orange"><s>{{ item.Gia|int }}₫</s> {{ dis_price|int }}₫</td>
+            <td>
+                <div class="qcontrol">
+                    <button class="btnL" id="decrease_{{ item.MaSP }}" onclick="changeQuantitybtn(-1, '{{ item.MaSP }}')">-</button>
+                    <input type="text" id="quantity_{{ item.MaSP }}" value="{{ item.SoLuong }}" readonly>
+                    <input type="hidden" id="left_{{ item.MaSP }}" value="{{ item.SoLuongCon }}">
+                    <button class="btnR" id="increase_{{ item.MaSP }}" onclick="changeQuantitybtn(1, '{{ item.MaSP }}')">+</button>
+                </div>
+            </td>
+            <td style="color:orange">{{ (dis_price * item.SoLuong)|int }}₫</td>
             <td><a href="{{ url_for('cart_bp.remove_from_cart', product_id=item.id) }}">Xóa</a></td>
         </tr>
         {% endfor %}
@@ -51,6 +58,40 @@
     {% else %}
     <p style="text-align:center;">Giỏ hàng trống.</p>
     {% endif %}
+    </div>
+
+    <script>
+        let debounceTimeout = null;
+
+        function changeQuantitybtn(delta, MaSP) {
+            let input = document.getElementById(`quantity_${MaSP}`);
+            let value = parseInt(input.value);
+            const maxStock = parseInt(document.getElementById(`left_${MaSP}`).value);
+            value += delta;
+            if (value < 1) value = 1;
+            if (value > maxStock) value = maxStock;
+            input.value = value;
+            document.getElementById(`decrease_${MaSP}`).disabled = (value === 1);
+            document.getElementById(`increase_${MaSP}`).disabled = (value === maxStock);
+
+            // Debounce gửi request
+            clearTimeout(debounceTimeout);
+            debounceTimeout = setTimeout(() => {
+                updateCart(MaSP, value);
+            }, 500); // 500ms sau lần bấm cuối mới gửi
+
+        }
+
+        function updateCart(MaSP, quantity) {
+            fetch('/update-cart', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({MaSP: MaSP, SoLuong: quantity})
+            })
+                .then(res => res.json())
+                .then(data => console.log(data));
+        }
+    </script>
 </body>
 </html>
 
