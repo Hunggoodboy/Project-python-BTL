@@ -39,18 +39,33 @@ def add_cart_no_reload():
         # Lấy ttin sp từ bảng Product
         conn = get_connect()
         cursor = conn.cursor(dictionary=True)
-        cursor.execute("SELECT Gia, Discount FROM QLBanQuanAo.SanPham WHERE MaSP = %s", (ma_sp,))
+        cursor.execute("SELECT * FROM QLBanQuanAo.SanPham WHERE MaSP = %s", (ma_sp,))
         product = cursor.fetchone()
         if not product:
             return jsonify({'error': 'invalid_product'}), 404
 
-        # Thêm đơn hàng
-        sqladd = """
-            INSERT INTO QLBanQuanAo.GioHang
-            (MaKH, MaSP, SoLuong, MauSacDaChon, KichCoDaChon)
-            VALUES (%s, %s, %s, %s, %s)
-        """
-        cursor.execute(sqladd, (ma_kh, ma_sp, so_luong, mau, size))
+        cursor.execute("""
+                SELECT * FROM QLBanQuanAo.GioHang 
+                WHERE MaSP = %s AND MaKH = %s
+                AND MauSacDaChon LIKE %s AND KichCoDaChon LIKE %s
+                """, (ma_sp, ma_kh, mau, size))
+        product = cursor.fetchone()
+        if not product:
+            # Thêm đơn hàng
+            sqladd = """
+                INSERT INTO QLBanQuanAo.GioHang
+                (MaKH, MaSP, SoLuong, MauSacDaChon, KichCoDaChon)
+                VALUES (%s, %s, %s, %s, %s)
+            """
+            cursor.execute(sqladd, (ma_kh, ma_sp, so_luong, mau, size))
+        else:
+            sqlupdate = """
+                    UPDATE QLBanQuanAo.GioHang
+                    SET SoLuong = SoLuong + %s
+                    WHERE MaKH = %s AND MaSP = %s
+                    AND (MauSacDaChon <=> %s) AND (KichCoDaChon <=> %s)
+                """
+            cursor.execute(sqlupdate, (so_luong, ma_kh, ma_sp, mau, size))
         conn.commit()
         cursor.close()
         conn.close()
@@ -60,17 +75,33 @@ def add_cart_no_reload():
         return jsonify({'error': 'server_error'}), 500
 
 # Xóa sản phẩm khỏi giỏ
-@cart_bp.route('/remove_from_cart/<product_id>')
-def remove_from_cart(product_id):
-    carts = session.get('cart', [])
-    carts = [item for item in carts if item['id'] != product_id]
-    session['cart'] = carts
+@cart_bp.route('/remove-from-cart')
+def remove_from_cart():
+    maKH = session.get('id')
+    maSP = request.args.get('maSP')
+    mau = request.args.get('mau')
+    size = request.args.get('size')
+    conn = get_connect()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("""
+        DELETE FROM QLBanQuanAo.GioHang
+        WHERE MaSP = %s AND MaKH = %s
+        AND MauSacDaChon = %s AND KichCoDaChon = %s
+        """, (maSP, maKH, mau, size))
+    conn.commit()
     return redirect(url_for('cart_bp.cart'))
 
 # Xóa toàn bộ giỏ hàng
-@cart_bp.route('/clear_cart')
+@cart_bp.route('/clear-cart')
 def clear_cart():
-    session.pop('cart', None)
+    maKH = session.get('id')
+    conn = get_connect()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("""
+        DELETE FROM QLBanQuanAo.GioHang
+        WHERE MaKH = %s
+        """, (maKH,))
+    conn.commit()
     return redirect(url_for('cart_bp.cart'))
 
 #update số lượng
