@@ -17,6 +17,15 @@ def cart():
                     WHERE MaKH = %s
                    """, (ma_kh,))
     cart_items = cursor.fetchall()
+    for item in cart_items:
+        item['sizes'] = [c.strip() for c in item.get('Size', '').split(',') if c.strip()]
+        colors = [c.strip() for c in item.get('MauSac', '').split(',') if c.strip()]
+        item['colors'] = [
+            {'name': c,
+             'image': item[f'AnhPhu{i+1}'] if i < 4 and item[f'AnhPhu{i+1}'] else item['HinhAnh']
+             }
+            for i, c in enumerate(colors)]
+
     total_price = round(sum((item['Gia'] * (100 - item['Discount']) / 100) * item['SoLuong'] for item in cart_items))
     cursor.close()
     conn.close()
@@ -146,4 +155,61 @@ def update_cart():
         print("Error adding to cart:", e)
         return jsonify({'error': 'server_error'}), 500
 
+@cart_bp.route('/update-cart-item-option', methods=['POST'])
+def update_cart_item_option():
+    try:
+        data = request.get_json()
+        ma_kh = session.get('id')
+        old_sp = int(data.get('old_ma_sp'))
+        new_sp = int(data.get('new_ma_sp', old_sp))
+        old_mau = data.get('old_mau')
+        old_size = data.get('old_size')
+        new_mau = data.get('new_mau')
+        new_size = data.get('new_size')
+        so_luong = int(data.get('so_luong', 1))
+
+        if not ma_kh:
+            return jsonify({'error': 'not_logged_in'}), 401
+
+        conn = get_connect()
+        cursor = conn.cursor(dictionary=True)
+
+        # 🔹 Xóa item cũ trong giỏ
+        cursor.execute("""
+            DELETE FROM QLBanQuanAo.GioHang
+            WHERE MaSP = %s AND MaKH = %s
+            AND MauSacDaChon = %s AND KichCoDaChon = %s
+        """, (old_sp, ma_kh, old_mau, old_size))
+
+        # 🔹 Thêm hoặc cộng dồn item mới
+        cursor.execute("""
+            SELECT * FROM QLBanQuanAo.GioHang
+            WHERE MaSP = %s AND MaKH = %s
+            AND MauSacDaChon = %s AND KichCoDaChon = %s
+        """, (new_sp, ma_kh, new_mau, new_size))
+        existed = cursor.fetchone()
+
+        if existed:
+            cursor.execute("""
+                UPDATE QLBanQuanAo.GioHang
+                SET SoLuong = SoLuong + %s
+                WHERE MaSP = %s AND MaKH = %s
+                AND MauSacDaChon = %s AND KichCoDaChon = %s
+            """, (so_luong, new_sp, ma_kh, new_mau, new_size))
+        else:
+            cursor.execute("""
+                INSERT INTO QLBanQuanAo.GioHang
+                (MaKH, MaSP, SoLuong, MauSacDaChon, KichCoDaChon)
+                VALUES (%s, %s, %s, %s, %s)
+            """, (ma_kh, new_sp, so_luong, new_mau, new_size))
+
+        conn.commit()
+        cursor.close()
+        conn.close()
+
+        return jsonify({'success': True})
+
+    except Exception as e:
+        print("Error updating cart item:", e)
+        return jsonify({'error': 'server_error'}), 500
 

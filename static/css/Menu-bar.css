@@ -40,6 +40,8 @@ div.menu-bar {
 /* hidden dropdown<table> */
 .hidden {
     display: none;
+}
+.dropdown {
     position: absolute;
     top: 100%;
     left: 50%;
@@ -48,8 +50,8 @@ div.menu-bar {
     width: auto;
     z-index: 999;
     border-collapse: collapse;
-
 }
+
 .tag:hover .hidden {
     display: table;
 }
@@ -186,7 +188,6 @@ div.menu-bar {
 
 /* Dropdown cho search */
 .upright-search .dropdown {
-    display: none;
     position: absolute;
     top: 100%;
     left: 0;
@@ -196,8 +197,8 @@ div.menu-bar {
     z-index: 999;
 }
 
-.upright-search:hover input.dropdown,
-.upright-search input.dropdown:focus {
+.upright-search:hover input.hidden,
+.upright-search input.hidden:focus {
     display: block;
 }
 
