@@ -55,7 +55,9 @@
         <div>
             <span class="status {% if order.TrangThai == 'Đã giao thành công' %}green{% else %}yellow{% endif %}" onclick="openStatusModal({{ order.id }})">{{ order.TrangThai }}</span>
             {% if order.TrangThai == 'Chờ xác nhận đơn' %}
-            <button class="cancel-btn" onclick="openCancelModal({{ order.id }})">Hủy đơn</button>
+                <button class="cancel-btn" onclick="openCancelModal({{ order.id }})">Hủy đơn</button>
+            {% elif order.TrangThai == 'Chờ bạn xác nhận' %}
+                <button class="confirm-order-btn" onclick="confirmOrder({{ order.id }}, '{{ order.MaSP }}')">Xác nhận giao thành công</button>
             {% endif %}
             {% if order.TrangThai == 'Đã giao thành công' %}
             <button class="review-btn" onclick="openReviewModal({{ order.id }}, '{{ order.ProductID }}')">Đánh giá</button>
@@ -162,6 +164,43 @@ function confirmCancel(orderId) {
         }
     });
 }
+
+//Xác nhận giao thành công
+function confirmOrder(orderId) {
+    fetch("/confirm_order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ order_id: orderId })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            // Cập nhật trạng thái thành "Đã giao thành công"
+            const orderRow = document.getElementById('order-' + orderId);
+            const statusSpan = orderRow.querySelector('.status');
+            statusSpan.textContent = 'Đã giao thành công';
+            statusSpan.classList.remove('yellow');
+            statusSpan.classList.add('green');
+
+            // Ẩn nút xác nhận đơn
+            const confirmBtn = orderRow.querySelector('.confirm-order-btn');
+            if (confirmBtn) confirmBtn.remove();
+
+            // Nếu muốn, hiển thị nút đánh giá
+            const reviewBtn = document.createElement('button');
+            reviewBtn.className = 'review-btn';
+            reviewBtn.textContent = 'Đánh giá';
+            reviewBtn.onclick = function() {
+                openReviewModal(orderId, productId);
+            };
+            orderRow.appendChild(reviewBtn);
+
+        } else {
+            alert("Xác nhận thất bại: " + data.message);
+        }
+    });
+}
+
 window.onclick = function(event) {
     {% for order in orders %}
     if (event.target == document.getElementById('status-modal-{{ order.id }}')) {

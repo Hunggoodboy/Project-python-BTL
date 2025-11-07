@@ -76,7 +76,7 @@ def create_order():
         cursor.execute("""
             INSERT INTO QLBanQuanAo.DonHang (MaKH, MaSP, Mau, TrangThai, SoLuong, DonGia, TongGia)
             VALUES (%s, %s, %s, %s, %s, %s, %s)
-        """, (user_id, product_id, color, "Chờ xác nhận đơn", quantity, don_gia, tong_gia))
+        """, (user_id, product_id, color, "Chờ bạn xác nhận", quantity, don_gia, tong_gia))
 
         conn.commit()
 
@@ -127,6 +127,33 @@ def cancel_order():
 
         return jsonify({"success": True})
 
+    except Exception as e:
+        print("ERROR:", e)
+        return jsonify({"success": False, "message": str(e)}), 500
+
+#Route xác nhận đơn của khách hàng
+@orders_bp.route('/confirm_order', methods=['POST'])
+def confirm_order():
+    try:
+        if 'id' not in session:
+            return jsonify({"success": False, "message": "Chưa đăng nhập"}), 401
+
+        order_id = request.json.get('order_id')
+
+        conn = get_connect()
+        cursor = conn.cursor()
+
+        cursor.execute("""
+            UPDATE QLBanQuanAo.DonHang
+            SET TrangThai = 'Đã giao thành công'
+            WHERE MaDH = %s
+        """, (order_id,))
+
+        conn.commit()
+        cursor.close()
+        conn.close()
+
+        return jsonify({"success": True})
     except Exception as e:
         print("ERROR:", e)
         return jsonify({"success": False, "message": str(e)}), 500
