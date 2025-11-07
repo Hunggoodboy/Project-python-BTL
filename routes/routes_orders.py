@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, session
 from database.connect import get_connect
 orders_bp = Blueprint('orders', __name__)
 
+#Hiện thị đơn
 @orders_bp.route('/orders')
 def show_orders():
 
@@ -15,7 +16,7 @@ def show_orders():
     FROM QLBanQuanAo.DonHang a
     JOIN QLBanQuanAo.SanPham b 
     ON a.MaSP = b.MaSP
-    WHERE a.MaKH = %s
+    WHERE a.MaKH = %s AND a.TrangThai != 'Đã hủy'
     """
 
     cursor.execute(sql, (user_id,))
@@ -27,10 +28,10 @@ def show_orders():
             "id": dic['MaDH'],
             "MaSP": dic['MaSP'],
             "TenSP": dic['TenSP'],
-            "Gia": dic['TongGia'],        # ✅ sửa đúng tên cột
+            "Gia": dic['TongGia'],       
             "SoLuong": dic['SoLuong'],
             "TrangThai": dic['TrangThai'],
-            "Mau": dic['Mau'],            # ✅ nên thêm nếu bạn có màu
+            "Mau": dic['Mau'],            
             "HinhAnh": dic['HinhAnh']
         }
         orders.append(product)
@@ -72,7 +73,6 @@ def create_order():
         don_gia = product['Gia']
         tong_gia = don_gia * quantity
 
-        # ✅ Insert đầy đủ trường đúng với bảng DonHang
         cursor.execute("""
             INSERT INTO QLBanQuanAo.DonHang (MaKH, MaSP, Mau, TrangThai, SoLuong, DonGia, TongGia)
             VALUES (%s, %s, %s, %s, %s, %s, %s)
@@ -84,7 +84,6 @@ def create_order():
         cursor.close()
         conn.close()
 
-        # ✅ Trả về đúng chuẩn
         return jsonify({
             "success": True,
             "order": {
@@ -98,6 +97,35 @@ def create_order():
                 "HinhAnh": product['HinhAnh']
             }
         })
+
+    except Exception as e:
+        print("ERROR:", e)
+        return jsonify({"success": False, "message": str(e)}), 500
+
+#Route hủy đơn (xóa đơn khỏi database)
+
+@orders_bp.route('/cancel_order', methods=['POST'])
+def cancel_order():
+    try:
+        if 'id' not in session:
+            return jsonify({"success": False, "message": "Chưa đăng nhập"}), 401
+
+        order_id = request.json.get('order_id')
+
+        conn = get_connect()
+        cursor = conn.cursor()
+
+        cursor.execute("""
+            UPDATE QLBanQuanAo.DonHang
+            SET TrangThai = 'Đã hủy'
+            WHERE MaDH = %s
+        """, (order_id,))
+
+        conn.commit()
+        cursor.close()
+        conn.close()
+
+        return jsonify({"success": True})
 
     except Exception as e:
         print("ERROR:", e)
