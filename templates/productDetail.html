@@ -105,8 +105,8 @@
 
 <!-- nút đặt/thêm hàng -->
 <div class="action-row">
-    <button class="add-cart" onclick="addToCart()">Thêm vào giỏ hàng</button>
-    <button class="buy-now" onclick="openProductModal('buy')">Đặt hàng</button>
+    <button id="add-cart" class="add-cart" onclick="addToCart()">Thêm vào giỏ hàng</button>
+    <button class="buy-now" onclick="openProductModal()">Đặt hàng</button>
 </div>
 
 <div class="product-modal" id="product-modal">
@@ -146,15 +146,7 @@
     </div>
 </div>
 
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<!-- script thử cho cart -->
+<!-- script cho cart -->
 <script src="{{ url_for('static', filename='js/add-to-cart.js') }}"></script>
 
 <!-- Ảnh cho lúc đặt/thêm hàng -->
