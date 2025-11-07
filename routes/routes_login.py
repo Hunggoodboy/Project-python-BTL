@@ -29,9 +29,13 @@ def login():
                 session['id'] = user['MaKH']
                 session['hoten'] = user['HoTen']
                 session['username'] = user['UserName']
-                # session['password'] = password
-                # session['numberphone'] = numberphone
-                # session['address'] = address
+                session['password'] = user['MatKhau']
+                session['numberphone'] = user['numberphone']
+                session['address'] = user['address']
+                if(session['username'] == "Admin_03" and session['password'] == "admin_nhom3"):
+                    session['user_role'] = 'admin'
+                else:
+                    session['user_role'] = 'client'
                 flash('Bạn đã đăng nhập thành công !')
                 return redirect(url_for('menu.main_menu'))
             else:
