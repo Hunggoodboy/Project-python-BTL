@@ -31,8 +31,21 @@ document.addEventListener('DOMContentLoaded', () => {
     async function addToCart() {
         const ma_sp = document.getElementById("product-id").value;
         const so_luong = document.getElementById("quantity1").value || 0;
-        const mau = document.getElementById("selected-color").value || "Không chọn";
-        const size = document.getElementById("selected-size").value || "Không chọn";
+        const mau = document.getElementById("selected-color").value;
+        const size = document.getElementById("selected-size").value;
+
+        if (!so_luong) {
+            alert("Số lượng không hợp lệ");
+            return;
+        }
+        if (!mau) {
+            alert("Vui lòng chọn màu trước khi thêm vào giỏ hàng!");
+            return;
+        }
+        if (!size) {
+            alert("Vui lòng chọn kích cỡ trước khi thêm vào giỏ hàng!");
+            return;
+        }
 
         try {
             const res = await fetch("/add-no-reload", {

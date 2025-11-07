@@ -35,22 +35,23 @@ function closeModal(id) {
     document.getElementById(id).style.display = 'none';
 }
 
-function openProductModal(type) {
+function openProductModal() {
     const modal = document.getElementById('product-modal');
     modal.style.display = 'block';
-    const addBtn = document.getElementById('modal-add-cart');
+    const addBtn = document.getElementById('add-cart');
     const buyBtn = document.getElementById('modal-buy-now');
-    if(type === 'add') {
-        addBtn.style.display = 'block';
-        buyBtn.style.display = 'none';
-    } else if(type === 'buy') {
-        addBtn.style.display = 'none';
-        buyBtn.style.display = 'block';
-    }
+
+    document.getElementById('add-cart').style.cursor = 'not-allowed';
+    addBtn.disabled = true;
+    buyBtn.style.display = 'block';
 }
 
 function closeProductModal() {
     document.getElementById('product-modal').style.display = 'none';
+    document.getElementById('add-cart').style.cursor = 'pointer';
+
+    const addBtn = document.getElementById('add-cart');
+    addBtn.disabled = false;
 }
 
 function changeModalImage(imgUrl) {

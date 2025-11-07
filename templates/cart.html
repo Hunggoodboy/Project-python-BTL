@@ -26,27 +26,75 @@
         <tr>
             <td>
                 <a class="product-wrapper" href="{{ url_for('product.product_detail', pid=item.MaSP) }}">
-                    <img src="{{ url_for('static', filename = item.HinhAnh) }}">
+                    {% set selected_color = (item.colors | selectattr('name', 'equalto', item.MauSacDaChon) | list | first) %}
+                    <img src="{{ url_for('static', filename = selected_color.image) }}">
                     <div class="pro-name">{{ item.TenSP }}</div>
                 </a>
             </td>
             <td>
                 <div class="option">
-                    {{ item.MauSacDaChon }},
-                    {{ item.KichCoDaChon }}
+                    <button class="optionBtn"
+                            data-target="dropdown_{{ item.MaSP }}_{{ item.MauSacDaChon }}_{{ item.KichCoDaChon }}">
+                        {{ item.MauSacDaChon }}, {{ item.KichCoDaChon }}
+                        <span class="triangle-down"></span>
+                    </button>
+                    <div id="dropdown_{{ item.MaSP }}_{{ item.MauSacDaChon }}_{{ item.KichCoDaChon }}" class="dropdown">
+                        <span class="triangle"></span>
+                        <form id="form_{{ item.MaSP }}_{{ item.MauSacDaChon }}_{{ item.KichCoDaChon }}">
+                            Màu sắc:
+                            {% for c in item.colors %}
+                            <label class="container">
+                                <input type="radio" name="color" value="{{ c.name }}"/>
+                                <span class="text">{{ c.name }}</span>
+                            </label>
+                            {% endfor %}
+                            <br>
+                            Size:
+                            {% for s in item.sizes %}
+                            <label class="container">
+                                <input type="radio" name="size" value="{{ s }}"/>
+                                <span class="text">{{ s }}</span>
+                            </label>
+                            {% endfor %}
+                            <div class="cart-form-options">
+                                <button type="reset">Hủy</button>
+                                <button type="submit"
+                                        onclick="updateCartOption('{{ item.MaSP }}', '{{ item.MauSacDaChon }}', '{{ item.KichCoDaChon }}')">
+                                    Xác nhận
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </td>
             <td style="color:orange"><s>{{ item.Gia|int }}₫</s> {{ dis_price|int }}₫</td>
             <td>
                 <div class="qcontrol">
-                    <button class="btnL" id="decrease_{{ item.MaSP }}" onclick="changeQuantitybtn(-1, '{{ item.MaSP }}')">-</button>
-                    <input type="text" id="quantity_{{ item.MaSP }}" value="{{ item.SoLuong }}" readonly>
-                    <input type="hidden" id="left_{{ item.MaSP }}" value="{{ item.SoLuongCon }}">
-                    <button class="btnR" id="increase_{{ item.MaSP }}" onclick="changeQuantitybtn(1, '{{ item.MaSP }}')">+</button>
+                    <button class="btnL"
+                            id="decrease_{{ item.MaSP }}_{{ item.MauSacDaChon }}_{{ item.KichCoDaChon }}"
+                            onclick="changeQuantitybtn(-1, '{{ item.MaSP }}', '{{ item.MauSacDaChon }}', '{{ item.KichCoDaChon }}')">-</button>
+
+                    <input type="text"
+                           id="quantity_{{ item.MaSP }}_{{ item.MauSacDaChon }}_{{ item.KichCoDaChon }}"
+                           value="{{ item.SoLuong }}" readonly>
+                    <input type="hidden"
+                           id="left_{{ item.MaSP }}_{{ item.MauSacDaChon }}_{{ item.KichCoDaChon }}"
+                           value="{{ item.SoLuongCon }}">
+
+                    <button class="btnR"
+                            id="increase_{{ item.MaSP }}_{{ item.MauSacDaChon }}_{{ item.KichCoDaChon }}"
+                            onclick="changeQuantitybtn(1, '{{ item.MaSP }}', '{{ item.MauSacDaChon }}', '{{ item.KichCoDaChon }}')">+</button>
                 </div>
             </td>
             <td style="color:orange">{{ (dis_price * item.SoLuong)|int }}₫</td>
-            <td><a href="{{ url_for('cart_bp.remove_from_cart', product_id=item.id) }}">Xóa</a></td>
+            <td>
+                <a href="{{ url_for('cart_bp.remove_from_cart',
+                        maSP=item.MaSP,
+                        mau=item.MauSacDaChon,
+                        size=item.KichCoDaChon) }}">
+                    Xóa
+                </a>
+            </td>
         </tr>
         {% endfor %}
     </table>
@@ -63,34 +111,92 @@
     <script>
         let debounceTimeout = null;
 
-        function changeQuantitybtn(delta, MaSP) {
-            let input = document.getElementById(`quantity_${MaSP}`);
+        function changeQuantitybtn(delta, MaSP, mau, size) {
+            let input = document.getElementById(`quantity_${MaSP}_${mau}_${size}`);
             let value = parseInt(input.value);
-            const maxStock = parseInt(document.getElementById(`left_${MaSP}`).value);
+            const maxStock = parseInt(document.getElementById(`left_${MaSP}_${mau}_${size}`).value);
             value += delta;
             if (value < 1) value = 1;
             if (value > maxStock) value = maxStock;
             input.value = value;
-            document.getElementById(`decrease_${MaSP}`).disabled = (value === 1);
-            document.getElementById(`increase_${MaSP}`).disabled = (value === maxStock);
+            document.getElementById(`decrease_${MaSP}_${mau}_${size}`).disabled = (value === 1);
+            document.getElementById(`increase_${MaSP}_${mau}_${size}`).disabled = (value === maxStock);
 
             // Debounce gửi request
             clearTimeout(debounceTimeout);
             debounceTimeout = setTimeout(() => {
-                updateCart(MaSP, value);
+                updateCart(MaSP, mau, size, value);
             }, 500); // 500ms sau lần bấm cuối mới gửi
 
         }
 
-        function updateCart(MaSP, quantity) {
+        function updateCart(MaSP, mau, size, quantity) {
             fetch('/update-cart', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({MaSP: MaSP, SoLuong: quantity})
+                body: JSON.stringify({MaSP: MaSP, MauSacDaChon: mau, KichCoDaChon: size, SoLuong: quantity})
             })
                 .then(res => res.json())
                 .then(data => console.log(data));
         }
+
+        document.querySelectorAll('.optionBtn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const targetId = btn.dataset.target;
+                const dropdown = document.getElementById(targetId);
+                //tắt hết dropdown khác
+                document.querySelectorAll('.dropdown.active').forEach(dd => {
+                    if (dd !== dropdown) dd.classList.remove('active');
+                });
+                dropdown.classList.toggle('active');
+            });
+        });
+
+        // Gửi yêu cầu đổi màu/size sản phẩm trong giỏ
+        async function updateCartOption(maSP, oldMau, oldSize) {
+            const form = document.getElementById(`form_${maSP}_${oldMau}_${oldSize}`);
+            const newMau = form.querySelector('input[name="color"]:checked')?.value || oldMau;
+            const newSize = form.querySelector('input[name="size"]:checked')?.value || oldSize;
+
+            // Nếu không chọn gì mới → bỏ qua
+            if (newMau === oldMau && newSize === oldSize) {
+                alert("Bạn chưa thay đổi màu hoặc size!");
+                return;
+            }
+
+            const so_luong = document.getElementById(`quantity_${maSP}_${oldMau}_${oldSize}`).value || 1;
+
+            try {
+                const res = await fetch("/update-cart-item-option", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        old_ma_sp: maSP,
+                        new_ma_sp: maSP,
+                        old_mau: oldMau,
+                        old_size: oldSize,
+                        new_mau: newMau,
+                        new_size: newSize,
+                        so_luong
+                    })
+                });
+
+                const data = await res.json();
+                if (data.success) {
+                    alert("Cập nhật giỏ hàng thành công!");
+                    location.reload();
+                } else if (data.error === "not_logged_in") {
+                    alert("Vui lòng đăng nhập trước khi thao tác!");
+                    window.location.href = "/login";
+                } else {
+                    alert("Lỗi khi cập nhật sản phẩm!");
+                }
+            } catch (err) {
+                console.error(err);
+                alert("Không thể kết nối server!");
+            }
+        }
+
     </script>
 </body>
 </html>
