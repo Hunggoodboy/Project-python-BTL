@@ -6,6 +6,7 @@ login_bp = Blueprint('login_module', __name__)
 
 
 @login_bp.route('/login', methods=['GET', 'POST'])
+
 def login():
     if request.method == 'POST':
         print("ok")
@@ -29,9 +30,13 @@ def login():
                 session['id'] = user['MaKH']
                 session['hoten'] = user['HoTen']
                 session['username'] = user['UserName']
-                # session['password'] = password
-                # session['numberphone'] = numberphone
-                # session['address'] = address
+                session['password'] = user['MatKhau']
+                session['numberphone'] = user['SDT']
+                session['address'] = user['Address']
+                if(session['username'] == "Admin_03" and session['password'] == "admin_nhom3"):
+                    session['user_role'] = 'admin'
+                else:
+                    session['user_role'] = 'client'
                 flash('Bạn đã đăng nhập thành công !')
                 return redirect(url_for('menu.main_menu'))
             else:
