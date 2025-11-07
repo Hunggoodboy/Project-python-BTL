@@ -128,22 +128,39 @@ function selectReason(el) {
     circles.forEach(c => c.classList.remove('checked'));
     el.querySelector('.circle').classList.add('checked');
 }
-
+//Gọi API hủy đơn
 function confirmCancel(orderId) {
     const modal = document.getElementById('cancel-modal-' + orderId);
     const selected = modal.querySelector('.circle.checked');
     const errorMsg = document.getElementById('error-' + orderId);
+
     if (!selected) {
         errorMsg.textContent = 'Vui lòng chọn lý do hủy đơn';
         return;
     }
+
     errorMsg.textContent = '';
-    modal.style.display = 'none';
-    const orderRow = document.getElementById('order-' + orderId);
-    orderRow.remove();
-    const successMsg = document.getElementById('success-msg');
-    successMsg.style.display = 'block';
-    setTimeout(() => { successMsg.style.display = 'none'; }, 2000);
+
+    // Gửi yêu cầu lên server để cập nhật DB
+    fetch("/cancel_order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ order_id: orderId })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            modal.style.display = 'none';
+            const orderRow = document.getElementById('order-' + orderId);
+            orderRow.remove();
+
+            const successMsg = document.getElementById('success-msg');
+            successMsg.style.display = 'block';
+            setTimeout(() => { successMsg.style.display = 'none'; }, 2000);
+        } else {
+            alert("Hủy đơn thất bại: " + data.message);
+        }
+    });
 }
 window.onclick = function(event) {
     {% for order in orders %}
