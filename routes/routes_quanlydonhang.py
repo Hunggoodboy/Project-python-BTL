@@ -4,7 +4,7 @@ from flask import Blueprint, render_template, request
 
 qldonhangbp = Blueprint('qldonhangbp', __name__)
 
-qldonhangbp.route("/quanlydonhang_Choxacnhandon", methods=["POST"])
+qldonhangbp.route("/quanlydonhang_Choxacnhandon", methods=["POST", "GET"])
 def quanlydonhang_Choxacnhandon():
     conn = get_connect()
     cursor = conn.cursor(dictionary=True)
@@ -21,7 +21,8 @@ def quanlydonhang_Choxacnhandon():
     return render_template('adminorder.html', rows=rows)
 
 
-@qldonhangbp.route("/quanlydonhang_Danggiaohang", methods=["POST"])
+@qldonhangbp.route("/quanlydonhang_Danggiaohang", methods=["POST", "GET"])
+def quanlydonhang_Danggiaohang():
 def quanlydonhang_Danggiaohang():
     conn = get_connect()
     cursor = conn.cursor(dictionary=True)
@@ -53,7 +54,7 @@ def quanlydonhang_Chobanxacnhan():
     conn.close()
     return render_template('adminorder.html', rows=rows)
 
-@qldonhangbp.route("/quanlydonhang_Dagiaothanhcong", methods=["POST"])
+@qldonhangbp.route("/quanlydonhang_Dagiaothanhcong", methods=["POST", "GET"])
 def quanlydonhang_Dagiaothanhcong():
     conn = get_connect()
     cursor = conn.cursor(dictionary=True)
