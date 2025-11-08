@@ -4,14 +4,14 @@ from flask import Blueprint, render_template, request
 
 qldonhangbp = Blueprint('qldonhangbp', __name__)
 
-qldonhangbp.route("/quanlydonhang_Choxacnhan", methods=["POST"])
-def quanlydonhang_Choxacnhan():
+qldonhangbp.route("/quanlydonhang_Choxacnhandon", methods=["POST"])
+def quanlydonhang_Choxacnhandon():
     conn = get_connect()
     cursor = conn.cursor()
     sql = """
     SELECT *
     FROM QLBanQuanAo.DonHang
-    Where TrangThai Like 'Chờ xác nhận'
+    Where TrangThai Like 'Chờ xác nhận đơn'
     """
     cursor.execute(sql)
     rows = cursor.fetchall()
