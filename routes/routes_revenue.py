@@ -10,13 +10,14 @@ def getRevenue_daily():
     connect = get_connect()
     cursor = connect.cursor()
     sql = """
-    DROP VIEW IF EXISTS doanhthu;
-    Create view doanhthu as
     Select
     DATE(`Time`) as ngaytao,
     Sum(TongGia) as doanhthu
-    FROM DonHang
+    FROM QLBanQuanAo.DonHang
     Group by Date(`Time`)
+    """
+    sql = """
+    SELECT * FROM QLBanQuanAo.doanhthu
     """
     cursor.execute(sql)
     row = cursor.fetchall()
@@ -33,16 +34,13 @@ def getRevenue_DayOnRequest():
     connect = get_connect()
     cursor = connect.cursor()
     sql = """
-    DROP VIEW IF EXISTS doanhthu_theongay;
-    Create view doanhthu_theongay as
-    Select
-    DATE(`Time`) as ngaytao,
-    Sum(TongGia) as doanhthu
-    FROM DonHang
-    WHERE Date(`Time`) = %s
-    Group by Date(`Time`)
+        SELECT
+        DATE(`Time`) as ngaytao,
+        SUM(TongGia) as doanhthu
+        FROM QLBanQuanAo.DonHang
+        WHERE DATE(`Time`) = %s
+        GROUP BY DATE(`Time`)
     """
-
     cursor.execute(sql, [day])
     row = cursor.fetchall()
     return render_template('adminrevenue.html', rows = row)
