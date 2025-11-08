@@ -49,7 +49,8 @@ CREATE TABLE IF NOT EXISTS DonHang(
     foreign key(MaKH) references KhachHang(MaKH),
     SoLuong int,
     DonGia int,
-    TongGia int
+    TongGia int,
+    'Time' datetime
 );
 
 CREATE TABLE IF NOT EXISTS SizePhuNu (

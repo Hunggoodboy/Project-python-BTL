@@ -27,6 +27,7 @@ from routes.routes_show_product import show_productbp
 from routes.routes_orders import orders_bp
 from routes.routes_cart import cart_bp
 from routes.routes_AI_chat import AI_chatbp
+from routes.routes_quanlydonhang import qldonhangbp
 
 app = Flask(__name__)
 app.secret_key = '123456'
@@ -55,6 +56,7 @@ app.register_blueprint(show_productbp)
 app.register_blueprint(orders_bp)
 app.register_blueprint(cart_bp)
 app.register_blueprint(AI_chatbp)
+app.register_blueprint(qldonhangbp)
 
 @app.route('/new-product')
 def new_product():
