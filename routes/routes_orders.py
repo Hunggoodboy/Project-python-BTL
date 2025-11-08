@@ -71,11 +71,12 @@ def create_order():
             return jsonify({"success": False, "message": "Sản phẩm không tồn tại"}), 404
 
         don_gia = product['Gia']
+        print(don_gia)
         tong_gia = don_gia * quantity
-
+        print(tong_gia)
         cursor.execute("""
-            INSERT INTO QLBanQuanAo.DonHang (MaKH, MaSP, Mau, TrangThai, SoLuong, DonGia, TongGia)
-            VALUES (%s, %s, %s, %s, %s, %s, %s)
+            INSERT INTO QLBanQuanAo.DonHang (MaKH, MaSP, Mau, TrangThai, SoLuong, DonGia, TongGia, Time)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, NOW())
         """, (user_id, product_id, color, "Chờ bạn xác nhận", quantity, don_gia, tong_gia))
 
         conn.commit()

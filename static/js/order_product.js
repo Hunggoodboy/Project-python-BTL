@@ -35,7 +35,6 @@ document.addEventListener("DOMContentLoaded", () => {
             formData.append("product_id", PRODUCT_ID); // PRODUCT_ID lấy từ template
             formData.append("quantity", quantity);
             formData.append("color", color);
-            
             //gửi lại lên routes orders
             fetch("/create_order", {
                 method: "POST",
