@@ -132,7 +132,7 @@ def cancel_order():
         print("ERROR:", e)
         return jsonify({"success": False, "message": str(e)}), 500
 
-#Route xác nhận đơn của khách hàng
+#Route xác nhận đơn của khách hàng và cập nhật doanh thu
 @orders_bp.route('/confirm_order', methods=['POST'])
 def confirm_order():
     try:
@@ -144,17 +144,65 @@ def confirm_order():
         conn = get_connect()
         cursor = conn.cursor()
 
+        # Lấy thông tin đơn
+        cursor.execute("""
+            SELECT TongGia, DaTinhDoanhThu
+            FROM QLBanQuanAo.DonHang
+            WHERE MaDH=%s
+        """, (order_id,))
+        row = cursor.fetchone()
+
+        if not row:
+            return jsonify({"success": False, "message": "Không tìm thấy đơn hàng"}), 404
+
+        TongGia, DaTinh = row
+
+        from datetime import datetime, date
+        now = datetime.now()
+        today = now.date().strftime("%Y-%m-%d")
+
+        # Cập nhật trạng thái + Time(Cập nhật thời gian đơn vào đúng lúc khách bấm xác nhận đơn)
         cursor.execute("""
             UPDATE QLBanQuanAo.DonHang
-            SET TrangThai = 'Đã giao thành công'
-            WHERE MaDH = %s
-        """, (order_id,))
+            SET TrangThai='Đã giao thành công',
+                Time=%s
+            WHERE MaDH=%s
+        """, (now, order_id))
+
+        # Nếu chưa tính doanh thu thì mới cộng
+        if DaTinh == 0:
+
+            # Tạo doanh thu cho hôm nay nếu chưa có
+            cursor.execute("""
+                SELECT Ngay FROM QLBanQuanAo.DoanhThu
+                WHERE Ngay=%s
+            """, (today,))
+            if cursor.fetchone() is None:
+                cursor.execute("""
+                    INSERT INTO QLBanQuanAo.DoanhThu (Ngay, DoanhThuHomNay)
+                    VALUES (%s, 0)
+                """, (today,))
+
+            # Cộng doanh thu
+            cursor.execute("""
+                UPDATE QLBanQuanAo.DoanhThu
+                SET DoanhThuHomNay = DoanhThuHomNay + %s
+                WHERE Ngay=%s
+            """, (TongGia, today))
+
+            # Đánh dấu đã tính doanh thu (để không bị cộng 2 lần cho 1 đơn hàng)
+            cursor.execute("""
+                UPDATE QLBanQuanAo.DonHang
+                SET DaTinhDoanhThu = 1
+                WHERE MaDH=%s
+            """, (order_id,))
 
         conn.commit()
         cursor.close()
         conn.close()
 
         return jsonify({"success": True})
+
     except Exception as e:
         print("ERROR:", e)
         return jsonify({"success": False, "message": str(e)}), 500

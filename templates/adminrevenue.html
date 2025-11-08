@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Doanh Thu</title>
+    <style>
+        table {
+            width: 60%;
+            border-collapse: collapse;
+            margin: 20px auto;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+        th {
+            background: #f5f5f5;
+        }
+    </style>
+</head>
+<body>
+
+    <h2 style="text-align: center;">Bảng Doanh Thu Theo Ngày</h2>
+
+    <table>
+        <tr>
+            <th>Ngày</th>
+            <th>Doanh Thu</th>
+        </tr>
+        {% for ngay, doanhthu in doanhthu %}
+        <tr>
+            <td>{{ ngay }}</td>
+            <td>{{ "{:,}".format(doanhthu) }} đ</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+</body>
+</html>

@@ -1,46 +1,35 @@
+from flask import Blueprint, render_template
+from datetime import date
 from database.connect import get_connect
-from flask import Blueprint, render_template, request
 
-revenuebp = Blueprint('revenuebp', __name__)
-
-
-# route lấy doanh thu mỗi ngày
-@revenuebp.route('/getRevenue_daily', methods=['POST'])
-def getRevenue_daily():
-    connect = get_connect()
-    cursor = connect.cursor()
-    sql = """
-    Select
-    DATE(`Time`) as ngaytao,
-    Sum(TongGia) as doanhthu
-    FROM QLBanQuanAo.DonHang
-    Group by Date(`Time`)
-    """
-    sql = """
-    SELECT * FROM QLBanQuanAo.doanhthu
-    """
-    cursor.execute(sql)
-    row = cursor.fetchall()
-    return render_template('adminrevenue.html', rows = row)
+revenue_bp = Blueprint("revenue_bp", __name__)
 
 
-#route lấy doanh thu theo thời gian nhất định
 
+@revenue_bp.route("/admin/revenue")
+def admin_revenue():
+    conn = get_connect()
+    cursor = conn.cursor()
 
-@revenuebp.route('/getRevenue_DayOnRequest', methods=['GET', 'POST'])
-def getRevenue_DayOnRequest():
+    # Tạo doanh thu hôm nay nếu chưa có
+    today = date.today().strftime("%Y-%m-%d")
+    cursor.execute("SELECT Ngay FROM DoanhThu WHERE Ngay=%s", (today,))
+    if cursor.fetchone() is None:
+        cursor.execute("""
+            INSERT INTO DoanhThu (Ngay, DoanhThuHomNay)
+            VALUES (%s, 0)
+        """, (today,))
+        conn.commit()
 
-    day = request.args.get('day')
-    connect = get_connect()
-    cursor = connect.cursor()
-    sql = """
-        SELECT
-        DATE(`Time`) as ngaytao,
-        SUM(TongGia) as doanhthu
-        FROM QLBanQuanAo.DonHang
-        WHERE DATE(`Time`) = %s
-        GROUP BY DATE(`Time`)
-    """
-    cursor.execute(sql, [day])
-    row = cursor.fetchall()
-    return render_template('adminrevenue.html', rows = row)
+    # Lấy toàn bộ doanh thu
+    cursor.execute("""
+        SELECT Ngay, DoanhThuHomNay
+        FROM DoanhThu
+        ORDER BY Ngay DESC
+    """)
+    doanhthu = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+
+    return render_template("adminrevenue.html", doanhthu=doanhthu)
