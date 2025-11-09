@@ -33,10 +33,10 @@ def login():
                 session['password'] = user['MatKhau']
                 session['numberphone'] = user['SDT']
                 session['address'] = user['Address']
-                if(session['username'] == "Admin_03" and session['password'] == "admin_nhom3"):
-                    session['user_role'] = 'admin'
+                if(user['Role'] == 'Admin'):
+                    session['user_role'] = 'Admin'
                 else:
-                    session['user_role'] = 'client'
+                    session['user_role'] = 'Client'
                 flash('Bạn đã đăng nhập thành công !')
                 return redirect(url_for('menu.main_menu'))
             else:

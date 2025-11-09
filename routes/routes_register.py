@@ -18,8 +18,8 @@ def register():
         conn = get_connect()
         cursor = conn.cursor()
         sql = """
-            INSERT INTO QLBanQuanAo.KhachHang (HoTen, username, MatKhau, SDT, Address)
-            VALUES (%s, %s, %s, %s, %s)
+            INSERT INTO QLBanQuanAo.KhachHang (HoTen, username, MatKhau, SDT, Address, Role)
+            VALUES (%s, %s, %s, %s, %s, 'Client')
         """
         cursor.execute(sql, [name, username, password, numberphone, address])
         session['logged_in'] = True
