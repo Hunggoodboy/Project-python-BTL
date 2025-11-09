@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='css/admin.css')}}">
+</head>
+
+<body>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <!-- bar điều hướng, có ở tất cả các trang-->
+    {% include 'MenuBar.html' %}
+
+    <!-- bieu tuong (cho dep) -->
+    <div class="star_gif" >
+        <img src="{{ url_for('static', filename='used/star.png') }}">
+    </div>
+    <div class="sep">
+        <div class="column">
+            <button class="product-btn active">Chỉnh sửa sản phẩm</button>
+        </div>
+        <div class="column">
+            <button class="user-btn">Chỉnh sửa người dùng</button>
+        </div>
+    </div>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/Product-table.css') }}">
+
+    <div class="product-tab">
+        {% if not products %}
+        <div class="no-product">
+            <img src="{{ url_for('static', filename='used/no-product.png') }}" alt="No product">
+            <h1>Không có sản phẩm nào hiện trong kho</h1>
+        </div>
+        {% else %}
+        <table class="product-table" id="product-table">
+            <tbody></tbody>
+        </table>
+
+        <template id="product-template">
+            <td>
+                <div class="product">
+                    <div><img class="main" src=""></div>
+                    <div class="name"></div>
+                    <div class="price"></div>
+                    <div class="add_info">
+                        <div class="material"></div>
+                        <div class="discount"></div>
+                    </div>
+                </div>
+                <button class="hidden overlay">
+                    <img src="{{ url_for('static', filename='used/edit.png') }}" alt="Edit product">
+                </button>
+            </td>
+        </template>
+        {% endif %}
+    </div>
+    <div id="popup" class="hidden popup">
+        <div class="popup-content">
+        <span id="close-popup">×</span>
+            <div id="popup-body">
+                <form id="edit-form" class="product-form">
+                    <div><img class="main" src=""></div>
+                    <input type="hidden" name="MaSP">
+                    <input type="text" name="MaDM">
+                    <input type="text" name="TenSP">
+                    <input type="text" name="MoTa">
+                    <input type="text" name="Gia">
+                    <input type="text" name="MauSac">
+                    <input type="text" name="ChatLieu">
+                    <input type="text" name="SoLuongCon">
+                    <input type="text" name="HinhAnh">
+                    <input type="text" name="Season">
+                    <button class="delete">Xóa sản phẩm</button>
+                    <button class="cancel" type="reset">Hủy</button>
+                    <button type="submit">Lưu</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="user-tab" style="display:none">
+        {% if not users %}
+        <div class="no-user">
+            <img src="{{ url_for('static', filename='used/no-user.png') }}" alt="No user">
+            <h1>Chưa có người dùng nào trong cơ sở dữ liệu</h1>
+        </div>
+        {% else %}
+        <table class="user-table" id="user-table">
+            <thead>
+            <tr>
+                <th> Mã khách hàng </th>
+                <th>Họ và tên</th>
+                <th>Username</th>
+                <th>Số điện thoại</th>
+                <th>Địa chỉ giao hàng</th>
+            </tr>
+            </thead>
+
+            <tbody></tbody>
+        </table>
+
+        <template id="user-template">
+            <tr class="user">
+                <td><div class="stt"></div></td>
+                <td><div class="name"></div></td>
+                <td><div class="username"></div></td>
+                <td><div class="sdt"></div></td>
+                <td><div class="address"></div></td>
+            </tr>
+        </template>
+        {% endif %}
+    </div>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/pagination.css') }}">
+    <div class="pagination" id="pagination"></div>
+    <script>
+        window.productsData = {{ products|tojson }};
+        window.usersData = {{ users|tojson }};
+    </script>
+    <script src="{{ url_for('static', filename='js/pagination-for-edit.js') }}"></script>
+
+</body>
+</html>
