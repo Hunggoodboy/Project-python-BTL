@@ -14,7 +14,7 @@ def add_product():
         MauSac = request.form['MauSac']
         Size = request.form['Size']
         ChatLieu = request.form['ChatLieu']
-        SoLuongCon = request.form['SoLuongCon']
+        SoLuongcon = request.form['SoLuongcon']
         HinhAnh = request.form['HinhAnh']
         Season = request.form['Season']
 
@@ -22,13 +22,13 @@ def add_product():
         cursor = conn.cursor()
         cursor.execute("""
                        INSERT INTO QLBanQuanAo.SanPham
-                       (MaSP, MaDM, TenSP, MoTa, Gia, MauSac, Size, ChatLieu, SoLuongCon, HinhAnh, Season)
+                       (MaSP, MaDM, TenSP, MoTa, Gia, MauSac, Size, ChatLieu, SoLuongcon, HinhAnh, Season)
                        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
                        """,
-                       (MaSP, MaDM, TenSP, MoTa, Gia, MauSac, Size, ChatLieu, SoLuongCon, HinhAnh, Season))
+                       (MaSP, MaDM, TenSP, MoTa, Gia, MauSac, Size, ChatLieu, SoLuongcon, HinhAnh, Season))
         conn.commit()
         conn.close()
-        return redirect(url_for('show_product'))
+        return redirect(url_for('admin.admin_page'))
     return render_template('newProduct.html')
 
 @admin_product_bp.route('/product/edit/<string:MaSP>', methods=['GET', 'POST'])

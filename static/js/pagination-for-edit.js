@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     addBtn.textContent = "+";
                     addCell.className = "add-cell";
                     addBtn.className = "addBtn";
-                    addBtn.onclick = () => alert("Thêm sản phẩm");
+                    addBtn.onclick = () => openAddForm();
                     addCell.appendChild(addBtn);
                     tr.appendChild(addCell);
                     for (let i = 0; i < 4 && i < slice.length; i++) tr.appendChild(createProductTD(slice[i]));
