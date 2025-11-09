@@ -122,31 +122,6 @@ document.addEventListener("DOMContentLoaded", () => {
             return tr;
         }
 
-        function openEditForm(p) {
-            const popup = document.getElementById("popup");
-            const form = popup.querySelector(".product-form"); // 👈 dòng cần thêm
-
-            popup.classList.remove("hidden");
-
-
-            const mapping = ["MaDM", "TenSP", "MoTa", "Gia", "MauSac", "ChatLieu", "SoLuongCon", "HinhAnh", "Season"];
-
-            mapping.forEach(key => {
-                const input = form.querySelector(`[name='${key}']`);
-                if (input) {
-                    input.value = p[key] ?? "";
-                    input.placeholder = p[key] ?? "";
-                }
-            });
-        }
-        const closeBtn = document.getElementById("close-popup");
-        closeBtn.addEventListener("click", () => closeEditForm());
-        function closeEditForm() {
-            const popup = document.getElementById("popup");
-            const form = popup.querySelector(".product-form");
-            popup.classList.add("hidden");
-        }
-
         renderPage(1);
     }
 

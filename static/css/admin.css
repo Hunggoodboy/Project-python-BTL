@@ -1,4 +1,9 @@
-.sep{display: flex;}
+.sep{
+    display: flex;
+    flex-direction: row;
+    background-color: #16476A;
+    padding-top: 20px;
+}
 .column{
     display:flex;
     flex:50%;
@@ -6,7 +11,20 @@
     justify-content: center;
 }
 
-.product-btn, .user-btn{}
+.product-btn, .user-btn{
+    width: 40%;
+    padding: 14px 25px;
+    border-radius: 10px 10px 0 0;   /* bo góc tròn trên */
+    border: 1px transparent;
+    background-color: #16476A;
+    color: white;
+    text-align: center;
+    font-family: "Verdana", sans-serif;
+    text-decoration: none;
+}
+.user-btn:hover, .user-btn.active, .product-btn:hover, .product-btn.active {
+    background-color: #BF092F;
+}
 
 .product-table, .user-table{
     width: 100%;
@@ -18,23 +36,34 @@
     object-fit: cover;
     overflow: hidden;
 }
+
+.product{border: 2px solid transparent;}
+
 .add-cell{
     text-align: center;
     vertical-align: middle;
 }
 .addBtn{
-    border: 1px solid orange;
+    border: 5px solid orange;
     border-radius: 50%;
     color: orange;
+    background-color: transparent;
     font-weight: bold;
     text-align: center;
-    font-size: 100px;
-    width: 150px;
-    height: 150px;
+    font-size: 80px;
+    width: 100px;
+    height: 100px;
+    cursor: pointer;
+}
+.addBtn:hover{
+    background-color: orange;
+    color: white;
+    border: 5px solid white;
 }
 
 .hidden { display: none; }
 
+/* form edit sản phẩm */
 .popup {
     position: fixed;
     inset: 0;
@@ -42,23 +71,70 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    z-index: 11;
 }
 
 .popup-content {
     background: white;
     padding: 20px;
     border-radius: 10px;
-    width: 400px;
+    width: 50%;
     max-height: 80%;
     overflow-y: auto;
+}
+.product-form{
+    display: flex;
+    flex-wrap: wrap;
+}
+.input-wrapper {
+    width: fit-content;
+    padding: 10px;
+}
+.product-form input {
+    padding: 10px;
 }
 
 #close-popup {
     float: right;
     cursor: pointer;
-    font-size: 20px;
+    font-size: 30px;
+    font-weight: bold;
 }
 
+/* các nút xác nhận */
+.optionDiv{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+.optionDiv button{
+    font-weight: bold;
+    padding: 15px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-family: "Verdana", sans-serif;
+}
+.optionDiv .delete{
+    background-color: red;
+    border: red solid 2px;
+    color: white;
+}
+.optionDiv .cancel{
+    background-color: white;
+    border: black solid 2px;
+}
+.optionDiv .cancel:hover{
+    color: rgb(100, 100, 100);
+}
+.optionDiv .save{
+    background-color: #8C00FF;
+    color: white;
+    border: #8C00FF solid 2px;
+}
+
+/* overlay lúc hover vào cell bảng chuẩn bị mở form */
 .product-table td {
     position: relative;
 }
@@ -70,8 +146,9 @@
     width: 100%;
     height: 100%;
     background: rgba(0,0,0,0.6);
-    display: none;
     border: none;
+    display: none;
+    z-index: 10;
     cursor: pointer;
 }
 

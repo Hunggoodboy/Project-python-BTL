@@ -55,32 +55,26 @@
             </td>
         </template>
         {% endif %}
-    </div>
-    <div id="popup" class="hidden popup">
-        <div class="popup-content">
-        <span id="close-popup">×</span>
-            <div id="popup-body">
-                <form id="edit-form" class="product-form">
-                    <div><img class="main" src=""></div>
-                    <input type="hidden" name="MaSP">
-                    <input type="text" name="MaDM">
-                    <input type="text" name="TenSP">
-                    <input type="text" name="MoTa">
-                    <input type="text" name="Gia">
-                    <input type="text" name="MauSac">
-                    <input type="text" name="ChatLieu">
-                    <input type="text" name="SoLuongCon">
-                    <input type="text" name="HinhAnh">
-                    <input type="text" name="Season">
-                    <button class="delete">Xóa sản phẩm</button>
-                    <button class="cancel" type="reset">Hủy</button>
-                    <button type="submit">Lưu</button>
+
+        <div id="popupEdit" class="hidden popup">
+            <div class="popup-content">
+                <span id="close-popup">×</span>
+                <form method="post" id="edit-form" class="product-form">
+                    <!-- đã chèn js tạo bảng -->
+                </form>
+            </div>
+        </div>
+        <div id="popupAdd" class="hidden popup">
+            <div class="popup-content">
+                <span id="close-popup2">x</span>
+                <form method="post" id="add-form" class="product-form">
+                    <!-- đã chèn js tạo bảng -->
                 </form>
             </div>
         </div>
     </div>
 
-    <div class="user-tab" style="display:none">
+    <div class="user-tab" style="display:none; padding-top:10px;">
         {% if not users %}
         <div class="no-user">
             <img src="{{ url_for('static', filename='used/no-user.png') }}" alt="No user">
@@ -119,6 +113,7 @@
         window.productsData = {{ products|tojson }};
         window.usersData = {{ users|tojson }};
     </script>
+    <script src="{{ url_for('static', filename='js/admin-page-popup-form.js') }}"></script>
     <script src="{{ url_for('static', filename='js/pagination-for-edit.js') }}"></script>
 
 </body>
