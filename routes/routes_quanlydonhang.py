@@ -23,7 +23,6 @@ def quanlydonhang_Choxacnhandon():
 
 @qldonhangbp.route("/quanlydonhang_Danggiaohang", methods=["POST", "GET"])
 def quanlydonhang_Danggiaohang():
-def quanlydonhang_Danggiaohang():
     conn = get_connect()
     cursor = conn.cursor(dictionary=True)
     sql = """

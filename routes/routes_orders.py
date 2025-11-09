@@ -160,8 +160,10 @@ def confirm_order():
         from datetime import datetime, date
         now = datetime.now()
         today = now.date().strftime("%Y-%m-%d")
+        current_month = now.strftime("%Y-%m")
+        current_year = now.strftime("%Y")
 
-        # Cập nhật trạng thái + Time(Cập nhật thời gian đơn vào đúng lúc khách bấm xác nhận đơn)
+        # Cập nhật trạng thái + thời gian đơn
         cursor.execute("""
             UPDATE QLBanQuanAo.DonHang
             SET TrangThai='Đã giao thành công',
@@ -179,18 +181,21 @@ def confirm_order():
             """, (today,))
             if cursor.fetchone() is None:
                 cursor.execute("""
-                    INSERT INTO QLBanQuanAo.DoanhThu (Ngay, DoanhThuHomNay)
-                    VALUES (%s, 0)
-                """, (today,))
+                    INSERT INTO QLBanQuanAo.DoanhThu 
+                    (Ngay, DoanhThuHomNay, DoanhThuTheoThang, DoanhThuTheoNam, Thang, Nam)
+                    VALUES (%s, 0, 0, 0, %s, %s)
+                """, (today, current_month, current_year))
 
-            # Cộng doanh thu
+            # Cộng doanh thu hôm nay, tháng và năm
             cursor.execute("""
                 UPDATE QLBanQuanAo.DoanhThu
-                SET DoanhThuHomNay = DoanhThuHomNay + %s
+                SET DoanhThuHomNay = DoanhThuHomNay + %s,
+                    DoanhThuTheoThang = DoanhThuTheoThang + %s,
+                    DoanhThuTheoNam = DoanhThuTheoNam + %s
                 WHERE Ngay=%s
-            """, (TongGia, today))
+            """, (TongGia, TongGia, TongGia, today))
 
-            # Đánh dấu đã tính doanh thu (để không bị cộng 2 lần cho 1 đơn hàng)
+            # Đánh dấu đã tính doanh thu
             cursor.execute("""
                 UPDATE QLBanQuanAo.DonHang
                 SET DaTinhDoanhThu = 1
@@ -206,3 +211,4 @@ def confirm_order():
     except Exception as e:
         print("ERROR:", e)
         return jsonify({"success": False, "message": str(e)}), 500
+

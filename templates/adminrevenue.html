@@ -11,30 +11,26 @@
         }
         th, td {
             padding: 10px;
-            border: 1px solid #ddd;
+            border: 1px solid #333;
             text-align: center;
-        }
-        th {
-            background: #f5f5f5;
         }
     </style>
 </head>
 <body>
-
-    <h2 style="text-align: center;">Bảng Doanh Thu Theo Ngày</h2>
-
+    <h2 style="text-align:center;">Báo cáo Doanh Thu</h2>
     <table>
         <tr>
             <th>Ngày</th>
-            <th>Doanh Thu</th>
+            <th>Doanh Thu Hôm Nay</th>
+            <th>Doanh Thu Tháng</th>
+            <th>Doanh Thu Năm</th>
         </tr>
-        {% for ngay, doanhthu in doanhthu %}
         <tr>
-            <td>{{ ngay }}</td>
-            <td>{{ "{:,}".format(doanhthu) }} đ</td>
+            <td>{{ revenue[0] }}</td> <!-- Ngay: Ngày hôm nay-->
+            <td>{{ revenue[1] }}</td> <!-- DoanhThuHomNay: doanh thu theo ngày -->
+            <td>{{ revenue[2] }}</td> <!-- DoanhThuTheoThang: theo tháng -->
+            <td>{{ revenue[3] }}</td> <!-- DoanhThuTheoNam:theo năm -->
         </tr>
-        {% endfor %}
     </table>
-
 </body>
 </html>
