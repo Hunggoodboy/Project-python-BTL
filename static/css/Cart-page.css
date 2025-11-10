@@ -64,7 +64,7 @@
     .cart-table .optionBtn {
         padding: 15px 10px;
         background-color: transparent;
-        border: 1px ridge orange;
+        border: 1px solid orange;
         cursor: pointer;
     }
     .cart-table .triangle-down{
@@ -73,7 +73,7 @@
         height: 0;
         border-left: 0.4em solid transparent;
         border-right: 0.4em solid transparent;
-        border-top: 0.5em solid #4FB7B3;
+        border-top: 0.5em solid #8C00FF;
         vertical-align: middle;
         margin-left: 0.3em;
     }
@@ -211,8 +211,27 @@
         text-align: center;
     }
 /* nút xóa sản phẩm */
-.actions { text-align: center; margin-top: 20px; }
-
+.cart-table td:last-child button{
+    text-decoration: none;
+    color: red;
+    background-color: white;
+    padding: 6px 9px;
+    border: 2px solid red;
+    border-radius: 5px;
+}
+.cart-table td:last-child button:hover{
+    background-color: red;
+    color: white;
+}
+.actions { text-align: center; margin-top: 20px; padding-bottom: 150px;}
+.actions a{     
+    text-decoration: none;
+    color: white; background-color: #BF092F;
+    padding: 10px;
+    border-radius: 5px;
+    font-family: Open Sans, sans-serif;
+}
+.actions a:hover{ text-decoration: none; background-color: red}
 
 #cart-summary {
     position: fixed;
@@ -221,7 +240,7 @@
     width: 100%;
     background: white;
     border-top: 2px solid #ccc;
-    padding: 15px;
+    padding: 40px;
     text-align: center;
     font-size: 18px;
     box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
@@ -237,5 +256,6 @@
     color: white;
     padding: 8px 16px;
     border-radius: 6px;
+    font-family: Open Sans, sans-serif;
     cursor: pointer;
 }

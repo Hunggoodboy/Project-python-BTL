@@ -84,12 +84,15 @@ def add_cart_no_reload():
         return jsonify({'error': 'server_error'}), 500
 
 # Xóa sản phẩm khỏi giỏ
-@cart_bp.route('/remove-from-cart')
+@cart_bp.route('/remove-from-cart', methods = ['POST'])
 def remove_from_cart():
     maKH = session.get('id')
-    maSP = request.args.get('maSP')
-    mau = request.args.get('mau')
-    size = request.args.get('size')
+
+    data = request.get_json()
+    maSP = data.get('maSP')
+    mau = data.get('mau')
+    size = data.get('size')
+
     conn = get_connect()
     cursor = conn.cursor(dictionary=True)
     cursor.execute("""
@@ -98,7 +101,7 @@ def remove_from_cart():
         AND MauSacDaChon = %s AND KichCoDaChon = %s
         """, (maSP, maKH, mau, size))
     conn.commit()
-    return redirect(url_for('cart_bp.cart'))
+    return jsonify({"success": True})
 
 # Xóa toàn bộ giỏ hàng
 @cart_bp.route('/clear-cart')
