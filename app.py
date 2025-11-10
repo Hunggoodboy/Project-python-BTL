@@ -32,7 +32,9 @@ from routes.routes_cart import cart_bp
 from routes.routes_AI_chat import AI_chatbp
 from routes.routes_quanlydonhang import qldonhangbp
 from routes.routes_revenue import revenue_bp
-
+import chromadb
+import google.generativeai as genai
+from build_vector_db import get_all_products_as_text
 app = Flask(__name__)
 app.secret_key = '123456'
 
@@ -66,29 +68,37 @@ app.register_blueprint(cart_bp)
 app.register_blueprint(AI_chatbp)
 app.register_blueprint(qldonhangbp)
 app.register_blueprint(revenue_bp)
-@app.route('/new-product')
-def new_product():
-    return render_template('newProduct.html')
-
-@app.route('/ShowUser')
-def show_user():
-    conn = get_connect()
-    cursor = conn.cursor()
-    cursor.execute("select * from QLBanQuanAo.KhachHang")
-    users = cursor.fetchall()
-    cursor.close()
-    return render_template('ShowUser.html', users=users)
 
 
-@app.route('/product')
-def show_product():
-    conn = get_connect()
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM qlbanquanao.sanpham")
-    products = cursor.fetchall()
-    cursor.close()
-    print("tat ca san pham", products)
-    return render_template('ProductTable.html', products=products)
+client = chromadb.PersistentClient(path="./my_vector_db")
+collection = client.get_or_create_collection(name="products")
+
+def search_products(query_text, max_price=None, category=None):
+    #get_all_products_as_text()
+    result = genai.embed_content(
+        model='models/text-embedding-004',
+        content=query_text,
+        task_type="RETRIEVAL_QUERY" # Quan trọng: nói cho AI biết đây là CÂU HỎI
+    )
+    query_vector = result['embedding']
+    filters = {}
+    if max_price:
+        filters["Gia"] = {"$lte": max_price}  # lte = less than or equal
+
+    if category:
+        filters["TenDM"] = {"$eq": category}  # eq = equal
+
+    results = collection.query(
+        query_embeddings=query_vector,
+        n_results=5,  # Lấy 5 kết quả gần nhất
+        where=filters if filters else None
+    )
+
+    return results['metadatas']
+
+print("--- Tìm Áo Thun Oversize ---")
+search_results = search_products("áo thun cho mùa hè")
+print(search_results)
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
