@@ -120,7 +120,7 @@ def update_cart():
         data = request.get_json()  # nhận dữ liệu JSON từ fetch
         ma_sp = int(data.get('MaSP'))
         so_luong = int(data.get('SoLuong', 1))
-        mau = int(data.get('MauSacDaChon'))
+        mau = data.get('MauSacDaChon')
         size = data.get('KichCoDaChon')
         ma_kh = session.get('id')
 
@@ -174,14 +174,14 @@ def update_cart_item_option():
         conn = get_connect()
         cursor = conn.cursor(dictionary=True)
 
-        # 🔹 Xóa item cũ trong giỏ
+        # Xóa item cũ trong giỏ
         cursor.execute("""
             DELETE FROM QLBanQuanAo.GioHang
             WHERE MaSP = %s AND MaKH = %s
             AND MauSacDaChon = %s AND KichCoDaChon = %s
         """, (old_sp, ma_kh, old_mau, old_size))
 
-        # 🔹 Thêm hoặc cộng dồn item mới
+        # Thêm hoặc cộng dồn item mới
         cursor.execute("""
             SELECT * FROM QLBanQuanAo.GioHang
             WHERE MaSP = %s AND MaKH = %s

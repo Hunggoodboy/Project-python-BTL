@@ -283,6 +283,16 @@ INSERT INTO `SanPhamMau` VALUES (1,1012,'Trắng','anh_quan_ao/anh_mau/ao_thun_o
 /*!40000 ALTER TABLE `SanPhamMau` ENABLE KEYS */;
 UNLOCK TABLES;
 
+UPDATE SanPham
+SET
+    AnhPhu1 = CASE WHEN AnhPhu1 IS NOT NULL THEN CONCAT('anh_quan_ao/', AnhPhu1) ELSE AnhPhu1 END,
+    AnhPhu2 = CASE WHEN AnhPhu2 IS NOT NULL THEN CONCAT('anh_quan_ao/', AnhPhu2) ELSE AnhPhu2 END,
+    AnhPhu3 = CASE WHEN AnhPhu3 IS NOT NULL THEN CONCAT('anh_quan_ao/', AnhPhu3) ELSE AnhPhu3 END,
+    AnhPhu4 = CASE WHEN AnhPhu4 IS NOT NULL THEN CONCAT('anh_quan_ao/', AnhPhu4) ELSE AnhPhu4 END,
+    AnhPhu5 = CASE WHEN AnhPhu5 IS NOT NULL THEN CONCAT('anh_quan_ao/', AnhPhu5) ELSE AnhPhu5 END,
+    AnhPhu6 = CASE WHEN AnhPhu6 IS NOT NULL THEN CONCAT('anh_quan_ao/', AnhPhu6) ELSE AnhPhu6 END,
+    AnhPhu7 = CASE WHEN AnhPhu7 IS NOT NULL THEN CONCAT('anh_quan_ao/', AnhPhu7) ELSE AnhPhu7 END;
+
 --
 -- Table structure for table `SizeDanOng`
 --

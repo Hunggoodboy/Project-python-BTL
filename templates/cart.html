@@ -14,6 +14,7 @@
     {% if cart_items %}
     <table class="cart-table">
         <tr>
+            <th></th>
             <th style="padding-left: 155px">Tên sản phẩm</th>
             <th> </th>
             <th>Giá</th>
@@ -24,10 +25,19 @@
         {% for item in cart_items %}
         {% set dis_price = item.Gia * (100 - item.Discount) / 100 %}
         <tr>
+            <td class="checksum">
+                <input type="checkbox"
+                    class="cart-checkbox"
+                    data-id="{{ item.MaSP }}"
+                    data-color="{{ item.MauSacDaChon }}"
+                    data-size="{{ item.KichCoDaChon }}"
+                    data-price="{{ dis_price }}"
+                    data-quantity="{{ item.SoLuong }}">
+            </td>
             <td>
                 <a class="product-wrapper" href="{{ url_for('product.product_detail', pid=item.MaSP) }}">
                     {% set selected_color = (item.colors | selectattr('name', 'equalto', item.MauSacDaChon) | list | first) %}
-                    <img src="{{ url_for('static', filename = selected_color.image) }}">
+                    <img src="{{ url_for('static', filename = selected_color.image if selected_color.image else 'images/default.jpg') }}">
                     <div class="pro-name">{{ item.TenSP }}</div>
                 </a>
             </td>
@@ -67,12 +77,12 @@
                     </div>
                 </div>
             </td>
-            <td style="color:orange"><s>{{ item.Gia|int }}₫</s> {{ dis_price|int }}₫</td>
+            <td style="color:orange"><s>{{ item.Gia|vnd }}</s> {{ dis_price|vnd }}</td>
             <td>
                 <div class="qcontrol">
                     <button class="btnL"
                             id="decrease_{{ item.MaSP }}_{{ item.MauSacDaChon }}_{{ item.KichCoDaChon }}"
-                            onclick="changeQuantitybtn(-1, '{{ item.MaSP }}', '{{ item.MauSacDaChon }}', '{{ item.KichCoDaChon }}')">-</button>
+                    >-</button>
 
                     <input type="text"
                            id="quantity_{{ item.MaSP }}_{{ item.MauSacDaChon }}_{{ item.KichCoDaChon }}"
@@ -83,10 +93,10 @@
 
                     <button class="btnR"
                             id="increase_{{ item.MaSP }}_{{ item.MauSacDaChon }}_{{ item.KichCoDaChon }}"
-                            onclick="changeQuantitybtn(1, '{{ item.MaSP }}', '{{ item.MauSacDaChon }}', '{{ item.KichCoDaChon }}')">+</button>
+                    >+</button>
                 </div>
             </td>
-            <td style="color:orange">{{ (dis_price * item.SoLuong)|int }}₫</td>
+            <td style="color:orange">{{ (dis_price * item.SoLuong)|vnd }}</td>
             <td>
                 <a href="{{ url_for('cart_bp.remove_from_cart',
                         maSP=item.MaSP,
@@ -100,7 +110,7 @@
     </table>
 
     <div class="actions">
-        <h3>Tổng cộng: {{ total_price }}₫</h3>
+        <h3>Tổng cộng: {{ total_price|vnd }}</h3>
         <a href="{{ url_for('cart_bp.clear_cart') }}">Xóa toàn bộ</a>
     </div>
     {% else %}
@@ -108,38 +118,67 @@
     {% endif %}
     </div>
 
+    <div id="cart-summary">
+        <span id="selected-count">0</span> sản phẩm được chọn |
+        Tổng tiền: <span id="total-price">0₫</span>
+        <button id="create-order-btn">Tạo đơn hàng</button>
+    </div>
+
+    <!-- script đổi số lượng sản phẩm -->
     <script>
-        let debounceTimeout = null;
+        const debounceTimeouts = {};
 
-        function changeQuantitybtn(delta, MaSP, mau, size) {
-            let input = document.getElementById(`quantity_${MaSP}_${mau}_${size}`);
-            let value = parseInt(input.value);
-            const maxStock = parseInt(document.getElementById(`left_${MaSP}_${mau}_${size}`).value);
-            value += delta;
-            if (value < 1) value = 1;
-            if (value > maxStock) value = maxStock;
-            input.value = value;
-            document.getElementById(`decrease_${MaSP}_${mau}_${size}`).disabled = (value === 1);
-            document.getElementById(`increase_${MaSP}_${mau}_${size}`).disabled = (value === maxStock);
+        document.querySelectorAll('.btnL, .btnR').forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Lấy delta từ class
+                const delta = btn.classList.contains('btnL') ? -1 : 1;
 
-            // Debounce gửi request
-            clearTimeout(debounceTimeout);
-            debounceTimeout = setTimeout(() => {
-                updateCart(MaSP, mau, size, value);
-            }, 500); // 500ms sau lần bấm cuối mới gửi
+                // Lấy thông tin từ ID của button
+                const parts = btn.id.split('_');
+                // btn.id = "decrease_MaSP_Mau_Size" hoặc "increase_MaSP_Mau_Size"
+                const MaSP = parts[1];
+                const mau = parts[2];
+                const size = parts[3];
 
-        }
+                const quantityInput = document.getElementById(`quantity_${MaSP}_${mau}_${size}`);
+                const maxStock = parseInt(document.getElementById(`left_${MaSP}_${mau}_${size}`).value);
+
+                let value = parseInt(quantityInput.value);
+                value += delta;
+                if (value < 1) value = 1;
+                if (value > maxStock) value = maxStock;
+                quantityInput.value = value;
+
+                document.getElementById(`decrease_${MaSP}_${mau}_${size}`).disabled = (value === 1);
+                document.getElementById(`increase_${MaSP}_${mau}_${size}`).disabled = (value === maxStock);
+
+                // Debounce riêng cho từng sản phẩm
+                const key = `${MaSP}_${mau}_${size}`;
+                clearTimeout(debounceTimeouts[key]);
+                debounceTimeouts[key] = setTimeout(() => {
+                    updateCart(MaSP, mau, size, value);
+                }, 500);
+                });
+            });
 
         function updateCart(MaSP, mau, size, quantity) {
-            fetch('/update-cart', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({MaSP: MaSP, MauSacDaChon: mau, KichCoDaChon: size, SoLuong: quantity})
+        fetch('/update-cart', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({MaSP: MaSP, MauSacDaChon: mau, KichCoDaChon: size, SoLuong: quantity})
+        })
+            .then(res => res.json())
+            .then(data => {
+                if(data.success) {
+                    location.reload();
+                }
             })
-                .then(res => res.json())
-                .then(data => console.log(data));
+            .catch(err => console.error(err));
         }
+    </script>
 
+    <!-- script đổi màu và size -->
+    <script>
         document.querySelectorAll('.optionBtn').forEach(btn => {
             btn.addEventListener('click', () => {
                 const targetId = btn.dataset.target;
@@ -169,7 +208,7 @@
             try {
                 const res = await fetch("/update-cart-item-option", {
                     method: "POST",
-                    headers: { "Content-Type": "application/json" },
+                    headers: {"Content-Type": "application/json"},
                     body: JSON.stringify({
                         old_ma_sp: maSP,
                         new_ma_sp: maSP,
@@ -196,8 +235,67 @@
                 alert("Không thể kết nối server!");
             }
         }
-
     </script>
+
+    <!-- script cho checkbox và order hàng -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const checkboxes = document.querySelectorAll('.cart-checkbox');
+            const totalPriceEl = document.getElementById("total-price");
+            const selectedCountEl = document.getElementById("selected-count");
+            const createOrderBtn = document.getElementById("create-order-btn");
+
+            // restore trạng thái từ localStorage
+            const savedChecked = JSON.parse(localStorage.getItem('cartChecked') || '{}');
+            checkboxes.forEach(cb => {
+            const key = `${cb.dataset.id}_${cb.dataset.color}_${cb.dataset.size}`;
+            if(savedChecked[key]) cb.checked = true;
+            });
+
+            function updateSummary() {
+                const checkboxes = document.querySelectorAll(".cart-checkbox"); // lấy lại từ DOM
+                let total = 0;
+                let count = 0;
+
+                checkboxes.forEach(cb => {
+                    if(cb.checked){
+                        const price = parseFloat(cb.dataset.price) || 0;
+                        const quantity = parseInt(cb.dataset.quantity) || 1;
+                        total += price * quantity;
+                        count++;
+                    }
+                });
+
+                totalPriceEl.textContent = total.toLocaleString("vi-VN") + "₫";
+                selectedCountEl.textContent = count;
+            }
+
+            function saveChecked() {
+                const obj = {};
+                checkboxes.forEach(cb => {
+                    const key = `${cb.dataset.id}_${cb.dataset.color}_${cb.dataset.size}`;
+                    obj[key] = cb.checked;
+                });
+                localStorage.setItem('cartChecked', JSON.stringify(obj));
+            }
+
+        // các event
+        checkboxes.forEach(cb => {
+            cb.addEventListener("change", () => {
+            saveChecked();
+            updateSummary();
+            });
+        });
+
+        createOrderBtn.addEventListener("click", () => {
+        // Xử lý tạo đơn
+        });
+
+        // tính summary ngay khi load
+        updateSummary();
+        });
+    </script>
+
 </body>
 </html>
 
