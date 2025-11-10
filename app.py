@@ -66,6 +66,11 @@ app.register_blueprint(cart_bp)
 app.register_blueprint(AI_chatbp)
 app.register_blueprint(qldonhangbp)
 app.register_blueprint(revenue_bp)
+
+@app.template_filter('vnd')
+def vnd_format(value):
+    return "{:,}₫".format(int(value)).replace(",", ".")
+
 @app.route('/new-product')
 def new_product():
     return render_template('newProduct.html')
