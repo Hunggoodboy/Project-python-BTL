@@ -21,7 +21,6 @@ SET @@SESSION.SQL_LOG_BIN= 0;
 -- GTID state at the beginning of the backup 
 --
 
-SET @@GLOBAL.GTID_PURGED=/*!80000 '+'*/ 'e90674b2-b037-11f0-98bc-1579213bc118:1-345';
 
 --
 -- Table structure for table `DanhMuc`
@@ -126,9 +125,9 @@ CREATE TABLE `GioHang` (
   `MaKH` int NOT NULL,
   `MaSP` int NOT NULL,
   `SoLuong` int DEFAULT NULL,
-  `MauSac` varchar(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci DEFAULT NULL,
-  `Size` varchar(10) DEFAULT NULL,
-  PRIMARY KEY (`MaKH`,`MaSP`)
+  `MauSacDaChon` varchar(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci,
+  `KichCoDaChon` varchar(10),
+  PRIMARY KEY (`MaKH`,`MaSP`, `MauSacDaChon`, `KichCoDaChon`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

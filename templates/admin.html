@@ -32,6 +32,7 @@
         <div class="no-product">
             <img src="{{ url_for('static', filename='used/no-product.png') }}" alt="No product">
             <h1>Không có sản phẩm nào hiện trong kho</h1>
+            <h2> Hoặc chưa kết nối được tới cơ sở dữ liệu</h2>
         </div>
         {% else %}
         <table class="product-table" id="product-table">
@@ -77,8 +78,9 @@
     <div class="user-tab" style="display:none; padding-top:10px;">
         {% if not users %}
         <div class="no-user">
-            <img src="{{ url_for('static', filename='used/no-user.png') }}" alt="No user">
+            <img src="{{ url_for('static', filename='used/error-database.png') }}" alt="No user">
             <h1>Chưa có người dùng nào trong cơ sở dữ liệu</h1>
+            <h2> Hoặc chưa kết nối được tới cơ sở dữ liệu</h2>
         </div>
         {% else %}
         <table class="user-table" id="user-table">

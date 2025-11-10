@@ -27,6 +27,17 @@
     background-color: #BF092F;
 }
 
+/* không có sản phẩm/ người dùng */
+.no-product, .no-user{
+    text-align: center;
+    padding: 50px;
+    font-family: 'Roboto', sans-serif;
+}
+.no-product img, .no-user img{
+    height: 150px;
+    width: 150px;
+}
+
 .product-table, .user-table{
     width: 100%;
 }
@@ -166,4 +177,21 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+
+
+/* User tab */
+.user-table{
+    width: 100%;
+    text-align: center;
+    border-collapse: collapse;
+}
+.user-table th:first-child,
+.user-table td:first-child {
+    width: 1%; /* cho vừa khít nội dung */
+    white-space: nowrap; /* tránh xuống dòng */
+    font-weight: bold;
+}
+.user-table th, .user-table tr, .user-table td{
+    border: 1px #16476A solid;
 }

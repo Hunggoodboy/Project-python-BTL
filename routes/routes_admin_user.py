@@ -56,8 +56,8 @@ def edit_user(MaKH):
             print(f"Lỗi khi lấy thông tin người dùng: {e}")
             return "Đã xảy ra lỗi."
 
-@admin_user_bp.route('/order/delete/<int:MaDH>', methods=['POST'])
-def delete_order(MaDH):
+@admin_user_bp.route('/user/delete/<string:MaKH>', methods=['POST'])
+def delete_user(MaKH):
     # Kiểm tra quyền admin
     if 'user_role' not in session or session['user_role'] != 'admin':
         flash('Bạn không có quyền thực hiện hành động này!')
@@ -67,13 +67,12 @@ def delete_order(MaDH):
         try:
             conn = get_connect()
             cursor = conn.cursor()
-            cursor.execute("DELETE FROM QLBanQuanAo.DonHang WHERE MaDH = %s", (MaDH,))
+            cursor.execute("DELETE FROM QLBanQuanAo.KhachHang WHERE MaKH = %s", (MaKH,))
             conn.commit()
-            flash('Đã xóa đơn hàng thành công!')
             cursor.close()
             conn.close()
+            flash('Đã xóa người dùng thành công!')
         except Exception as e:
-            print(f"Lỗi khi xóa đơn hàng: {e}")
-            conn.rollback()
-            flash('Xóa đơn hàng thất bại.')
-        return redirect(url_for('show_orders'))
+            print(f"Lỗi khi xóa người dùng: {e}")
+            flash('Xóa người dùng thất bại.')
+        return redirect(url_for('show_user'))
