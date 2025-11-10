@@ -196,12 +196,14 @@
         border: none;
         background-color: white;
         aspect-ratio: 1/1;
+        font-size: 16pt;
     }
     .cart-table .qcontrol .btnL{ border-radius: 15px 0 0 15px }
     .cart-table .qcontrol .btnR{ border-radius: 0 15px 15px 0 }
 
     .cart-table .qcontrol button:hover{
         background-color: #132440;
+        color: white;
     }
     .cart-table .qcontrol input{
         width: 50px;
