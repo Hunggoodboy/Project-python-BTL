@@ -144,7 +144,9 @@ def get_all_products_as_text():
         )
 
         data_get = collection.get()
-
+        product_list = data_get['embeddings']
+        for product in product_list:
+            print(product)
 
     except Exception as e:
         print(f"Lỗi khi truy vấn sản phẩm: {e}")
