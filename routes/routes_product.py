@@ -16,8 +16,8 @@ def product_detail(pid):
         return "Không tìm thấy sản phẩm", 404
 
     # Giá trị mặc định
-    product['Sold'] = product.get('Sold', 0)
-    product['Discount'] = product.get('Discount', 0)
+    product['Sold'] = product.get('Sold') or 0
+    product['Discount'] = product.get('Discount') or 0
     product['HinhAnh'] = product.get('HinhAnh', 'images/default.png')
     product['Season'] = product.get('Season', 'All')
 
