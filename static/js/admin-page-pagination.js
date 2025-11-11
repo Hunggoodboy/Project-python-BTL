@@ -119,6 +119,8 @@ document.addEventListener("DOMContentLoaded", () => {
             tr.querySelector(".username").textContent = u.UserName;
             tr.querySelector(".sdt").textContent = u.SDT;
             tr.querySelector(".address").textContent = u.Address;
+            tr.querySelector(".edit-user").onclick=()=> openEditUserForm(u);
+            tr.querySelector(".delete-user").onclick=()=> deleteUser(u.MaKH);
             return tr;
         }
 
