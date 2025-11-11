@@ -225,7 +225,16 @@
     background-color: red;
     color: white;
 }
-.actions { text-align: center; margin-top: 20px; padding-bottom: 150px;}
+.actions{
+    text-align: center;
+    margin-top: 20px;
+    padding-bottom: 150px;
+}
+.actions h3{
+    font-family: "Be Vietnam Pro", sans-serif;
+    font-weight: 500;
+    font-style: normal;
+}
 .actions a{     
     text-decoration: none;
     color: white; background-color: #BF092F;
@@ -238,26 +247,49 @@
 #cart-summary {
     position: fixed;
     bottom: 0;
-    left: 0;
-    width: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 96%; /* bằng vs table */
+
     background: white;
     border-top: 2px solid #ccc;
-    padding: 40px;
+    padding: 40px 0;
+    box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+
     text-align: center;
     font-size: 18px;
-    box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+    font-family: "Be Vietnam Pro", sans-serif;
+    font-weight: 500;
+    font-style: normal;
+
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 15px;
+}
+#selected-count{
+    padding: 0;
+}
+
+#total-price{
+    background: linear-gradient(45deg, #FFA733, #FF7A00);
+    -webkit-background-clip: text;  /* cắt nền theo chữ */
+    -webkit-text-fill-color: transparent; /* làm trong suốt phần chữ để lộ nền */
 }
 
 #cart-summary button {
     background: orange;
     border: none;
     color: white;
-    padding: 8px 16px;
+    margin-left: 40px;
+    padding: 10px 16px;
     border-radius: 6px;
     font-family: Open Sans, sans-serif;
+    font-size: 16px;
     cursor: pointer;
+}
+
+#cart-summary button:hover{
+    background: linear-gradient(45deg, #FFA733, #FF7A00);
+    box-shadow: 0 6px 16px rgba(255, 140, 0, 0.5);
+    transform: translateY(-2px);
 }

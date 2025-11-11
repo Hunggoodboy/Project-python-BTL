@@ -78,7 +78,7 @@ def create_order():
         cursor.execute("""
             INSERT INTO QLBanQuanAo.DonHang (MaKH, MaSP, Mau, Size, TrangThai, SoLuong, DonGia, TongGia, Time)
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, NOW())
-        """, (user_id, product_id, color, size, "Chờ bạn xác nhận", quantity, don_gia, tong_gia))
+        """, (user_id, product_id, color, size, "Chờ xác nhận đơn", quantity, don_gia, tong_gia))
 
         conn.commit()
 
