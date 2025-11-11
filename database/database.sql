@@ -83,3 +83,13 @@ ADD COLUMN AnhPhu1 VARCHAR(255),
 ADD COLUMN AnhPhu2 VARCHAR(255),
 ADD COLUMN AnhPhu3 VARCHAR(255),
 ADD COLUMN AnhPhu4 VARCHAR(255);
+create table if not exists DoanhThu(
+    Ngay date primary key,
+    DoanhThuHomNay int default 0,
+    DoanhThuTheoThang int default 0,
+    DoanhThuTheoNam int default 0,
+    Thang varchar(7),
+    Nam varchar(4)
+);
+alter table DonHang
+add column if not exists DaTinhDoanhThu tinyint default 0;

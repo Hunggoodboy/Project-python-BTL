@@ -7,10 +7,9 @@ product_bp = Blueprint('product', __name__, url_prefix='/product')
 def product_detail(pid):
     conn = get_connect()
     cursor = conn.cursor(dictionary=True)
+    #Lấy sản phẩm theo MaSP
     cursor.execute("SELECT * FROM SanPham WHERE MaSP = %s", (pid,))
     product = cursor.fetchone()
-    cursor.close()
-    conn.close()
 
     if not product:
         return "Không tìm thấy sản phẩm", 404
@@ -38,14 +37,34 @@ def product_detail(pid):
             images.append(path)
     product['images'] = images
 
-    # Màu sắc
-    colors = [c.strip() for c in product.get('MauSac', '').split(',') if c.strip()]
-    product['colors'] = [{'name': c, 'image': images[0] if images else url_for('static', filename='images/default.png')} for c in colors]
+    #Lấy dữ liệu màu từ bảng SanPhamMau
+    cursor.execute("""
+        select 
+            tenmau,
+            min(url_anh1) as url_anh1
+        from SanPhamMau
+        where id_sanpham = %s
+        group by tenmau
+    """, (pid,))
+    color_rows = cursor.fetchall()
 
-    # Size
+    product_colors = []
+
+    for row in color_rows:
+        # Lấy ảnh màu
+        img_path = row['url_anh1']
+
+        # Thêm vào danh sách
+        product_colors.append({
+            "name": row["tenmau"],
+            "image": img_path
+        })
+    product['colors'] = product_colors
+
+    #Lấy SIZE
     product['sizes'] = [s.strip() for s in product.get('Size', '').split(',') if s.strip()]
 
-    print("=== PRODUCT IMAGES ===")
-    print(product['images'])
+    cursor.close()
+    conn.close()
 
     return render_template('productDetail.html', product=product)

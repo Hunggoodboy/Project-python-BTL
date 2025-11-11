@@ -16,7 +16,7 @@ from routes.routes_category import category_bp
 from routes.routes_size import size_bp
 from routes.routes_search import search_bp
 from routes.routes_logout import logout_bp
-from routes.routes_productdetail import productdetail_bp
+# from routes.routes_productdetail import productdetail_bp
 from routes.routes_collections import collections_bp
 """
 from routes.routes_edit_user import edit_userbp
@@ -54,7 +54,7 @@ app.register_blueprint(catalog_bp)
 app.register_blueprint(size_bp)
 app.register_blueprint(search_bp)
 app.register_blueprint(logout_bp)
-app.register_blueprint(productdetail_bp, url_prefix='/product')
+# app.register_blueprint(productdetail_bp, url_prefix='/product')
 app.register_blueprint(collections_bp)
 """
 app.register_blueprint(edit_userbp)

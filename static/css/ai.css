@@ -45,7 +45,7 @@ h2 {
     outline: none;
 }
 #send-button {
-    background-color: #007bff;
+    background-color: #8C00FF;
     color: white;
     border: none;
     height: 40px;
@@ -59,7 +59,7 @@ h2 {
     justify-content: center;
 }
 #send-button:hover {
-    background-color: #0056b3;
+    background-color: #7200D9;
 }
 #send-button img{
     width: 20px;
@@ -70,7 +70,7 @@ h2 {
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 10px;
-    background-color: #27005D;
+    background-color: #8C00FF;
     color: #F3F8FF;
     max-width: 70%;
     align-self: flex-end;

@@ -28,4 +28,7 @@ def admin_revenue():
     revenue = cursor.fetchone()
 
     conn.close()
+    print("__________DEBUG_________")
+    print("revenue =", revenue)
+
     return render_template("adminrevenue.html", revenue=revenue)
