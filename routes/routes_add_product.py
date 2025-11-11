@@ -20,7 +20,7 @@ def add_product():
 
         conn = get_connect()
         cursor = conn.cursor()
-        cursor.execute("""
+        cursor.execute("""  
                        INSERT INTO QLBanQuanAo.SanPham
                        (MaSP, MaDM, TenSP, MoTa, Gia, MauSac, Size, ChatLieu, SoLuongCon, HinhAnh, Season)
                        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
