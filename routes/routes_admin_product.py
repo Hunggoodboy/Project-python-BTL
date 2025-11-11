@@ -90,7 +90,7 @@ def edit_product(MaSP):
 
             if product:
                 # Gửi dữ liệu sản phẩm này sang file
-                return render_template('editProduct.html', product=product)
+                return render_template('productDetail.html', product=product)
             else:
                 # Nếu không tìm thấy sản phẩm
                 return "Không tìm thấy sản phẩm."

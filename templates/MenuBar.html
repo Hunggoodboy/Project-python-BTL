@@ -8,8 +8,8 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <header>
         Nhóm 3
-        {% if session.get('user_role') == 'admin' %}
-        <a href="{{ url_for('admin.admin_page') }}">Vào chế độ chỉnh sửa</a>
+        {% if session.get('user_role') == 'Admin' %}
+        <a href="{{ url_for('admin.admin_page') }}" style="margin-left: 50px">Vào chế độ chỉnh sửa</a>
         {% endif %}
         <a style="float: right" href="{{ url_for('size.size_help') }}">Hỗ trợ chọn size</a>
     </header>

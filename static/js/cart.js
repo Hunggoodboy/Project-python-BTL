@@ -108,7 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         Promise.all(promises).then(() => {
-            location.reload();
+            window.location.href = "/orders";
         });
 
     });
