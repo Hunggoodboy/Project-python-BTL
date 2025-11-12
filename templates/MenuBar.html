@@ -24,26 +24,26 @@
             </div>
         </a>
 
-        <a class="navi" href="{{ url_for('category.collection_date') }}" > Hàng mới về </a>
+        <a class="navi" href="{{ url_for('navigation.newest_products') }}" > Hàng mới về </a>
 
         <span class="tag">
-            <a class="navi" href="{{ url_for('catalog.catalog') }}"> Bộ sưu tập </a>
+            <a class="navi" href="{{ url_for('navigation.collections') }}"> Bộ sưu tập </a>
             <table class="hidden dropdown">
-                <tr><td><a class = "cate" href="{{ url_for('category.collection', season='Spring') }}">💮 Xuân Hồng 💮</a></td></tr>
-                <tr><td><a class = "cate" href="{{ url_for('category.collection', season='Summer') }}">🍋 Hạ Cháy 🍋</a></td></tr>
-                <tr><td><a class = "cate" href="{{ url_for('category.collection', season='Autumn') }}">🍂 Thu Nhẹ 🍂</a></td></tr>
-                <tr><td><a class = "cate" href="{{ url_for('category.collection', season='Winter') }}">❄️ Đông Trắng ❄️</a></td></tr>
+                <tr><td><a class = "cate" href="{{ url_for('navigation.p_collection', season='Spring') }}">💮 Xuân Hồng 💮</a></td></tr>
+                <tr><td><a class = "cate" href="{{ url_for('navigation.p_collection', season='Summer') }}">🍋 Hạ Cháy 🍋</a></td></tr>
+                <tr><td><a class = "cate" href="{{ url_for('navigation.p_collection', season='Autumn') }}">🍂 Thu Nhẹ 🍂</a></td></tr>
+                <tr><td><a class = "cate" href="{{ url_for('navigation.p_collection', season='Winter') }}">❄️ Đông Trắng ❄️</a></td></tr>
             </table>
         </span>
 
-        <!--Danh mục hàng, có thể sẽ thay bằng bảng csdl-->
+        <!--Danh mục hàng-->
         <span class="tag">
-            <a class="navi" href="{{ url_for('catalog.catalog') }}">Danh mục hàng</a>
+            <a class="navi" href="{{ url_for('navigation.categories') }}">Danh mục hàng</a>
             <table class="hidden dropdown" name="navi_choice">
-                <tr><td><a class = "cate" href="{{ url_for('category.collection_category', category='Áo') }}">Áo</a></td></tr>
-                <tr><td><a class = "cate" href="{{ url_for('category.collection_category', category='Quần') }}">Quần</a></td></tr>
-                <tr><td><a class = "cate" href="{{ url_for('category.collection_category', category='Váy') }}">Váy</a></td></tr>
-                <tr><td><a class = "cate" href="{{ url_for('category.collection_category', category='Phụ Kiện') }}">Phụ kiện</a></td></tr>
+                <tr><td><a class = "cate" href="{{ url_for('navigation.p_category', category='Áo') }}">Áo</a></td></tr>
+                <tr><td><a class = "cate" href="{{ url_for('navigation.p_category', category='Quần') }}">Quần</a></td></tr>
+                <tr><td><a class = "cate" href="{{ url_for('navigation.p_category', category='Váy') }}">Váy</a></td></tr>
+                <tr><td><a class = "cate" href="{{ url_for('navigation.p_category', category='Phụ Kiện') }}">Phụ kiện</a></td></tr>
             </table>
         </span>
 
@@ -62,7 +62,7 @@
                 <img src="{{ url_for('static', filename='used/logout.png') }}" alt="Log Out" />
             </a>
             {% else %}
-            <a style="float: right" href="{{ url_for('login_module.login') }}">
+            <a style="float: right" href="{{ url_for('login_modules.login') }}">
                 <img src="{{ url_for('static', filename='used/user.png') }}" alt="User" />
             </a>
             {% endif %} 
@@ -72,7 +72,7 @@
             <link rel="stylesheet" href="{{ url_for('static', filename='css/orderorcart.css') }}">
             <img src="{{ url_for('static', filename='used/cart.png') }}" alt="Cart" />
             <div class="cart-dropdown hidden">
-                <a href="{{ url_for('cart_bp.cart') }}">🛒 Giỏ hàng của tôi</a>
+                <a href="{{ url_for('cart.cart') }}">🛒 Giỏ hàng của tôi</a>
                 <a href="{{ url_for('orders.show_orders') }}">📦 Đơn hàng của tôi</a>
             </div>
             <script src="{{ url_for('static', filename='js/orderorcart.js') }}"></script>

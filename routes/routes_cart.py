@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session, jsonify
 from database.connect import get_connect
 
-cart_bp = Blueprint('cart_bp', __name__)
+cart_bp = Blueprint('cart', __name__)
 
 # Trang giỏ hàng
 @cart_bp.route('/cart')
@@ -120,7 +120,7 @@ def clear_cart():
         WHERE MaKH = %s
         """, (maKH,))
     conn.commit()
-    return redirect(url_for('cart_bp.cart'))
+    return redirect(url_for('cart.cart'))
 
 #update số lượng
 @cart_bp.route('/update-cart', methods=['POST'])
