@@ -21,9 +21,21 @@ def newest_products():
 def collections():
     conn = get_connect()
     cursor = conn.cursor(dictionary=True)
-    sql = ("SELECT COALESCE(Season, 'Quanh năm') AS Season, COUNT(*) AS SoLuong FROM SanPham GROUP BY Season")
+    sql = ("""
+        SELECT COALESCE(Season, 'Quanh năm') AS Season, 
+            COUNT(*) AS SoLuong,
+            (
+                SELECT sp2.HinhAnh 
+                FROM SanPham sp2 
+                WHERE (sp2.Season = sp.Season OR (sp2.Season IS NULL AND sp.Season IS NULL))
+                LIMIT 1 OFFSET 1
+            ) AS HinhAnh
+        FROM SanPham sp GROUP BY Season
+        """)
     cursor.execute(sql)
     seasons = cursor.fetchall()
+    for season in seasons:
+        print(season['HinhAnh'])
     cursor.close()
     conn.close()
     return render_template("collections.html", seasons=seasons)
@@ -45,21 +57,61 @@ def p_collection(season):
 def categories():
     conn = get_connect()
     cursor = conn.cursor(dictionary=True)
-    cursor.execute("SELECT * FROM DanhMuc")
+    sql = """
+        SELECT dm.MaDM, dm.TenDM, dm.MaDMCha,
+        IF(dm.MaDMCha IS NULL,
+           -- danh mục cha: lấy sản phẩm thứ 2 trong danh mục con
+           (SELECT sp.HinhAnh
+            FROM SanPham sp
+            JOIN DanhMuc dm2 ON sp.MaDM = dm2.MaDM
+            WHERE dm2.MaDMCha = dm.MaDM
+            LIMIT 1 OFFSET 1),
+            
+           -- danh mục con: lấy sản phẩm đầu
+           (SELECT sp2.HinhAnh
+            FROM SanPham sp2
+            WHERE sp2.MaDM = dm.MaDM
+            LIMIT 1)
+        ) AS HinhAnh
+        FROM DanhMuc dm
+        """
+    cursor.execute(sql)
     categories = cursor.fetchall()
     cursor.close()
     conn.close()
     return render_template('catalog.html', categories=categories)
 
 # Sản phẩm theo danh mục
-@navigation_bp.route('/collections/category/<category>')
-def p_category(category):
+@navigation_bp.route('/collections/category/<int:maDM>')
+def p_category(maDM):
     conn = get_connect()
     cursor = conn.cursor(dictionary=True)
-    sql = ("SELECT * FROM QLBanQuanAo.SanPham"
-           " WHERE MoTa LIKE %s")
-    cursor.execute(sql, [f"%{category}%"])
-    products = cursor.fetchall()  # tất cả sản phẩm
+
+    # Kiểm tra cha hay con
+    cursor.execute("SELECT TenDM, MaDMCha FROM DanhMuc WHERE MaDM = %s", (maDM,))
+    row = cursor.fetchone()
+
+    if not row:
+        cursor.close()
+        conn.close()
+        return "Danh mục không tồn tại", 404
+
+    if row["MaDMCha"] is None:  # Danh mục cha
+        sql = """
+                SELECT sp.*
+                FROM QLBanQuanAo.SanPham sp
+                JOIN DanhMuc dm ON sp.MaDM = dm.MaDM
+                WHERE (dm.MaDM = %s OR dm.MaDMCha = %s)
+            """
+        params = [maDM, maDM]
+    else:  # Danh mục con
+        sql = "SELECT * FROM QLBanQuanAo.SanPham WHERE MaDM = %s"
+        params = [maDM]
+
+    cursor.execute(sql, params)
+    products = cursor.fetchall()
+    category = row['TenDM']
+
     cursor.close()
     conn.close()
     return render_template("catalog.html", category = category, products=products)

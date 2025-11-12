@@ -26,26 +26,25 @@
 
         <a class="navi" href="{{ url_for('navigation.newest_products') }}" > Hàng mới về </a>
 
-        <span class="tag">
+        <div class="tag">
             <a class="navi" href="{{ url_for('navigation.collections') }}"> Bộ sưu tập </a>
-            <table class="hidden dropdown">
-                <tr><td><a class = "cate" href="{{ url_for('navigation.p_collection', season='Spring') }}">💮 Xuân Hồng 💮</a></td></tr>
-                <tr><td><a class = "cate" href="{{ url_for('navigation.p_collection', season='Summer') }}">🍋 Hạ Cháy 🍋</a></td></tr>
-                <tr><td><a class = "cate" href="{{ url_for('navigation.p_collection', season='Autumn') }}">🍂 Thu Nhẹ 🍂</a></td></tr>
-                <tr><td><a class = "cate" href="{{ url_for('navigation.p_collection', season='Winter') }}">❄️ Đông Trắng ❄️</a></td></tr>
-            </table>
-        </span>
+            <ul class="hidden dropdown">
+                <li><a class = "cate" href="{{ url_for('navigation.p_collection', season='Spring') }}">💮 Xuân Hồng 💮</a></li>
+                <li><a class = "cate" href="{{ url_for('navigation.p_collection', season='Summer') }}">🍋 Hạ Cháy 🍋</a></li>
+                <li><a class = "cate" href="{{ url_for('navigation.p_collection', season='Autumn') }}">🍂 Thu Nhẹ 🍂</a></li>
+                <li><a class = "cate" href="{{ url_for('navigation.p_collection', season='Winter') }}">❄️ Đông Trắng ❄️</a></li>
+            </ul>
+        </div>
 
         <!--Danh mục hàng-->
-        <span class="tag">
+        <div class="tag">
             <a class="navi" href="{{ url_for('navigation.categories') }}">Danh mục hàng</a>
-            <table class="hidden dropdown" name="navi_choice">
-                <tr><td><a class = "cate" href="{{ url_for('navigation.p_category', category='Áo') }}">Áo</a></td></tr>
-                <tr><td><a class = "cate" href="{{ url_for('navigation.p_category', category='Quần') }}">Quần</a></td></tr>
-                <tr><td><a class = "cate" href="{{ url_for('navigation.p_category', category='Váy') }}">Váy</a></td></tr>
-                <tr><td><a class = "cate" href="{{ url_for('navigation.p_category', category='Phụ Kiện') }}">Phụ kiện</a></td></tr>
-            </table>
-        </span>
+            <ul class="hidden dropdown">
+                <li><a class = "cate" href="{{ url_for('navigation.p_category', maDM = 100) }}">Áo</a></li>
+                <li><a class = "cate" href="{{ url_for('navigation.p_category', maDM = 200) }}">Quần & Váy</a></li>
+                <li><a class = "cate" href="{{ url_for('navigation.p_category', maDM = 300) }}">Phụ kiện</a></li>
+            </ul>
+        </div>
 
         <div class="upright-search">
             <form action="{{ url_for('search.search') }}" method="GET">

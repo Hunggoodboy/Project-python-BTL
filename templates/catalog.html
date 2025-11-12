@@ -9,14 +9,25 @@
 
     <!-- bar điều hướng, có ở tất cả các trang-->
     {% include 'MenuBar.html' %}
-    <h4 style="padding-left: 195px">Web Qao / Danh Mục {{category}} </h4>
+
     {% if categories %} <!-- chọn xem danh mục hoặc sản phẩm -->
-        {% for c in categories %}
-        <table class="catalog">
-            <td> {{ c.TenDM }} </td>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/category-table.css') }}">
+    <h4 style="padding-left: 195px">Web Qao / Danh Mục </h4>
+        <table class="category">
+            {% for cat3 in categories|batch(3, '') %}
+            <tr>
+                {% for c in cat3 if c %}
+                <td><a href="{{ url_for('navigation.p_category', maDM=c.MaDM) }}">
+                    <img src="{{ url_for('static', filename=c.HinhAnh) }}">
+                    {{ c.TenDM }}
+                </a></td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
         </table>
-        {% endfor %}
+
     {% else %}
+        <h4 style="padding-left: 195px">Web Qao / {{category}} </h4>
         {% include 'ProductTable.html' %}
     {% endif %}
 
