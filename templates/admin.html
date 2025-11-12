@@ -91,6 +91,8 @@
                 <th>Username</th>
                 <th>Số điện thoại</th>
                 <th>Địa chỉ giao hàng</th>
+                <th> Chỉnh sửa </th>
+                <th> Xóa </th>
             </tr>
             </thead>
 
@@ -104,8 +106,20 @@
                 <td><div class="username"></div></td>
                 <td><div class="sdt"></div></td>
                 <td><div class="address"></div></td>
+                <td><button class="edit-user">
+                    <img src="{{ url_for('static', filename='used/edit.png') }}" alt="Edit user">
+                </button></td>
+                <td><button class="delete-user">×</button></td>
             </tr>
         </template>
+        <div id="popupEditUser" class="hidden popup">
+            <div class="popup-content">
+                <span id="close-popup3" class="close-popup">×</span>
+                <form id="edit-form2" class="user-form">
+                    <!-- đã chèn js tạo bảng -->
+                </form>
+            </div>
+        </div>
         {% endif %}
     </div>
 
@@ -116,7 +130,7 @@
         window.usersData = {{ users|tojson }};
     </script>
     <script src="{{ url_for('static', filename='js/admin-page-popup-form.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/pagination-for-edit.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/admin-page-pagination.js') }}"></script>
 
 </body>
 </html>

@@ -39,9 +39,9 @@
                     data-quantity="{{ item.SoLuong }}">
             </td>
             <td>
+                <!-- duyệt list tìm ảnh cho đúng màu -->
                 <a class="product-wrapper" href="{{ url_for('product.product_detail', pid=item.MaSP) }}">
-                    {% set selected_color = (item.colors | selectattr('name', 'equalto', item.MauSacDaChon) | list | first) %}
-                    <img src="{{ url_for('static', filename = selected_color.image if selected_color.image else 'images/default.jpg') }}">
+                    <img src="{{ url_for('static', filename = item.selected_image) }}">
                     <div class="pro-name">{{ item.TenSP }}</div>
                 </a>
             </td>
@@ -58,8 +58,8 @@
                             Màu sắc:
                             {% for c in item.colors %}
                             <label class="container">
-                                <input type="radio" name="color" value="{{ c.name }}"/>
-                                <span class="text">{{ c.name }}</span>
+                                <input type="radio" name="color" value="{{ c }}"/>
+                                <span class="text">{{ c }}</span>
                             </label>
                             {% endfor %}
                             <br>
@@ -115,7 +115,7 @@
 
     <div class="actions">
         <h3 style="padding-bottom: 10px">Tổng giá trị trong giỏ hàng: {{ total_price|vnd }}</h3>
-        <a href="{{ url_for('cart_bp.clear_cart') }}">Xóa toàn bộ</a>
+        <a href="{{ url_for('cart.clear_cart') }}">Xóa toàn bộ</a>
     </div>
     {% else %}
         <div style="padding: 50px; text-align: center;background-color: white">
