@@ -30,10 +30,6 @@ except Exception as e:
 # với tên bạn định nghĩa trong FunctionDeclaration (ở Bước 4)
 def search_products(query_sanpham: str, season: str = None, min_price: float = None, max_price: float = None,
                     category: str = None):
-    """
-    Hàm Python này được AI gọi đến.
-    Các tham số (query_sanpham, season...) được chính AI quyết định và gửi sang.
-    """
     print(
         f"[Tool Call] AI đang tìm kiếm: query='{query_sanpham}', season='{season}', min={min_price}, max={max_price}, category='{category}'")
 
@@ -173,7 +169,7 @@ Nhiệm vụ của bạn là tư vấn sản phẩm cho khách.
 - Khi khách hỏi về sản phẩm (ví dụ: tìm áo, quần, giá cả, mùa...), hãy SỬ DỤNG tool 'search_products' để tìm kiếm trong cơ sở dữ liệu.
 - Khi gọi tool, hãy dịch các mùa (xuân, hạ, thu, đông) sang tiếng Anh (Spring, Summer, Autumn, Winter) như tool yêu cầu.
 - Dựa vào kết quả JSON từ tool, tư vấn cho khách. Nếu không tìm thấy, hãy nói thật là không tìm thấy.
-- Nếu kết quả là một danh sách sản phẩm, hãy tóm tắt chúng (Tên, Giá, Mô tả ngắn).
+- Nếu kết quxả là một danh sách sản phẩm, hãy tóm tắt chúng (Tên, Giá, Mô tả ngắn).
 - Không bịa đặt thông tin sản phẩm.
 - Nếu khách hỏi ngoài lề (ví dụ: 'thủ đô Việt Nam là gì?'), hãy từ chối lịch sự và nói rằng bạn chỉ là trợ lý của shop.
 """
