@@ -1,15 +1,19 @@
 .category{
     width: 100%;
-    background: #fff;
     padding: 50px;
     font-family: 'Roboto Bold', sans-serif;
+
+}
+
+.category tr {
+    display: flex;
+    justify-content: center; /* 👈 căn giữa cả hàng */
 }
 .category div{
     display: flex;
     justify-content: center; /* căn ngang */
     align-items: center;
-    padding: 10px;
-    border: 1px solid #ddd;
+    padding: 50px 20px;
 }
 .category a{
     text-decoration: none;
@@ -20,11 +24,20 @@
     justify-content: center;
     flex-direction: column;
     border: 2px solid #4FB7B3;
-    border-radius: 50%;
+    color: #132440;
 
-    width: 250px;       /* cố định width = height */
-    height: 250px;      /* giữ hình vuông */
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+
+    width: 250px;
+    height: 250px;
     box-sizing: border-box; /* để border + padding ko làm lệch */
+}
+.category a:link, .category a:visited{text-decoration: none;}
+
+.category a:hover{
+    background: #4FB7B3;
+    color: #fff;
 }
 .category img{
     width: 150px;
@@ -32,5 +45,4 @@
     object-fit: cover;
     object-position: center;
     border-radius: 50%;
-
 }
