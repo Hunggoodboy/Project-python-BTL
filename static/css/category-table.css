@@ -1,0 +1,36 @@
+.category{
+    width: 100%;
+    background: #fff;
+    padding: 50px;
+    font-family: 'Roboto Bold', sans-serif;
+}
+.category div{
+    display: flex;
+    justify-content: center; /* căn ngang */
+    align-items: center;
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+.category a{
+    text-decoration: none;
+    padding: 20px;
+    gap: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    border: 2px solid #4FB7B3;
+    border-radius: 50%;
+
+    width: 250px;       /* cố định width = height */
+    height: 250px;      /* giữ hình vuông */
+    box-sizing: border-box; /* để border + padding ko làm lệch */
+}
+.category img{
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 50%;
+
+}

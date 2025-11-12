@@ -46,24 +46,19 @@ UPLOAD_FOLDER = os.path.join('static', 'images')
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 app.register_blueprint(main_bp)
+app.register_blueprint(AI_chatbp)
+
+app.register_blueprint(admin_bp)
+#app.register_blueprint(user_bp)
+
 app.register_blueprint(login_bp)
+app.register_blueprint(logout_bp)
 app.register_blueprint(register_bp)
-app.register_blueprint(category_bp)
-app.register_blueprint(product_bp)
-app.register_blueprint(catalog_bp)
+
+app.register_blueprint(navigation_bp)
 app.register_blueprint(size_bp)
 app.register_blueprint(search_bp)
-app.register_blueprint(logout_bp)
-# app.register_blueprint(productdetail_bp, url_prefix='/product')
-app.register_blueprint(collections_bp)
-"""
-app.register_blueprint(edit_userbp)
-app.register_blueprint(edit_productbp)
-app.register_blueprint(addproduct_bp)
-app.register_blueprint(delete_productbp)
-app.register_blueprint(delete_userbp)
-"""
-app.register_blueprint(admin_bp)
+app.register_blueprint(product_bp)
 
 
 app.register_blueprint(show_productbp)
@@ -156,8 +151,4 @@ def new_product():
 # )
 
 if __name__ == '__main__':
-    # test_query = "Tìm kiếm áo mùa đông"
-    # max_query = "Tìm kiếm đồ có giá lớn hơn 300000 đồng"
-    # result = search_products(max_query)
-    # print(result)
-    app.run(debug=True, port=5003)
+    app.run(debug=True, port=5000)
