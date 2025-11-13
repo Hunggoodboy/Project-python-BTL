@@ -23,6 +23,7 @@ h2 {
 #chat-box p {
     margin: 10px 0;
     white-space: pre-wrap;
+    color: black;
 }
 #chat-input-area {
     display: flex;

@@ -80,23 +80,29 @@ def get_all_products_as_text():
                 f"Danh mục: {product.get('TenDM')}",
                 f"Mô tả: {product.get('MoTa')}",
                 f"Chất liệu: {product.get('ChatLieu')}",
-                f"Màu sắc: {product.get('MauSac')}",
-                f"Các size: {product.get('Size')}"
+                f"Những màu sắc: {product.get('MauSac')}",
+                f"Các size: {product.get('Size')}",
+                f"Số lượng còn lại : {product.get('SoLuongcon')}",
+                f"Giá được giảm : {product.get('Discount')}",
+                f"Ngày nhập hàng : {product.get('NgayNhap')}%",
             ]
             if product.get('Gia') is not None:
                 text_parts.append(f"Giá bán: {product.get('Gia')}")
             if product.get('Season'):
                 text_parts.append(f"Phù hợp cho mùa: {product.get('Season')}")
-            if product.get('Discount') is not None:
-                text_parts.append(f"Giảm giá: {product.get('Discount')}%")
-
+            else:
+                text_parts.append("Phù hợp quanh năm")
+            if product.get('AllMenSizes'):
+                text_parts.append(f"Size của đàn ông hiện có : {product.get('AllMenSizes')}")
+            if product.get('AllWomenSizes'):
+                text_parts.append(f"Size của phụ nữ hiện có : {product.get('AllWomenSizes')}")
             text_document = "\n".join(text_parts)
             product_texts.append(text_document)
 
             gia_val = product.get('Gia')
             season_val = product.get('Season')
             discount_val = product.get('Discount')
-            soluong_val = product.get('SoLuongCon')
+            soluong_val = product.get('SoLuongcon')
 
             masp_val = product.get('MaSP')
             metadata = {

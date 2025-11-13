@@ -8,10 +8,11 @@ from google.generativeai.types import PartDict
 
 from google.generativeai.types import Tool
 
-from . import filter_create
+from . import filters_tool_create
 
 # --- 1. CẤU HÌNH AI ---
 YOUR_API_KEY = "AIzaSyAvIRfabil8y_PsdzSGa9Kx2K2u0a-RtC4"
+
 try:
     genai.configure(api_key=YOUR_API_KEY)
 except Exception as e:
@@ -20,6 +21,7 @@ except Exception as e:
 # --- 2. KẾT NỐI VECTOR DB (CHROMA) ---
 client = chromadb.PersistentClient(path="./my_vector_db")
 collection = client.get_or_create_collection(name="products")
+
 print(">>> ĐÃ KẾT NỐI CHROMA DB THÀNH CÔNG! <<<")
 
 system_instruction_ = """Bạn là 'Bot', trợ lý AI bán hàng của 'Shop Nhóm 3'. 
@@ -40,7 +42,7 @@ Nhiệm vụ của bạn là tư vấn sản phẩm cho khách.
 try:
     model = genai.GenerativeModel(
         model_name='models/gemini-2.5-flash',
-        tools=Tool(function_declarations=[filter_create.search_products_tool]),
+        tools=Tool(function_declarations=[filters_tool_create.search_products_tool]),
         system_instruction = system_instruction_
     )
     print(">>> ĐÃ NẠP TOOL 'search_products' VÀO MODEL <<<")
@@ -114,7 +116,7 @@ def real_chat():
                         print(f"[Flask] Đang gọi tool 'search_products' với args: {args}")
                         print("qurry la")
                         print(args.get("query_sanpham"))
-                        results = filter_create.search_products(
+                        results = filters_tool_create.search_products(
                             query_Sanpham=args.get("query_sanpham"),
                             season=args.get("season"),
                             min_price=args.get("min_price"),

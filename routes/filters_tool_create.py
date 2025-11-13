@@ -3,6 +3,7 @@ import google.generativeai as genai
 
 
 from google.generativeai.types import FunctionDeclaration, Tool
+from sympy.strategies.branch import condition
 
 # --- 1. CẤU HÌNH AI ---
 # (SỬA LẠI KEY CỦA BẠN NẾU CẦN)
@@ -23,15 +24,13 @@ except Exception as e:
 # --- 3. SỬA LẠI HÀM PYTHON ĐỂ KHỚP VỚI TOOL ---
 # Tên các tham số của hàm Python PHẢI TRÙNG KHỚP
 # với tên bạn định nghĩa trong FunctionDeclaration (ở Bước 4)
-print("số collection trước hàm def " + str(collection.count()))
-def search_products(query_Sanpham: str, season: str = None, min_price: float = None, max_price: float = None,
-                    category: str = None,):
+def search_products(query_Sanpham: str, season: str = None, min_price: float = None, max_price: float = None, category: str = None,):
     print(
-        f"[Tool Call] AI đang tìm kiếm: query='{query_Sanpham}', season='{season}', min={min_price}, max={max_price}, category='{category}'")
-    print("số collection trước try " + str(collection.count()))
+        f"[Tool Call] AI đang tìm kiếm: query='{query_Sanpham}', season='{season}', min={min_price}, max={max_price}, category='{category}'"
+    )
     try:
         # 2. Xây dựng bộ lọc 'where' cho ChromaDB
-        filters = {}
+        conditions = []
         price_filter = {}
         if min_price:
             price_filter["$gte"] = min_price  # gte = greater than or equal
@@ -39,19 +38,22 @@ def search_products(query_Sanpham: str, season: str = None, min_price: float = N
             price_filter["$lte"] = max_price  # lte = less than or equal
 
         if price_filter:
-            filters["Gia"] = price_filter
+            conditions.append({"Gia" : price_filter})
 
         if season:
-            filters["Season"] = {"$eq": season}
+            conditions.append({"Season" : season})
 
         if category:
-            # Dùng regex để tìm không phân biệt hoa thường
-            filters["TenDM"] = {"$eq": category}
+            conditions.append({"TenDM" : category})
 
-        print(f"[Tool Call] Bộ lọc ChromaDB: {filters}")
-
+        filters = {}
+        print("Bắt đầu lọc filter")
         # 3. Truy vấn ChromaDB
-        print("số collection count sau try " + str(collection.count()))
+
+        if len(conditions) > 1:
+            filters["$and"] = conditions
+        else :
+            filters = conditions[0]
 
         result = genai.embed_content(
             model='models/text-embedding-004',
@@ -84,7 +86,7 @@ def search_products(query_Sanpham: str, season: str = None, min_price: float = N
 
 # --- 4. ĐỊNH NGHĨA TOOL CHO AI (SỬA LẠI CHO KHỚP) ---
 search_products_tool = FunctionDeclaration(
-    name="search_products",  # PHẢI TRÙNG TÊN HÀM PYTHON (def search_products)
+    name="search_products",  # TÊN HÀM PYTHON (def search_products)
     description="Tìm kiếm sản phẩm trong shop theo tên, mô tả, danh mục, mùa, và khoảng giá.",
     parameters={
         "type": "OBJECT",  # Phải là "OBJECT"
