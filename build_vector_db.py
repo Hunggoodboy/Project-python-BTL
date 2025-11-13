@@ -98,6 +98,7 @@ def get_all_products_as_text():
             season_val = product.get('Season')
             discount_val = product.get('Discount')
             soluong_val = product.get('SoLuongCon')
+
             masp_val = product.get('MaSP')
             metadata = {
                 "MaSP": str(masp_val or "0"),
@@ -140,7 +141,6 @@ def get_all_products_as_text():
         embed = data_get['embeddings']
         metadata = data_get['metadatas']
         product_text = data_get['documents']
-
         print("ĐÃ XÂY DỰNG VECTOR DB THÀNH CÔNG!")
 
     except chromadb.errors.DuplicateIDError as e:
