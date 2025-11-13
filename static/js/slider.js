@@ -22,5 +22,5 @@ function goToSlide(index) {
 nextBtn.addEventListener('click', () => goToSlide(currentIndex + 1));
 prevBtn.addEventListener('click', () => goToSlide(currentIndex - 1));
 
-// Optional: auto slide
+// Auto slide
 setInterval(() => goToSlide(currentIndex + 1), 3000); // slide every 3s
