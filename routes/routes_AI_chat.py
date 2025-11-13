@@ -38,7 +38,6 @@ Nhiệm vụ của bạn là tư vấn sản phẩm cho khách.
 
 # --- 5. CẤU HÌNH MODEL VỚI TOOL ---
 # Đưa tool vào model
-# (Sửa tên model nếu bạn muốn dùng 'gemini-pro' hay 'gemini-1.5-pro-latest')
 try:
     model = genai.GenerativeModel(
         model_name='models/gemini-2.5-flash',

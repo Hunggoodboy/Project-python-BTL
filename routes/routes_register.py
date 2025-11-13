@@ -1,5 +1,5 @@
 import flask
-from flask import Blueprint, render_template, request, redirect, session, url_for
+from flask import Blueprint, render_template, request, redirect, session, url_for, flash
 from database.connect import get_connect
 
 # Tạo Blueprint, đặt template_folder ở đây
@@ -17,6 +17,26 @@ def register():
         print("Debug: ", name, username, password, numberphone, address)
         conn = get_connect()
         cursor = conn.cursor()
+        sql_check1 = """
+            SELECT * FROM QLBanQuanAo.KhachHang
+            WHERE username = %s
+        """
+        cursor.execute(sql_check1, [username])
+        check1 = cursor.fetchone()
+        if check1 is not None:
+            flash('Tên Đăng Nhập Đã Được Đăng Ký')
+            return redirect(url_for('register.register'))
+        sql_check2 = """
+                     SELECT * \
+                     FROM QLBanQuanAo.KhachHang
+                     WHERE SDT = %s \
+                     """
+        cursor.execute(sql_check2, [numberphone])
+        check2 = cursor.fetchone()
+        if check2 is not None:
+            flash('Số Điện Thoại Đã Được Đăng Ký')
+            return redirect(url_for('register.register'))
+
         sql = """
             INSERT INTO QLBanQuanAo.KhachHang (HoTen, username, MatKhau, SDT, Address, Role)
             VALUES (%s, %s, %s, %s, %s, 'Client')

@@ -65,7 +65,7 @@ def search_products(query_Sanpham: str, season: str = None, min_price: float = N
 
         results = collection.query(
             query_embeddings=query_vector,
-            n_results=5,  # Lấy 5 kết quả gần nhất
+            n_results=20,  # Lấy 5 kết quả gần nhất
             where=filters if filters else None
         )
 
