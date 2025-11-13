@@ -51,6 +51,8 @@
             <div><strong>{{ order.TenSP }}</strong></div>
             <div>Giá: {{ order.Gia }}₫</div>
             <div>Số lượng: {{ order.SoLuong }}</div>
+            <div>Màu: {{ order.Mau }}</div>
+            <div>Size: {{ order.Size }}</div>
         </div>
         <div>
             <span class="status {% if order.TrangThai == 'Đã giao thành công' %}green{% else %}yellow{% endif %}" onclick="openStatusModal({{ order.id }})">{{ order.TrangThai }}</span>

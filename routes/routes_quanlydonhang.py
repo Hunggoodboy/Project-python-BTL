@@ -9,9 +9,10 @@ def quanlydonhang_Choxacnhandon():
     conn = get_connect()
     cursor = conn.cursor(dictionary=True)
     sql = """
-    SELECT dh.*, sp.TenSP, sp.HinhAnh
+    SELECT dh.*, sp.TenSP, sp.HinhAnh, kh.HoTen, kh.SDT, kh.Address
     FROM QLBanQuanAo.DonHang dh
     JOIN QLBanQuanAo.SanPham sp ON dh.MaSP = sp.MaSP
+    JOIN QLBanQuanAo.KhachHang kh ON dh.MaKH = kh.MaKH
     WHERE dh.TrangThai LIKE 'Chờ xác nhận đơn'
     """
     cursor.execute(sql)
@@ -26,9 +27,10 @@ def quanlydonhang_Danggiaohang():
     conn = get_connect()
     cursor = conn.cursor(dictionary=True)
     sql = """
-    SELECT dh.*, sp.TenSP, sp.HinhAnh
+    SELECT dh.*, sp.TenSP, sp.HinhAnh, kh.HoTen, kh.SDT, kh.Address
     FROM QLBanQuanAo.DonHang dh
     JOIN QLBanQuanAo.SanPham sp ON dh.MaSP = sp.MaSP
+    JOIN QLBanQuanAo.KhachHang kh ON dh.MaKH = kh.MaKH
     WHERE dh.TrangThai LIKE 'Đang giao hàng'
     """
     cursor.execute(sql)
@@ -42,9 +44,10 @@ def quanlydonhang_Chobanxacnhan():
     conn = get_connect()
     cursor = conn.cursor(dictionary=True)
     sql = """
-    SELECT dh.*, sp.TenSP, sp.HinhAnh
+    SELECT dh.*, sp.TenSP, sp.HinhAnh, kh.HoTen, kh.SDT, kh.Address
     FROM QLBanQuanAo.DonHang dh
     JOIN QLBanQuanAo.SanPham sp ON dh.MaSP = sp.MaSP
+    JOIN QLBanQuanAo.KhachHang kh ON dh.MaKH = kh.MaKH
     WHERE dh.TrangThai LIKE 'Chờ bạn xác nhận'
     """
     cursor.execute(sql)
@@ -58,9 +61,10 @@ def quanlydonhang_Dagiaothanhcong():
     conn = get_connect()
     cursor = conn.cursor(dictionary=True)
     sql = """
-    SELECT dh.*, sp.TenSP, sp.HinhAnh
+    SELECT dh.*, sp.TenSP, sp.HinhAnh, kh.HoTen, kh.SDT, kh.Address
     FROM QLBanQuanAo.DonHang dh
     JOIN QLBanQuanAo.SanPham sp ON dh.MaSP = sp.MaSP
+    JOIN QLBanQuanAo.KhachHang kh ON dh.MaKH = kh.MaKH
     WHERE dh.TrangThai LIKE 'Đã giao thành công'
     """
     cursor.execute(sql)

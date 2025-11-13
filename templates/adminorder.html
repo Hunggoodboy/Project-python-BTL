@@ -34,12 +34,17 @@
             <div><strong>{{ order.TenSP }}</strong></div>
             <div>Giá: {{ order.TongGia }}₫</div>
             <div>Số lượng: {{ order.SoLuong }}</div>
+            <div>Màu: {{ order.Mau}}</div>
+            <div>Size: {{ order.Size }}</div>
         </div>
         <div>
             <span class="status {% if order.TrangThai == 'Đã giao thành công' %}green{% else %}yellow{% endif %}" id="status-text-{{ order.MaDH }}">
                 {{ order.TrangThai }}
             </span>
             <button class="edit-btn" onclick="openEditModal({{ order.MaDH }})">Sửa trạng thái</button>
+            <button class="view-customer-btn" onclick="openCustomerModal('{{ order.HoTen }}', '{{ order.SDT }}', '{{ order.Address }}')">
+                Xem khách hàng
+            </button>
         </div>
     </div>
     {% endfor %}
@@ -57,7 +62,16 @@
         </div>
     </div>
 </div>
-
+<!-- Modal hiển thị thông tin khách hàng -->
+<div id="customer-modal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeCustomerModal()">&times;</span>
+        <h3>Thông tin khách hàng</h3>
+        <p><strong>Họ tên:</strong> <span id="modal-customer-name"></span></p>
+        <p><strong>Số điện thoại:</strong> <span id="modal-customer-phone"></span></p>
+        <p><strong>Địa chỉ:</strong> <span id="modal-customer-address"></span></p>
+    </div>
+</div>
 <script>
 let currentOrderId = null;
 
@@ -92,7 +106,20 @@ function setTrangThai(newStatus) {
             }
         })
         .catch(() => alert("Lỗi khi gọi API!"));
+    
 }
+// Mở modal xem khách hàng
+function openCustomerModal(name, phone, address) {
+    document.getElementById("modal-customer-name").textContent = name;
+    document.getElementById("modal-customer-phone").textContent = phone;
+    document.getElementById("modal-customer-address").textContent = address;
+    document.getElementById("customer-modal").style.display = "block";
+}
+
+function closeCustomerModal() {
+    document.getElementById("customer-modal").style.display = "none";
+}
+
 </script>
 
 </body>
