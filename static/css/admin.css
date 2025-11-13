@@ -42,7 +42,7 @@
     width: 100%;
 }
 
-.product-table img, .user-table img{
+.product-table img{
     height: 150px;
     width: 150px;
     object-fit: cover;
@@ -94,7 +94,7 @@
     max-height: 80%;
     overflow-y: auto;
 }
-.product-form{
+.product-form, .user-form{
     display: flex;
     flex-wrap: wrap;
 }
@@ -102,7 +102,7 @@
     width: fit-content;
     padding: 10px;
 }
-.product-form input {
+.product-form input, .user-form input {
     padding: 10px;
 }
 
@@ -185,6 +185,7 @@
     width: 100%;
     text-align: center;
     border-collapse: collapse;
+    margin-bottom: 20px;
 }
 .user-table th:first-child,
 .user-table td:first-child {
@@ -195,3 +196,31 @@
 .user-table th, .user-table tr, .user-table td{
     border: 1px #16476A solid;
 }
+.user-table img{
+    height: 20px;
+    width: 20px;
+}
+.user-table td:nth-last-child(2),
+.user-table th:nth-last-child(2) {
+    width: 1%;
+    padding: 10px;
+}
+.user-table button{
+    text-decoration: none;
+    background-color: white;
+    border: 2px solid transparent;
+    cursor: pointer;
+}
+.user-table .edit-user:hover{
+    border: 2px solid transparent;
+    border-image: linear-gradient(45deg, #FFA733, #FF7A00) 1;
+}
+.user-table .delete-user {
+    color: red;
+    background-color: white;
+    padding: 6px 9px;
+    border: 2px solid red;
+    border-radius: 5px;
+}
+.user-table .delete-user:hover { background-color: red; color: white;}
+

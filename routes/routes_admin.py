@@ -12,6 +12,8 @@ admin_bp.register_blueprint(admin_user_bp)
 
 @admin_bp.route('/admin')
 def admin_page():
+    if 'user_role' not in session or session['user_role'] != 'Admin':
+        return redirect(url_for('menu.main_menu'))
     conn = get_connect()
     cursor = conn.cursor(dictionary=True)
     cursor.execute("SELECT * FROM qlbanquanao.sanpham")

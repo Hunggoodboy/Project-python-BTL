@@ -11,7 +11,27 @@
     {% include 'MenuBar.html' %}
     <h4 style="padding-left: 195px">Web Qao / {{ season }} Collection </h4>
 
-    {% include 'ProductTable.html' %}
+    {% if seasons %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/category-table.css') }}">
+    <table class="category">
+        {% for sea4 in seasons|batch(4, '') %}
+            <tr>
+                {% for s in sea4 if s %}
+                <td>
+                    <div>
+                    <a href="{{ url_for('navigation.p_collection', season= s.Season) }}">
+                    <img src="{{ url_for('static', filename=s.HinhAnh) }}">
+                    {{ s.Season }} ({{ s.SoLuong }})
+                    </a>
+                    </div>
+                </td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </table>
 
+    {% else %}
+        {% include 'ProductTable.html' %}
+    {% endif %}
 </body>
 </html>

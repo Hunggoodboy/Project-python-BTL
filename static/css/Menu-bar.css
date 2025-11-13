@@ -1,7 +1,6 @@
 
 /* menu-bar -> tag -> (navi + hidden dropdown) */
-div.menu-bar {
-
+.menu-bar {
     padding-left: 20px;
     background-color: #16476A;
 
@@ -9,18 +8,17 @@ div.menu-bar {
     flex-direction: row;
     align-items: flex-end;
     gap: 10px;
-    position: relative;
-
+    position: relative; /* cho mấy cái icon góc phải */
 }
 
-/* tag<span> = navi<a> + dropdown<table> */
+/* tag<div> = navi<a> + dropdown<ul> */
 .tag {
     position: relative; /* Để .hidden bám theo tag */
     display: inline-block;
 }
 
 /* navi<a> */
-.navi:link, .navi:visited {
+.navi {
     padding: 14px 25px;
     border-radius: 10px 10px 0 0;   /* bo góc tròn trên */
 
@@ -33,39 +31,61 @@ div.menu-bar {
     display: inline-block;
 }
 
-.navi:hover, .navi:active {
-    background-color: #BF092F;
-}
+.navi:hover, .navi:active { background-color: #BF092F; }
 
-/* hidden dropdown<table> */
-.hidden {
-    display: none;
-}
+/* hidden dropdown<ul> */
+.hidden { display: none; }
 .dropdown {
+    margin: 0;
+    padding: 0; /* ul có sẵn padding vs margin, nên phải reset hết */
+
     position: absolute;
     top: 100%;
     left: 50%;
     transform: translateX(-50%);
+
     min-width: 100%;
-    width: auto;
+    width: max-content;
     z-index: 999;
-    border-collapse: collapse;
 }
 
 .tag:hover .hidden {
-    display: table;
+    display: flex;
+    flex-direction: column;
 }
 
-/* Style cho bảng */
-.hidden td {
+/* Style cho list */
+.hidden li {
     border: 2px solid orange;
+    border-bottom: 0;
     padding: 10px;
     font-family: "Verdana", sans-serif;
     text-align: center;
     color: #16476A;
     background-color: white;
+    list-style: none;
+}
+.hidden li:last-child {border-bottom: 2px solid orange}
+
+/* a ở trong ul dropdown */
+.cate{
+    white-space: nowrap;
+    display: block;
+    text-align: center;
+    font-family: "Verdana", sans-serif;
 }
 
+.cate:link, .cate:visited {
+    color: #16476A;
+    text-decoration: none;
+}
+
+.cate:hover, .cate:active {
+    color: white;
+}
+.hidden li:hover {
+    background-color: orange;
+}
 
 /* logo về trang chủ */
 a.img {
@@ -109,27 +129,8 @@ a.img {
     z-index: 10;
 }
 
-.cate{
-    white-space: nowrap;
-    display: block;
-    text-align: center;
-    font-family: "Verdana", sans-serif;
-}
-
-.cate:link, .cate:visited {
-    color: #16476A;
-    text-decoration: none;
-}
-
-.cate:hover, .cate:active {
-    color: white;
-}
-.hidden td:hover {
-    background-color: orange;
-}
-
 /* Dành chỗ bên phải cho 2 icon */
-div.menu-bar {
+.menu-bar {
     padding-right: 120px;  /* tăng nếu cần */
 }
 

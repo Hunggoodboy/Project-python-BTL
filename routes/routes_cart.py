@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session, jsonify
 from database.connect import get_connect
 
-cart_bp = Blueprint('cart_bp', __name__)
+cart_bp = Blueprint('cart', __name__)
 
 # Trang giỏ hàng
 @cart_bp.route('/cart')
@@ -12,19 +12,25 @@ def cart():
         return redirect(url_for('login_module.login'))
     cursor = conn.cursor(dictionary=True)
     cursor.execute("""
-                    SELECT * FROM GioHang
-                    JOIN SanPham ON GioHang.MaSP = SanPham.MaSP
-                    WHERE MaKH = %s
-                   """, (ma_kh,))
+            SELECT gh.*, sp.*, 
+                   spm.url_anh1
+            FROM GioHang gh
+            JOIN SanPham sp ON gh.MaSP = sp.MaSP
+            LEFT JOIN SanPhamMau spm 
+                ON sp.MaSP = spm.id_sanpham AND spm.tenmau = gh.MauSacDaChon
+            WHERE gh.MaKH = %s
+        """, (ma_kh,))
+
     cart_items = cursor.fetchall()
+
     for item in cart_items:
         item['sizes'] = [c.strip() for c in item.get('Size', '').split(',') if c.strip()]
-        colors = [c.strip() for c in item.get('MauSac', '').split(',') if c.strip()]
-        item['colors'] = [
-            {'name': c,
-             'image': item[f'AnhPhu{i+1}'] if i < 4 and item[f'AnhPhu{i+1}'] else item['HinhAnh']
-             }
-            for i, c in enumerate(colors)]
+        item['colors'] = [c.strip() for c in item.get('MauSac', '').split(',') if c.strip()]
+        item['selected_image'] = item['url_anh1'] or item['HinhAnh']
+
+    #Debug kiểm tra sai link ảnh
+    for item in cart_items:
+        print(item['MaSP'], item['selected_image'])
 
     total_price = round(sum((item['Gia'] * (100 - item['Discount']) / 100) * item['SoLuong'] for item in cart_items))
     cursor.close()
@@ -114,7 +120,7 @@ def clear_cart():
         WHERE MaKH = %s
         """, (maKH,))
     conn.commit()
-    return redirect(url_for('cart_bp.cart'))
+    return redirect(url_for('cart.cart'))
 
 #update số lượng
 @cart_bp.route('/update-cart', methods=['POST'])

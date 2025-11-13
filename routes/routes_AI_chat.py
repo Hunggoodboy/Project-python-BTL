@@ -1,168 +1,183 @@
+import json
+
+import chromadb
 from flask import Blueprint, request, jsonify, render_template
 import google.generativeai as genai
-import os
 
-# --- 1. IMPORT CÁCH KẾT NỐI CSDL CỦA BẠN ---
-# Giả sử file connect.py nằm trong thư mục 'database'
-# (Sửa lại đường dẫn nếu cần)
-from database.connect import get_connect
+from google.generativeai.types import PartDict
 
-# --- 2. CẤU HÌNH AI (GIỮ NGUYÊN) ---
-YOUR_API_KEY = "AIzaSyCSuEwJLCPGYhpJC4pHrlqw-ylt3UUIio8"  # <-- Key của bạn
-model = None
+from google.generativeai.types import Tool
+
+from . import filter_create
+
+# --- 1. CẤU HÌNH AI ---
+YOUR_API_KEY = "AIzaSyAvIRfabil8y_PsdzSGa9Kx2K2u0a-RtC4"
 try:
     genai.configure(api_key=YOUR_API_KEY)
-    # Đảm bảo dùng đúng tên model
-    model = genai.GenerativeModel('models/gemini-2.5-flash')
-    print(">>> ĐÃ CẤU HÌNH GOOGLE AI THÀNH CÔNG! <<<")
 except Exception as e:
-    print(f"LỖI CẤU HÌNH AI: {e}")
+    print(f"LỖI CẤU HÌNH API KEY: {e}")
 
-# --- 3. BLUEPRINT (GIỮ NGUYÊN) ---
-AI_chatbp = Blueprint('AI_chatbp', __name__,)
+# --- 2. KẾT NỐI VECTOR DB (CHROMA) ---
+client = chromadb.PersistentClient(path="./my_vector_db")
+collection = client.get_or_create_collection(name="products")
+print(">>> ĐÃ KẾT NỐI CHROMA DB THÀNH CÔNG! <<<")
+
+system_instruction_ = """Bạn là 'Bot', trợ lý AI bán hàng của 'Shop Nhóm 3'. 
+Nhiệm vụ của bạn là tư vấn sản phẩm cho khách.
+- Hãy luôn thân thiện, chuyên nghiệp và nói tiếng Việt.
+- Khi khách hỏi về sản phẩm (ví dụ: tìm áo, quần, giá cả, mùa...), hãy SỬ DỤNG tool 'search_products' để tìm kiếm trong cơ sở dữ liệu.
+- Khi gọi tool, hãy dịch các mùa (xuân, hạ, thu, đông) sang tiếng Anh (Spring, Summer, Autumn, Winter) như tool yêu cầu.
+- Dựa vào kết quả JSON từ tool, tư vấn cho khách. Nếu không tìm thấy, hãy nói thật là không tìm thấy.
+- Nếu kết quả là một danh sách sản phẩm, hãy tóm tắt chúng (Tên, Giá, Mô tả ngắn).
+- Nếu người dùng hỏi mà bạn đang hoang mang, cố gắng tìm từ đồng nghĩa và trả lời kết quả cho khách hàng.
+- Không bịa đặt thông tin sản phẩm.
+- Nếu khách hỏi ngoài lề (ví dụ: 'thủ đô Việt Nam là gì?'), hãy từ chối lịch sự và nói rằng bạn chỉ là trợ lý của shop.
+"""
+
+# --- 5. CẤU HÌNH MODEL VỚI TOOL ---
+# Đưa tool vào model
+# (Sửa tên model nếu bạn muốn dùng 'gemini-pro' hay 'gemini-1.5-pro-latest')
+try:
+    model = genai.GenerativeModel(
+        model_name='models/gemini-2.5-flash',
+        tools=Tool(function_declarations=[filter_create.search_products_tool]),
+        system_instruction = system_instruction_
+    )
+    print(">>> ĐÃ NẠP TOOL 'search_products' VÀO MODEL <<<")
+except Exception as e:
+    print(f"LỖI KHI NẠP TOOL VÀO MODEL: {e}")
+
+# --- 6. KHỞI TẠO BLUEPRINT VÀ QUẢN LÝ SESSION ---
+AI_chatbp = Blueprint('AI_chatbp', __name__, )
+
+# Tool Calling là một cuộc hội thoại (chat) nhiều lượt
+# Chúng ta cần lưu trữ lịch sử chat cho mỗi người dùng
+
+chat_sessions = {}  # Dùng dict đơn giản để lưu session
 
 
-# --- 4. ROUTE TRANG TEST (GIỮ NGUYÊN) ---
+# --- 7. ROUTE TRANG TEST (GIỮ NGUYÊN) ---
 @AI_chatbp.route('/test-ai')
 def test_ai_page():
-    # 'test_ai.html' phải nằm trong thư mục 'templates'
     return render_template('test_ai.html')
 
 
-# --- 5. ROUTE XỬ LÝ CHAT (ĐÃ SỬA DÙNG get_connect()) ---
+# --- 8. ROUTE XỬ LÝ CHAT ---
 @AI_chatbp.route('/api/chat-real', methods=['POST'])
 def real_chat():
-    global model
+    global model, chat_sessions
     if model is None:
         return jsonify({'reply': 'Lỗi: Mô hình AI chưa được cấu hình.'}), 500
 
     try:
         data = request.json
         user_message = data.get('message')
-        user_message_lower = user_message.lower()
+        session_id = data.get('session_id', 'default_session')
 
         if not user_message:
             return jsonify({'reply': 'Bạn chưa hỏi gì cả.'})
 
-        context = "Bạn là trợ lý AI của 'Shop Nhóm 3'."
+        if session_id not in chat_sessions:
+            print(f"Tạo session mới: {session_id}")
+            chat_sessions[session_id] = model.start_chat(history=[])
+        chat = chat_sessions[session_id]
 
-        conn = None
-        cursor = None
+        # 1. Gửi tin nhắn của user cho AI
+        print(f"[{session_id}] User: {user_message}")
+        response = chat.send_message(content=user_message)
 
-        try:
-            conn = get_connect()
-            cursor = conn.cursor()
-            if("bao nhiêu" in user_message_lower or "tổng" in user_message_lower):
-                if ("quần" in user_message_lower):
-                    # Dùng %s làm placeholder
-                    sql = "SELECT COUNT(*) FROM QLBanQuanAo.SanPham WHERE MoTa LIKE %s"
-                    search_term = "%quần%"
+        # 2. KIỂM TRA XEM AI CÓ MUỐN GỌI TOOL KHÔNG
+        while True:
+            # Lấy các tool calls từ response
+            tool_calls = []
 
-                    # Truyền tham số dưới dạng tuple
-                    cursor.execute(sql, (search_term,))
-                    product_count = cursor.fetchone()[0]
+            # response.parts là cách truy cập an toàn nhất
+            if response.parts:
+                #print("co response")
+                for part in response.parts:
+                    # Kiểm tra xem PartDict có function_call không
+                    if hasattr(part, "function_call") and part.function_call:
+                        tool_calls.append(part.function_call)
+            # Nếu không có tool call, thoát vòng lặp, trả về text
+            if not tool_calls:
+                print("Khong co tool_calls")
+                break
 
-                    context += f" Thông tin từ CSDL: Shop hiện có {product_count} sản phẩm liên quan đến 'quần'."
+            # 3. THỰC THI TOOL CALLS
+            print(f"[Flask] AI muốn gọi {len(tool_calls)} tool(s)." + "là" + str(tool_calls))
 
-                elif ("sản phẩm" in user_message_lower):
-                    sql = "SELECT COUNT(*) FROM QLBanQuanAo.SanPham"
-                    cursor.execute(sql)
-                    product_count = cursor.fetchone()[0]
-
-                    context += f" Thông tin từ CSDL: Shop hiện có tổng cộng {product_count} sản phẩm."
-                elif("váy" in user_message_lower):
-                    sql = "SELECT COUNT(*) FROM QLBanQuanAo.SanPham WHERE MoTa LIKE %s"
-                    search_term = "%váy%"
-                    cursor.execute(sql, (search_term,))
-                    product_count = cursor.fetchone()[0]
-
-                    context += f" Thông tin từ CSDL: Shop hiện có {product_count} sản phẩm liên quan đến 'váy'."
-                elif ("áo" in user_message_lower):
-                    sql = "SELECT COUNT(*) FROM QLBanQuanAo.SanPham WHERE MoTa LIKE %s"
-                    search_term = "%áo%"
-                    cursor.execute(sql, (search_term,))
-                    product_count = cursor.fetchone()[0]
-
-                    context += f" Thông tin từ CSDL: Shop hiện có {product_count} sản phẩm liên quan đến 'áo'."
-                elif ("phụ kiện" in user_message_lower):
-                    sql = "SELECT COUNT(*) FROM QLBanQuanAo.SanPham WHERE MoTa LIKE %s "
-                    search_term = "%phụ kiện%"
-                    cursor.execute(sql, (search_term,))
-                    product_count = cursor.fetchone()[0]
-
-                    context += f" Thông tin từ CSDL: Shop hiện có {product_count} sản phẩm liên quan đến 'phụ kiện'."
-            # --- BLOCK 3 (GỢI Ý) ---
-            elif "lạnh" in user_message_lower or "ấm" in user_message_lower or "đông" in user_message_lower:
-
-                sql = "SELECT * FROM QLBanQuanAo.SanPham WHERE Season Like %s"
-                season = 'Winter'
-                cursor.execute(sql, (season,))
-
-                product_list = cursor.fetchall()
-                if product_list:
-                    context += f" Thông tin từ CSDL: Khi trời lạnh, shop có một số sản phẩm rất hợp như: "
-                    product_names = [product[2] for product in product_list]
-                    # product_link =
-                    context += f" {', '.join(product_names)}. (LỆNH CHO AI: Trả lời khách, liệt kê CÁC SẢN PHẨM NÀY, mỗi sản phẩm 1 dòng, có gạch đầu dòng '*' ở trước.)"
+            function_responses = []  # (Tên biến này vẫn OK)
+            for call in tool_calls:
+                if call.name == "search_products":
+                    try:
+                        args = dict(call.args)  # Chuyển args sang dict
+                        print(f"[Flask] Đang gọi tool 'search_products' với args: {args}")
+                        print("qurry la")
+                        print(args.get("query_sanpham"))
+                        results = filter_create.search_products(
+                            query_Sanpham=args.get("query_sanpham"),
+                            season=args.get("season"),
+                            min_price=args.get("min_price"),
+                            max_price=args.get("max_price"),
+                            category=args.get("category")
+                        )
+                        function_responses.append({
+                            "name": "search_products",
+                            "response": results
+                        })
+                    except Exception as e:
+                        print(f"Lỗi khi thực thi tool: {e}")
+                        function_responses.append({
+                            "name": "search_products",
+                            "response": {"error": f"Lỗi server khi gọi tool: {e}"}
+                        })
                 else:
-                    context += " Thông tin từ CSDL: Shop tạm thời hết các mặt hàng giữ ấm."
-            elif "nóng" in user_message_lower or "mát" in user_message_lower or "hè" in user_message_lower:
+                    # Xử lý trường hợp AI gọi tool lạ
+                    print(f"Lỗi: AI gọi tool không xác định '{call.name}'")
+                    function_responses.append({
+                        "name": call.name,
+                        "response": {"error": "Tool không tồn tại"}
+                    })
+            if function_responses :
+                print("Co function_responses")
+                print("function_responses la ")
+                print(function_responses)
+                print("het")
+            else:
+                print("none response")
+            # 4. GỬI KẾT QUẢ TOOL TRỞ LẠI CHO AI
+            print("[Flask] Gửi kết quả tool ngược lại cho AI...")
+            tool_result_parts = []
+            for r in function_responses:
+                tool_result_parts.append({
+                    "function_response": {
+                        "name": r["name"],
+                        "response": r["response"]
+                    }
+                })
 
-                sql = "SELECT * FROM QLBanQuanAo.SanPham WHERE Season Like %s or Season is null"
-                season = 'Summer'
-                cursor.execute(sql, (season,))
+            print("-----------------------")
+            print(type(tool_result_parts))
+            print(tool_result_parts)
+            print(type(tool_result_parts[0]))
+            print(tool_result_parts[0])
+            if not tool_result_parts:
+                print("[Flask] Lỗi: tool_result_parts bị rỗng, không gửi gì về AI.")
+                response = chat.send_message(content="Lỗi hệ thống: Không thể xử lý kết quả tool.")
 
-                product_list = cursor.fetchall()
-                if product_list:
-                    context += f" Thông tin từ CSDL: Khi trời nóng, shop có một số sản phẩm rất hợp như: "
-                    product_names = [product[2] for product in product_list]
-                    # product_link =
-                    context += f" {', '.join(product_names)}. (LỆNH CHO AI: Trả lời khách, liệt kê CÁC SẢN PHẨM NÀY, mỗi sản phẩm 1 dòng, có gạch đầu dòng '*' ở trước.)"
-                else:
-                    context += " Thông tin từ CSDL: Shop tạm thời hết các mặt hàng mát."
-            elif "mới nhập" in user_message_lower or "thịnh hành" in user_message_lower or "new" in user_message_lower:
-                sql = ("SELECT * FROM QLBanQuanAo.SanPham WHERE NgayNhap >= SUBDATE(CURDATE(), INTERVAL 30 DAY)")
-                cursor.execute(sql)
-                product_list = cursor.fetchall()
+            else:
+                # Nếu list KHÔNG rỗng, hãy gửi phần tử ĐẦU TIÊN
+                response = chat.send_message(content=json.dumps(tool_result_parts[0], ensure_ascii=False))
+            # Gửi list các PartDict này làm content
 
-                if product_list:
-                    context += f" Thông tin từ CSDL: Shop có một số sản phẩm mới về như: "
-                    product_names = [product[2] for product in product_list]
-                    # product_link =
-                    context += f" {', '.join(product_names)}. (LỆNH CHO AI: Trả lời khách, liệt kê CÁC SẢN PHẨM NÀY, mỗi sản phẩm 1 dòng, có gạch đầu dòng '*' ở trước.)"
-                else:
-                    context += " Thông tin từ CSDL: Shop tạm thời hết các mặt hàng mát."
-        except Exception as db_error:
-            print(f"Lỗi truy vấn CSDL (Raw SQL): {db_error}")
-            context += " (Đã xảy ra lỗi khi truy vấn CSDL.)"
-
-        finally:
-            # --- RẤT QUAN TRỌNG: LUÔN ĐÓNG KẾT NỐI ---
-            if cursor:
-                cursor.close()
-            if conn:
-                conn.close()
-
-        # 6. Tạo câu lệnh cuối cùng cho AI (Prompt Engineering)
-        final_prompt = f"""
-        Nhiệm vụ: Bạn là trợ lý AI tên là 'Bot' của 'Shop Nhóm 3'. 
-        Hãy trả lời câu hỏi của khách hàng một cách thân thiện, ngắn gọn và *CHỈ* dựa vào thông tin được cung cấp.
-
-        --- BỐI CẢNH (DỮ LIỆU TỪ CSDL CỦA SHOP) ---
-        {context}
-        ---
-
-        Câu hỏi của khách: "{user_message}"
-
-        Trả lời:
-        """
-
-        # 7. Gửi câu lệnh ĐÃ CÓ BỐI CẢNH cho AI
-        print(f"--- Đang gửi prompt tới AI: {final_prompt} ---")
-        response = model.generate_content(final_prompt)
-
-        return jsonify({'reply': response.text})
+        # 5. TRẢ VỀ CÂU TRẢ LỜI CUỐI CÙNG
+        if response.text:
+            print(f"[{session_id}] AI: {response.text}")
+            return jsonify({'reply': response.text})
+        else:
+            print(f"[{session_id}] Lỗi: AI không trả về text.")
+            return jsonify({'reply': 'Xin lỗi, AI không thể xử lý yêu cầu này.'}), 500
 
     except Exception as e:
-        print(f"Lỗi khi gọi Google AI: {e}")
-        return jsonify({'reply': 'Xin lỗi, AI đang bị lỗi. Vui lòng thử lại.'}), 500
+        print(f"Lỗi nghiêm trọng tại /api/chat-real: {e}")
+        return jsonify({'reply': f'Xin lỗi, AI đang bị lỗi: {e}'}), 500
