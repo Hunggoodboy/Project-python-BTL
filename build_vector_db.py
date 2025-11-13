@@ -10,7 +10,7 @@ import sys  # Thêm sys để in lỗi rõ hơn
 from database.connect import get_connect
 
 # --- 2. CẤU HÌNH AI (CHO VIỆC EMBEDDING) ---
-API_KEY = "AIzaSyCSuEwJLCPGYhpJC4pHrlqw-ylt3UUIio8"  # <-- Key của bạn
+API_KEY = "AIzaSyAvIRfabil8y_PsdzSGa9Kx2K2u0a-RtC4"
 genai.configure(api_key=API_KEY)
 embed_model = genai.GenerativeModel('models/text-embedding-004')
 
@@ -55,20 +55,20 @@ def get_all_products_as_text():
               FROM QLBanQuanAo.SanPham sp
                        LEFT JOIN
                    QLBanQuanAo.DanhMuc dm ON sp.MaDM = dm.MaDM
-                       LEFT JOIN (SELECT sp_inner.MaSP, \
-                                         GROUP_CONCAT(DISTINCT sizeman.MaSize SEPARATOR ', ') AS AllMenSizes \
-                                  FROM QLBanQuanAo.SanPham sp_inner \
-                                           JOIN \
-                                       QLBanQuanAo.SizeDanOng sizeman \
-                                       ON CONCAT(' ', sp_inner.Size, ' ') LIKE CONCAT(' %', sizeman.MaSize, ' %') \
+                       LEFT JOIN (SELECT sp_inner.MaSP,
+                                         GROUP_CONCAT(DISTINCT sizeman.MaSize SEPARATOR ', ') AS AllMenSizes 
+                                  FROM QLBanQuanAo.SanPham sp_inner 
+                                           JOIN 
+                                       QLBanQuanAo.SizeDanOng sizeman 
+                                       ON CONCAT(' ', sp_inner.Size, ' ') LIKE CONCAT(' %', sizeman.MaSize, ' %') 
                                   GROUP BY sp_inner.MaSP) AS men_sizes ON sp.MaSP = men_sizes.MaSP
-                       LEFT JOIN (SELECT sp_inner.MaSP, \
-                                         GROUP_CONCAT(DISTINCT sizewoman.MaSize SEPARATOR ', ') AS AllWomenSizes \
-                                  FROM QLBanQuanAo.SanPham sp_inner \
-                                           JOIN \
-                                       QLBanQuanAo.SizePhuNu sizewoman \
-                                       ON CONCAT(' ', sp_inner.Size, ' ') LIKE CONCAT(' %', sizewoman.MaSize, ' %') \
-                                  GROUP BY sp_inner.MaSP) AS women_sizes ON sp.MaSP = women_sizes.MaSP; \
+                       LEFT JOIN (SELECT sp_inner.MaSP, 
+                                         GROUP_CONCAT(DISTINCT sizewoman.MaSize SEPARATOR ', ') AS AllWomenSizes 
+                                  FROM QLBanQuanAo.SanPham sp_inner 
+                                           JOIN 
+                                       QLBanQuanAo.SizePhuNu sizewoman 
+                                       ON CONCAT(' ', sp_inner.Size, ' ') LIKE CONCAT(' %', sizewoman.MaSize, ' %') 
+                                  GROUP BY sp_inner.MaSP) AS women_sizes ON sp.MaSP = women_sizes.MaSP; 
               """
 
         cursor.execute(sql)
@@ -93,7 +93,6 @@ def get_all_products_as_text():
             text_document = "\n".join(text_parts)
             product_texts.append(text_document)
 
-            # (Phần làm sạch metadata giữ nguyên, đã đúng)
             gia_val = product.get('Gia')
             season_val = product.get('Season')
             discount_val = product.get('Discount')

@@ -25,6 +25,11 @@ from routes.routes_quanlydonhang import qldonhangbp
 from routes.routes_revenue import revenue_bp
 import sys
 import google.generativeai as genai
+import chromadb
+from build_vector_db import get_all_products_as_text
+
+client = chromadb.PersistentClient(path="./my_vector_db")
+collection = client.get_or_create_collection(name="products")
 
 print("--- KIỂM TRA MÔI TRƯỜNG ---")
 print(f"Đường dẫn Python đang chạy: {sys.executable}")

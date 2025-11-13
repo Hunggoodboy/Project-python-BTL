@@ -1,12 +1,6 @@
 import chromadb
-from flask import Blueprint, request, jsonify, render_template
 import google.generativeai as genai
-import os
-import re
 
-from google.ai.generativelanguage_v1 import Part
-# Giả sử file connect.py nằm trong thư mục 'database' (nếu có)
-# from database.connect import get_connect
 
 from google.generativeai.types import FunctionDeclaration, Tool
 
@@ -20,7 +14,7 @@ except Exception as e:
 
 # --- 2. KẾT NỐI VECTOR DB (CHROMA) ---
 try:
-    client = chromadb.PersistentClient(path="../my_vector_db")
+    client = chromadb.PersistentClient(path="./my_vector_db")
     collection = client.get_or_create_collection(name="products")
     print(">>> ĐÃ KẾT NỐI CHROMA DB THÀNH CÔNG! <<<")
 except Exception as e:
@@ -29,22 +23,16 @@ except Exception as e:
 # --- 3. SỬA LẠI HÀM PYTHON ĐỂ KHỚP VỚI TOOL ---
 # Tên các tham số của hàm Python PHẢI TRÙNG KHỚP
 # với tên bạn định nghĩa trong FunctionDeclaration (ở Bước 4)
+print("số collection trước hàm def " + str(collection.count()))
 def search_products(query_Sanpham: str, season: str = None, min_price: float = None, max_price: float = None,
-                    category: str = None):
+                    category: str = None,):
     print(
         f"[Tool Call] AI đang tìm kiếm: query='{query_Sanpham}', season='{season}', min={min_price}, max={max_price}, category='{category}'")
-    print("số collection " + str(collection.count()))
+    print("số collection trước try " + str(collection.count()))
     try:
-        # 1. Embed câu truy vấn chính
-        result = genai.embed_content(
-            model='models/text-embedding-004',
-            content=query_Sanpham,
-            task_type="RETRIEVAL_QUERY"  # Quan trọng: nói cho AI biết đây là CÂU HỎI
-        )
         # 2. Xây dựng bộ lọc 'where' cho ChromaDB
         filters = {}
         price_filter = {}
-
         if min_price:
             price_filter["$gte"] = min_price  # gte = greater than or equal
         if max_price:
@@ -54,34 +42,40 @@ def search_products(query_Sanpham: str, season: str = None, min_price: float = N
             filters["Gia"] = price_filter
 
         if season:
-            # Tool của bạn yêu cầu AI dịch sang tiếng Anh,
-            # nên ta giả định cột 'Season' trong DB cũng lưu tiếng Anh
-            filters["Season"] = season
+            filters["Season"] = {"$eq": season}
 
         if category:
             # Dùng regex để tìm không phân biệt hoa thường
-            filters["TenDM"] = {"$in": [category]}
+            filters["TenDM"] = {"$eq": category}
 
         print(f"[Tool Call] Bộ lọc ChromaDB: {filters}")
 
         # 3. Truy vấn ChromaDB
-        print(collection.count())
+        print("số collection count sau try " + str(collection.count()))
+
+        result = genai.embed_content(
+            model='models/text-embedding-004',
+            content=query_Sanpham,
+            task_type="RETRIEVAL_QUERY"
+        )
+
+        query_vector = result['embedding']
+
         results = collection.query(
             query_embeddings=query_vector,
             n_results=5,  # Lấy 5 kết quả gần nhất
             where=filters if filters else None
         )
-        print(results)
-        print(len(results['metadatas']))
+
+        if not results['ids'] or not results['ids'][0]:
+            return []
         if not results['metadatas']:
             print("Không tìm thấy sản phẩm nào phù hợp với mô tả.")
-            return "Không tìm thấy sản phẩm nào phù hợp với mô tả."
+            return []
         else:
-            print("co res")
             for res in results['metadatas'][0]:
-                print("co res")
                 print(res)
-        return results['metadatas']  # Trả về list[dict]
+        return results['metadatas'][0]
 
     except Exception as e:
         print(f"[Tool Call] Lỗi khi đang tìm kiếm: {e}")
@@ -106,7 +100,21 @@ search_products_tool = FunctionDeclaration(
             },
             "category": {
                 "type": "STRING",
-                "description": "Tìm theo danh mục. Ví dụ: 'Áo', 'Quần', 'Áo khoác'"
+                "description": (
+                    "Tên danh mục CHÍNH XÁC trong cơ sở dữ liệu. "
+                    "CHỈ được phép sử dụng MỘT trong các giá trị sau: "
+                    "'Áo Thun Cơ Bản', 'Áo Sơ Mi', 'Áo Khoác', 'Áo Len', 'Áo Khoác Dày', "
+                    "'Quần Jean', 'Quần Short', ... (thêm các danh mục của bạn từ CSDL vào đây)"
+                    "\n--- QUY TẮC ÁNH XẠ ---"
+                    "\n- Nếu người dùng hỏi 'áo thun', 'áo phông', 'áo T-shirt' hoặc các từ đồng nghĩa khác, BẮT BUỘC dùng: 'Áo Thun Cơ Bản'."
+                    "\n- Nếu người dùng hỏi 'sơ mi' hoặc 'áo sơ mi', BẮT BUỘC dùng: 'Áo Sơ Mi'."
+                    "\n- Nếu người dùng hỏi 'áo khoác' hoặc 'áo mùa đông' hoặc 'áo bomber', BẮT BUỘC dùng: 'Áo Khoác'."
+                    "\n- Nếu người dùng hỏi 'áo len' hoặc 'áo khoác len', Bắt buộc dùng: 'Áo Len'."
+                    "\n - Nếu người dùng hỏi 'phụ kiện' bắt buộc dùng: 'Túi & Ví'."
+                    "\n- Nếu không rõ, hãy hỏi lại người dùng."
+                    "\n- Nếu được hỏi về số lượng hàng, hãy lấy dữ liệu từ SoLuongCon"
+                    "\n- Nếu được hỏi những sản phẩm tốt hoặc xịn hoặc giá cao, thì hãy lấy những sản phẩm có giá lớn hơn 500.000 vnd"
+                )
             },
             "min_price": {
                 "type": "NUMBER",  # Phải là "NUMBER"
@@ -120,8 +128,3 @@ search_products_tool = FunctionDeclaration(
         "required": ["query_sanpham"]  # Báo cho AI biết query_sanpham là bắt buộc
     }
 )
-
-
-result = search_products("áo thun", None, None, None, "Áo Thun Cơ Bản")
-print("Kết quả là :")
-print(result)

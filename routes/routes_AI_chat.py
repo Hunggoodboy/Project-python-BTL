@@ -1,3 +1,6 @@
+import json
+
+import chromadb
 from flask import Blueprint, request, jsonify, render_template
 import google.generativeai as genai
 
@@ -8,14 +11,16 @@ from google.generativeai.types import Tool
 from . import filter_create
 
 # --- 1. CẤU HÌNH AI ---
-# (SỬA LẠI KEY CỦA BẠN NẾU CẦN)
-YOUR_API_KEY = "AIzaSyCSuEwJLCPGYhpJC4pHrlqw-ylt3UUIio8"
+YOUR_API_KEY = "AIzaSyAvIRfabil8y_PsdzSGa9Kx2K2u0a-RtC4"
 try:
     genai.configure(api_key=YOUR_API_KEY)
 except Exception as e:
     print(f"LỖI CẤU HÌNH API KEY: {e}")
 
 # --- 2. KẾT NỐI VECTOR DB (CHROMA) ---
+client = chromadb.PersistentClient(path="./my_vector_db")
+collection = client.get_or_create_collection(name="products")
+print(">>> ĐÃ KẾT NỐI CHROMA DB THÀNH CÔNG! <<<")
 
 system_instruction_ = """Bạn là 'Bot', trợ lý AI bán hàng của 'Shop Nhóm 3'. 
 Nhiệm vụ của bạn là tư vấn sản phẩm cho khách.
@@ -24,6 +29,7 @@ Nhiệm vụ của bạn là tư vấn sản phẩm cho khách.
 - Khi gọi tool, hãy dịch các mùa (xuân, hạ, thu, đông) sang tiếng Anh (Spring, Summer, Autumn, Winter) như tool yêu cầu.
 - Dựa vào kết quả JSON từ tool, tư vấn cho khách. Nếu không tìm thấy, hãy nói thật là không tìm thấy.
 - Nếu kết quả là một danh sách sản phẩm, hãy tóm tắt chúng (Tên, Giá, Mô tả ngắn).
+- Nếu người dùng hỏi mà bạn đang hoang mang, cố gắng tìm từ đồng nghĩa và trả lời kết quả cho khách hàng.
 - Không bịa đặt thông tin sản phẩm.
 - Nếu khách hỏi ngoài lề (ví dụ: 'thủ đô Việt Nam là gì?'), hãy từ chối lịch sự và nói rằng bạn chỉ là trợ lý của shop.
 """
@@ -46,11 +52,9 @@ AI_chatbp = Blueprint('AI_chatbp', __name__, )
 
 # Tool Calling là một cuộc hội thoại (chat) nhiều lượt
 # Chúng ta cần lưu trữ lịch sử chat cho mỗi người dùng
+
 chat_sessions = {}  # Dùng dict đơn giản để lưu session
 
-# result = filter_create.search_products("Tìm Kiếm đồ", None, 150000, None, None)
-# print("Kết quả là :")
-# print(result)
 
 # --- 7. ROUTE TRANG TEST (GIỮ NGUYÊN) ---
 @AI_chatbp.route('/test-ai')
@@ -58,8 +62,7 @@ def test_ai_page():
     return render_template('test_ai.html')
 
 
-# --- 8. ROUTE XỬ LÝ CHAT (SỬA LẠI HOÀN TOÀN) ---
-# --- 8. ROUTE XỬ LÝ CHAT (SỬA LẠI HOÀN TOÀN) ---
+# --- 8. ROUTE XỬ LÝ CHAT ---
 @AI_chatbp.route('/api/chat-real', methods=['POST'])
 def real_chat():
     global model, chat_sessions
@@ -90,7 +93,7 @@ def real_chat():
 
             # response.parts là cách truy cập an toàn nhất
             if response.parts:
-                print("co response")
+                #print("co response")
                 for part in response.parts:
                     # Kiểm tra xem PartDict có function_call không
                     if hasattr(part, "function_call") and part.function_call:
@@ -101,7 +104,8 @@ def real_chat():
                 break
 
             # 3. THỰC THI TOOL CALLS
-            print(f"[Flask] AI muốn gọi {len(tool_calls)} tool(s).")
+            print(f"[Flask] AI muốn gọi {len(tool_calls)} tool(s)." + "là" + str(tool_calls))
+
             function_responses = []  # (Tên biến này vẫn OK)
             for call in tool_calls:
                 if call.name == "search_products":
@@ -117,7 +121,6 @@ def real_chat():
                             max_price=args.get("max_price"),
                             category=args.get("category")
                         )
-
                         function_responses.append({
                             "name": "search_products",
                             "response": results
@@ -153,11 +156,18 @@ def real_chat():
                     }
                 })
 
-            print("la")
-            print(tool_result_parts) # Log này sẽ trông khác, đúng dạng PartDict
+            print("-----------------------")
+            print(type(tool_result_parts))
+            print(tool_result_parts)
+            print(type(tool_result_parts[0]))
+            print(tool_result_parts[0])
+            if not tool_result_parts:
+                print("[Flask] Lỗi: tool_result_parts bị rỗng, không gửi gì về AI.")
+                response = chat.send_message(content="Lỗi hệ thống: Không thể xử lý kết quả tool.")
 
-            # Gửi trực tiếp list các PartDict này làm content
-            response = chat.send_message(content=tool_result_parts)
+            else:
+                # Nếu list KHÔNG rỗng, hãy gửi phần tử ĐẦU TIÊN
+                response = chat.send_message(content=json.dumps(tool_result_parts[0], ensure_ascii=False))
             # Gửi list các PartDict này làm content
 
         # 5. TRẢ VỀ CÂU TRẢ LỜI CUỐI CÙNG
