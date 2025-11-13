@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
-<body>
+<body style="overflow-x: hidden;">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
     <!-- bar điều hướng, có ở tất cả các trang-->
@@ -14,13 +14,17 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/category-table.css') }}">
     <h4 style="padding-left: 195px">Web Qao / Danh Mục </h4>
         <table class="category">
-            {% for cat3 in categories|batch(3, '') %}
+            {% for cat4 in categories|batch(4, '') %}
             <tr>
-                {% for c in cat3 if c %}
-                <td><a href="{{ url_for('navigation.p_category', maDM=c.MaDM) }}">
-                    <img src="{{ url_for('static', filename=c.HinhAnh) }}">
-                    {{ c.TenDM }}
-                </a></td>
+                {% for c in cat4 if c %}
+                <td>
+                    <div>
+                    <a href="{{ url_for('navigation.p_category', maDM=c.MaDM) }}">
+                        <img src="{{ url_for('static', filename=c.HinhAnh) }}">
+                        {{ c.TenDM }}
+                    </a>
+                    </div>
+                </td>
                 {% endfor %}
             </tr>
             {% endfor %}

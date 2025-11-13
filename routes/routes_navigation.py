@@ -53,7 +53,7 @@ def p_collection(season):
     return render_template("collections.html", season = season, products=products)
 
 #Danh mục hàng
-@navigation_bp.route('/catalog')
+@navigation_bp.route('/category')
 def categories():
     conn = get_connect()
     cursor = conn.cursor(dictionary=True)
@@ -82,7 +82,7 @@ def categories():
     return render_template('catalog.html', categories=categories)
 
 # Sản phẩm theo danh mục
-@navigation_bp.route('/collections/category/<int:maDM>')
+@navigation_bp.route('/category/<int:maDM>')
 def p_category(maDM):
     conn = get_connect()
     cursor = conn.cursor(dictionary=True)

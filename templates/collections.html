@@ -14,14 +14,14 @@
     {% if seasons %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/category-table.css') }}">
     <table class="category">
-        {% for sea2 in seasons|batch(2, '') %}
+        {% for sea4 in seasons|batch(4, '') %}
             <tr>
-                {% for s in sea2 if s %}
+                {% for s in sea4 if s %}
                 <td>
                     <div>
                     <a href="{{ url_for('navigation.p_collection', season= s.Season) }}">
                     <img src="{{ url_for('static', filename=s.HinhAnh) }}">
-                    {{ s.Season }} {{ s.SoLuong }}
+                    {{ s.Season }} ({{ s.SoLuong }})
                     </a>
                     </div>
                 </td>
