@@ -92,7 +92,6 @@
 
             // Hàm để thêm tin nhắn vào chat box
             function addMessageToChatBox(sender, message, isLoading = false) {
-                message = message.replace(/\* /g, '\t• ')
                 const p = document.createElement("p");
                 p.innerHTML = `<strong>${sender}:</strong> ${message}`;
                 if (isLoading) {
