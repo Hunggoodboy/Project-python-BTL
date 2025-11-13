@@ -4,6 +4,50 @@
     <meta charset="UTF-8">
     <title>Admin</title>
     <link rel="stylesheet" href="{{url_for('static', filename='css/admin.css')}}">
+    <style>
+    /* Quản lý đơn hàng*/
+    .order-dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    .order-dropdown .order-menu {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        z-index: 999;
+        min-width: 220px;
+        padding: 10px 0;
+    }
+
+    .order-dropdown:hover .order-menu {
+        display: block;
+    }
+
+    .order-dropdown .menu-title {
+        font-weight: bold;
+        padding: 8px 16px;
+        border-bottom: 1px solid #eee;
+        color: #333;
+    }
+
+    .order-dropdown .order-menu a {
+        display: block;
+        padding: 10px 16px;
+        color: #333;
+        text-decoration: none;
+        transition: background-color 0.2s;
+    }
+
+    .order-dropdown .order-menu a:hover {
+        background-color: #e10e0e;
+    }
+    </style>
 </head>
 
 <body>
@@ -22,6 +66,21 @@
         </div>
         <div class="column">
             <button class="user-btn">Chỉnh sửa người dùng</button>
+        </div>
+
+        <div class="column order-dropdown">
+            <button class="user-btn">Quản lý đơn hàng ▾</button>
+            <div class="order-menu">
+                <div class="menu-title">Theo trạng thái đơn</div>
+                <a href="/quanlydonhang_Choxacnhandon">Chờ xác nhận đơn</a>
+                <a href="/quanlydonhang_Danggiaohang">Đang giao hàng</a>
+                <a href="/quanlydonhang_Chobanxacnhan">Chờ bạn xác nhận</a>
+                <a href="/quanlydonhang_Dagiaothanhcong">Đã giao thành công</a>
+            </div>
+        </div>
+
+        <div class="column">
+            <a href="/admin/revenue" class="user-btn">Doanh thu</a>
         </div>
     </div>
 
