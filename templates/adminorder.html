@@ -9,13 +9,18 @@
     .order-row img { height: 100px; width: 100px; margin-right: 20px; }
     .order-info { flex: 1; }
     .order-info div { margin-bottom: 5px; }
-    .status { cursor: pointer; font-weight: bold; margin-right: 10px; }
+    .status { font-weight: bold; margin-right: 10px; }
     .status.green { color: green; }
     .status.yellow { color: goldenrod; }
-    .cancel-btn { padding: 5px 10px; cursor: pointer; }
-    .modal { display: none; position: fixed; z-index: 999; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.5); }
-    .modal-content { background-color: #fefefe; margin: 10% auto; padding: 20px; border: 1px solid #888; width: 50%; position: relative; }
+    .edit-btn { padding: 5px 10px; background-color: #007BFF; color: white; border: none; border-radius: 4px; cursor: pointer; }
+    .edit-btn:hover { background-color: #0056b3; }
+    .modal { display: none; position: fixed; z-index: 999; left: 0; top: 0; width: 100%; height: 100%; 
+             overflow: auto; background-color: rgba(0,0,0,0.5); }
+    .modal-content { background-color: #fefefe; margin: 10% auto; padding: 20px; border: 1px solid #888; width: 40%; border-radius: 8px; }
     .close { color: #aaa; float: right; font-size: 28px; cursor: pointer; }
+    .status-option { display: block; padding: 10px; border: 1px solid #ddd; border-radius: 5px; margin: 8px 0;
+                     cursor: pointer; background-color: #f9f9f9; text-align: center; font-weight: bold; }
+    .status-option:hover { background-color: #e8f0fe; }
 </style>
 </head>
 <body>
@@ -31,37 +36,64 @@
             <div>Số lượng: {{ order.SoLuong }}</div>
         </div>
         <div>
-            <span class="status {% if order.TrangThai == 'Đã giao thành công' %}green{% else %}yellow{% endif %}" onclick="openStatusModal({{ order.MaDH }})">{{ order.TrangThai }}</span>
-            <!-- {% if order.TrangThai == 'Chờ xác nhận đơn' %}
-                <button class="cancel-btn" onclick="openCancelModal({{ order.MaDH }})">Hủy đơn</button>
-            {% elif order.TrangThai == 'Chờ bạn xác nhận' %}
-                <button class="confirm-order-btn" onclick="confirmOrder({{ order.MaDH }}, '{{ order.MaSP }}')">Xác nhận giao thành công</button>
-            {% endif %}
-            {% if order.TrangThai == 'Đã giao thành công' %}
-            <button class="review-btn" onclick="openReviewModal({{ order.MaDH }}, '{{ order.ProductID }}')">Đánh giá</button>
-            {% endif %} -->
+            <span class="status {% if order.TrangThai == 'Đã giao thành công' %}green{% else %}yellow{% endif %}" id="status-text-{{ order.MaDH }}">
+                {{ order.TrangThai }}
+            </span>
+            <button class="edit-btn" onclick="openEditModal({{ order.MaDH }})">Sửa trạng thái</button>
         </div>
     </div>
     {% endfor %}
 </div>
 
-<!-- Chi tiết các trạng thái của đơn -->
-{% for order in orders %}
-<div id="status-modal-{{ order.id }}" class="modal">
+<!-- Modal sửa trạng thái -->
+<div id="edit-status-modal" class="modal">
     <div class="modal-content">
-        <span class="close" onclick="closeModal('status', {{ order.MaDH }})">&times;</span>
-        <h2>Chi tiết trạng thái đơn hàng</h2>
-        <p>Thông tin chi tiết sẽ hiển thị ở đây...</p>
+        <span class="close" onclick="closeEditModal()">&times;</span>
+        <h2>Chọn trạng thái đơn hàng</h2>
+        <div id="status-options">
+            <div class="status-option" onclick="setTrangThai('Chờ xác nhận đơn')">Chờ xác nhận đơn</div>
+            <div class="status-option" onclick="setTrangThai('Đang giao hàng')">Đang giao hàng</div>
+            <div class="status-option" onclick="setTrangThai('Chờ bạn xác nhận')">Chờ bạn xác nhận</div>
+        </div>
     </div>
 </div>
-{% endfor %}
+
 <script>
-function openStatusModal(id) {
-    document.getElementById('status-modal-' + id).style.display = 'block';
+let currentOrderId = null;
+
+// Mở modal
+function openEditModal(orderId) {
+    currentOrderId = orderId;
+    document.getElementById("edit-status-modal").style.display = "block";
 }
-function closeModal(type, id) {
-    document.getElementById(type + '-modal-' + id).style.display = 'none';
+
+// Đóng modal
+function closeEditModal() {
+    document.getElementById("edit-status-modal").style.display = "none";
+    currentOrderId = null;
+}
+
+// Gọi route Flask để cập nhật trạng thái
+function setTrangThai(newStatus) {
+    if (!currentOrderId) return;
+
+    fetch(`/setTrangThai?TrangThai=${encodeURIComponent(newStatus)}&MaDH=${currentOrderId}`)
+        .then(response => {
+            if (response.ok) {
+                // Cập nhật ngay trên giao diện
+                const statusSpan = document.getElementById(`status-text-${currentOrderId}`);
+                statusSpan.textContent = newStatus;
+                statusSpan.classList.remove("green", "yellow");
+                if (newStatus === "Đã giao thành công") statusSpan.classList.add("green");
+                else statusSpan.classList.add("yellow");
+                closeEditModal();
+            } else {
+                alert("Cập nhật trạng thái thất bại!");
+            }
+        })
+        .catch(() => alert("Lỗi khi gọi API!"));
 }
 </script>
+
 </body>
 </html>
