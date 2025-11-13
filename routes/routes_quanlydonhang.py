@@ -4,7 +4,7 @@ from flask import Blueprint, render_template, request
 
 qldonhangbp = Blueprint('qldonhangbp', __name__)
 
-qldonhangbp.route("/quanlydonhang_Choxacnhandon", methods=["POST", "GET"])
+@qldonhangbp.route("/quanlydonhang_Choxacnhandon", methods=["POST", "GET"])
 def quanlydonhang_Choxacnhandon():
     conn = get_connect()
     cursor = conn.cursor(dictionary=True)
@@ -74,7 +74,7 @@ def quanlydonhang_Dagiaothanhcong():
 def setTrangThai():
     conn = get_connect()
     cursor = conn.cursor()
-    TrangThai = requests.args.get('TrangThai')
+    TrangThai = request.args.get('TrangThai')
     MaDH = request.args.get('MaDH')
     sql = """
     UPDATE `QLBanQuanAo`.`DonHang`
@@ -85,3 +85,4 @@ def setTrangThai():
     conn.commit()
     cursor.close()
     conn.close()
+    return "OK",200
