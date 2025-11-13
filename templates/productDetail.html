@@ -84,7 +84,6 @@
     </div>
 </div>
 
-
 <!-- Thông tin thời gian nhận hàng -->
 <div id="shipping-modal" class="modal">
     <div class="modal-content">
@@ -122,11 +121,21 @@
 
         <div class="modal-section">
             <p>Phân loại:</p>
-            <div class="options">
+            <!-- Lựa chọn màu sắc -->
+            <div class="options color-options">
+                <strong>Màu sắc:</strong>
                 {% for color in product.colors %}
-                    <button onclick="changeModalImage(`{{ url_for('static', filename=color.image) | default('default.png') }}`)">
-                        <span>{{ color.name | default('Màu') }}</span>
+                    <button class="option-btn" 
+                            onclick="changeModalImage(`{{ url_for('static', filename=color.image) | default('default.png') }}`)">
+                        {{ color.name | default('Màu') }}
                     </button>
+                {% endfor %}
+            </div>
+            <!-- Lựa chọn size -->
+            <div class="options size-options">
+                <strong>Size:</strong>
+                {% for size in product.sizes | default([]) %}
+                    <button class="option-btn">{{ size }}</button>
                 {% endfor %}
             </div>
         </div>
@@ -195,7 +204,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 </script>
-
 <style>
 .comment { display: flex; align-items: flex-start; margin-top: 10px; gap: 10px; }
 .comment img.avatar { width: 35px; height: 35px; border-radius: 50%; }

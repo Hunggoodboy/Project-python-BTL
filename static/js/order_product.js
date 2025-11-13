@@ -1,15 +1,19 @@
 document.addEventListener("DOMContentLoaded", () => {
 
     // Chọn màu
-    const colorButtons = document.querySelectorAll(".options button, .color-options img");
-   
+    const colorButtons = document.querySelectorAll(".color-options button");
     colorButtons.forEach(btn => {
         btn.addEventListener("click", () => {
             colorButtons.forEach(b => b.classList.remove("active"));
             btn.classList.add("active");
-            if(btn.tagName === "IMG"){
-                btn.classList.add("active");
-            }
+        });
+    });
+    // Chọn size
+    const sizeButtons = document.querySelectorAll(".size-options button");
+    sizeButtons.forEach(btn => {
+        btn.addEventListener("click", () => {
+            sizeButtons.forEach(b => b.classList.remove("active"));
+            btn.classList.add("active");
         });
     });
 
@@ -17,24 +21,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const buyNowBtn = document.getElementById("modal-buy-now");
     if(buyNowBtn){
         buyNowBtn.addEventListener("click", () => {
-            console.log("📦 Click Đặt hàng");
             const quantity = document.getElementById("quantity").value;
-            const selectedColorBtn = document.querySelector(".options button.active, .color-options img.active");
-            console.log("Số lượng:", quantity);
-            console.log("PRODUCT_ID:", PRODUCT_ID);
-            let color = "";
-            if(selectedColorBtn){
-                if(selectedColorBtn.tagName === "BUTTON"){
-                    color = selectedColorBtn.querySelector("span") ? selectedColorBtn.querySelector("span").innerText : "";
-                } else if(selectedColorBtn.tagName === "IMG"){
-                    color = selectedColorBtn.alt || "";
-                }
-            }
+            const selectedColorBtn = document.querySelector(".color-options button.active");
+            const selectedSizeBtn = document.querySelector(".size-options button.active");
+            const color = selectedColorBtn.textContent.trim();
+            const size = selectedSizeBtn.textContent.trim();
 
             const formData = new FormData();
             formData.append("product_id", PRODUCT_ID); // PRODUCT_ID lấy từ template
             formData.append("quantity", quantity);
             formData.append("color", color);
+            formData.append("size", size);
             //gửi lại lên routes orders
             fetch("/create_order", {
                 method: "POST",

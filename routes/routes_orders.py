@@ -32,7 +32,8 @@ def show_orders():
             "SoLuong": dic['SoLuong'],
             "TrangThai": dic['TrangThai'],
             "Mau": dic['Mau'],            
-            "HinhAnh": dic['HinhAnh']
+            "HinhAnh": dic['HinhAnh'],
+            "Size":dic['Size']
         }
         orders.append(product)
 
