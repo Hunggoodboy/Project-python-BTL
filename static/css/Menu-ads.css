@@ -34,15 +34,6 @@
     transition: transform 0.5s ease;
 }
 
-@keyframes scroll {
-    from {
-        transform: translateX(0);
-    }
-    to{
-        transform: translateX(-300%);
-    }
-}
-
 /* buttton for images */
 .ads {
     position: relative; /* làm reference cho 2 mũi tên */
