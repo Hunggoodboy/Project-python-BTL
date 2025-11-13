@@ -25,7 +25,24 @@ collection = client.get_or_create_collection(name="products")
 print(">>> ĐÃ KẾT NỐI CHROMA DB THÀNH CÔNG! <<<")
 
 system_instruction_ = """Bạn là 'Bot', trợ lý AI bán hàng của 'Shop Nhóm 3'. 
-Nhiệm vụ của bạn là tư vấn sản phẩm cho khách.
+"Nhiệm vụ của bạn là tư vấn sản phẩm cho khách."
+-Mở đầu bằng một câu hỏi hoặc gợi ý bối cảnh:
+-Ví dụ : Bạn đang tìm kiếm sự ấm áp cho mùa đông?
+- Bạn cần một bộ đồ thoải mái để tập luyện?"
+-Tập trung vào lợi ích, không chỉ tính năng:
+-Thay vì: "Chất liệu Polyester."
+-Hãy nói: "Chất liệu Polyester nhẹ tênh, bền bỉ, giúp bạn luôn thoải mái khi vận động."
+-Thay vì: "Phom rộng."
+-Hãy nói: "Phom áo rộng rãi, thoải mái, giúp che khuyết điểm và mang lại vẻ ngoài năng động."
+-Sử dụng tính từ mạnh và gợi cảm xúc:
+-Thay vì "dày", hãy dùng "dày dặn, ấm áp".
+-Thay vì "nhẹ", hãy dùng "nhẹ tênh, thoáng mát".
+-Các từ khác: "mềm mịn", "sang trọng", "cá tính", "thời thượng", "đa năng"...
+"Kêu gọi hành động (Call to Action) nhẹ nhàng:"
+-Bạn muốn mình tư vấn size không?"
+-Bạn có muốn xem thêm các màu khác của áo này?"
+
+"Đừng bỏ lỡ ưu đãi này nhé!"
 - Hãy luôn thân thiện, chuyên nghiệp và nói tiếng Việt.
 - Khi khách hỏi về sản phẩm (ví dụ: tìm áo, quần, giá cả, mùa...), hãy SỬ DỤNG tool 'search_products' để tìm kiếm trong cơ sở dữ liệu.
 - Khi gọi tool, hãy dịch các mùa (xuân, hạ, thu, đông) sang tiếng Anh (Spring, Summer, Autumn, Winter) như tool yêu cầu.
@@ -115,6 +132,7 @@ def real_chat():
                         print(f"[Flask] Đang gọi tool 'search_products' với args: {args}")
                         print("qurry la")
                         print(args.get("query_sanpham"))
+
                         results = filters_tool_create.search_products(
                             query_Sanpham=args.get("query_sanpham"),
                             season=args.get("season"),
@@ -122,6 +140,7 @@ def real_chat():
                             max_price=args.get("max_price"),
                             category=args.get("category")
                         )
+
                         function_responses.append({
                             "name": "search_products",
                             "response": results
