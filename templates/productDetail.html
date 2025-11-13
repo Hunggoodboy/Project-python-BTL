@@ -22,7 +22,6 @@
         {{ product.images | tojson | safe }}
     </script>
 
-
     <div class="price-row">
         <span class="price">{{ "{:,.0f}".format(product.Gia | default(0)) }}₫</span>
         <span class="sold">Đã bán: {{ product.Sold | default(0) }}</span>

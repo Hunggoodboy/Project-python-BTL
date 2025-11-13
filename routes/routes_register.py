@@ -24,7 +24,7 @@ def register():
         cursor.execute(sql_check1, [username])
         check1 = cursor.fetchone()
         if check1 is not None:
-            flash('Tên Đăng Nhập Đã Được Đăng Ký')
+            flash('Tên Đăng Nhập Đã Được Đăng Ký','danger')
             return redirect(url_for('register.register'))
         sql_check2 = """
                      SELECT * \
@@ -34,7 +34,7 @@ def register():
         cursor.execute(sql_check2, [numberphone])
         check2 = cursor.fetchone()
         if check2 is not None:
-            flash('Số Điện Thoại Đã Được Đăng Ký')
+            flash('Số Điện Thoại Đã Được Đăng Ký','danger')
             return redirect(url_for('register.register'))
 
         sql = """
