@@ -38,9 +38,17 @@ document.addEventListener("DOMContentLoaded", () => {
             if(page < 1 || page > totalPages) return;
             currentPage = page;
             table.innerHTML = "";
-            const start = (page - 1) * itemsPerPage;
-            const end = start + itemsPerPage;
-            const slice = items.slice(start, end);
+            let slice;
+
+            if (page === 1) {
+                // Trang 1 lấy đúng 9 sản phẩm (chừa 1 chỗ cho nút (+))
+                slice = items.slice(0, 9);
+            } else {
+                // Trang > 1 lấy 10 sản phẩm
+                const start = 9 + (page - 2) * itemsPerPage;
+                const end = start + itemsPerPage;
+                slice = items.slice(start, end);
+            }
 
             if(tabType === 'product')
                 if (page === 1) {

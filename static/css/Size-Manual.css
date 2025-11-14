@@ -78,10 +78,9 @@ td:not(.dropdown){
     justify-content: flex-start;
 }
 .toc{
-    border-radius: 10px;
-
     background-color: #FEF3E2;
     border: 3px solid #FA812F;
+    border-radius: 10px;
 
     width: 80%;
     margin-top: 20px;
