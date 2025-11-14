@@ -146,6 +146,11 @@ function closeForm(popupName) {
 function deleteUser(maKH) {
     if (confirm("Bạn có chắc muốn xoá?")) {
         fetch(`/user/delete/${maKH}`, { method: "POST" })
-            .then(() => location.reload());
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) location.reload();
+                else alert(data.message);
+            });
     }
 }
+
